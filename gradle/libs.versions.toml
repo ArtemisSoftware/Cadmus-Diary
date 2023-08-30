@@ -9,6 +9,8 @@ lifecycle-runtime-ktx = "2.6.1"
 activity-compose = "1.7.2"
 compose-bom = "2023.03.00"
 
+core-splashscreen = "1.0.1"
+
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -24,6 +26,64 @@ ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview
 ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 material3 = { group = "androidx.compose.material3", name = "material3" }
+
+
+
+
+
+#// Compose Navigation
+#implementation "androidx.navigation:navigation-compose:2.6.0"
+#
+#// Firebase
+#implementation 'com.google.firebase:firebase-auth-ktx:22.1.0'
+#implementation 'com.google.firebase:firebase-storage-ktx:20.2.1'
+#
+#// Room components
+#implementation "androidx.room:room-runtime:2.5.2"
+#kapt "androidx.room:room-compiler:2.5.2"
+#implementation "androidx.room:room-ktx:2.5.2"
+#
+#// Runtime Compose
+#implementation "androidx.lifecycle:lifecycle-runtime-compose:2.6.1"
+
+#Splash API
+core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "core-splashscreen" }
+
+#// Mongo DB Realm
+#implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.0"
+#implementation "io.realm.kotlin:library-sync:1.10.0"
+#
+#// Dagger Hilt
+#implementation "com.google.dagger:hilt-android:2.44.2"
+#kapt "com.google.dagger:hilt-compiler:2.44.2"
+#implementation "androidx.hilt:hilt-navigation-compose:1.0.0"
+#
+#// Coil
+#implementation "io.coil-kt:coil-compose:2.3.0"
+#
+#// Pager - Accompanist
+#implementation "com.google.accompanist:accompanist-pager:0.27.0"
+#
+#// Date-Time Picker
+#implementation 'com.maxkeppeler.sheets-compose-dialogs:core:1.0.2'
+#
+#// CALENDAR
+#implementation "com.maxkeppeler.sheets-compose-dialogs:calendar:1.0.2"
+#
+#// CLOCK
+#implementation "com.maxkeppeler.sheets-compose-dialogs:clock:1.0.2"
+#
+#// Message Bar Compose
+#implementation 'com.github.stevdza-san:MessageBarCompose:1.0.5'
+#
+#// One-Tap Compose
+#implementation 'com.github.stevdza-san:OneTapCompose:1.0.3'
+#
+#// Desugar JDK
+#coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.0'
+
+
+
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "agp" }
