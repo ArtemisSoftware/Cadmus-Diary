@@ -12,6 +12,6 @@ sealed class Screen(val route: String) {
     }
 
     companion object {
-        private const val WRITE_SCREEN_ARGUMENT_KEY = "diaryId"
+        const val WRITE_SCREEN_ARGUMENT_KEY = "diaryId"
     }
 }
