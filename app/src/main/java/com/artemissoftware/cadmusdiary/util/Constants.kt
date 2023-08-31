@@ -1,4 +1,4 @@
-package com.artemissoftware.cadmusdiary.ui.util
+package com.artemissoftware.cadmusdiary.util
 
 object Constants {
 
