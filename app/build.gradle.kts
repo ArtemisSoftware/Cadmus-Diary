@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.artemissoftware.cadmusdiary"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.artemissoftware.cadmusdiary"
