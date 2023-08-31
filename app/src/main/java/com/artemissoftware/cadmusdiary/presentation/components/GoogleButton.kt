@@ -102,12 +102,12 @@ fun GoogleButton(
 
 @Composable
 @Preview
-fun GoogleButtonPreview() {
+private fun GoogleButtonPreview() {
     GoogleButton {}
 }
 
 @Composable
 @Preview
-fun GoogleButtonPreview2() {
+private fun GoogleButtonPreview2() {
     GoogleButton(loadingState = true) {}
 }
