@@ -8,6 +8,7 @@ espresso-core = "3.5.1"
 lifecycle-runtime-ktx = "2.6.1"
 activity-compose = "1.7.2"
 compose-bom = "2023.03.00"
+navigation-compose = "2.6.0"
 
 core-splashscreen = "1.0.1"
 
@@ -31,8 +32,9 @@ material3 = { group = "androidx.compose.material3", name = "material3" }
 
 
 
-#// Compose Navigation
-#implementation "androidx.navigation:navigation-compose:2.6.0"
+# Compose Navigation
+navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation-compose" }
+
 #
 #// Firebase
 #implementation 'com.google.firebase:firebase-auth-ktx:22.1.0'

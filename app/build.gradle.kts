@@ -69,4 +69,5 @@ dependencies {
     debugImplementation(libs.ui.test.manifest)
 
     implementation(libs.core.splashscreen)
+    implementation(libs.navigation.compose)
 }
