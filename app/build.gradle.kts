@@ -70,4 +70,5 @@ dependencies {
 
     implementation(libs.core.splashscreen)
     implementation(libs.navigation.compose)
+    implementation(libs.one.tap.compose)
 }
