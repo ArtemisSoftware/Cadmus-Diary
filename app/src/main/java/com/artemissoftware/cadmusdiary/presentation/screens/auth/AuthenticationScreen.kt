@@ -15,6 +15,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.artemissoftware.cadmusdiary.presentation.screens.auth.composables.AuthenticationContent
 import com.artemissoftware.cadmusdiary.ui.theme.CadmusDiaryTheme
 import com.artemissoftware.cadmusdiary.util.Constants.CLIENT_ID
+import com.stevdzasan.messagebar.ContentWithMessageBar
+import com.stevdzasan.messagebar.rememberMessageBarState
 import com.stevdzasan.onetap.OneTapSignInWithGoogle
 import com.stevdzasan.onetap.rememberOneTapSignInState
 
@@ -69,18 +71,20 @@ private fun AuthenticationScreenContent(
     isLoading: Boolean,
     onGoogleAuthenticationButtonClicked: () -> Unit,
 ) {
+    val messageBarState = rememberMessageBarState()
+
     Scaffold(
         modifier = Modifier
             .background(MaterialTheme.colorScheme.surface)
             .statusBarsPadding()
             .navigationBarsPadding(),
         content = {
-//            ContentWithMessageBar(messageBarState = messageBarState) {
-            AuthenticationContent(
-                isLoading = isLoading,
-                onGoogleAuthenticationButtonClicked = onGoogleAuthenticationButtonClicked,
-            )
-//            }
+            ContentWithMessageBar(messageBarState = messageBarState) {
+                AuthenticationContent(
+                    isLoading = isLoading,
+                    onGoogleAuthenticationButtonClicked = onGoogleAuthenticationButtonClicked,
+                )
+            }
         },
     )
 

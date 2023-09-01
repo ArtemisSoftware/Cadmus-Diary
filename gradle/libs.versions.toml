@@ -12,6 +12,7 @@ navigation-compose = "2.7.1"
 
 core-splashscreen = "1.0.1"
 one-tap-compose = "1.0.3"
+message-bar-compose = "1.0.5"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -49,7 +50,7 @@ navigation-compose = { group = "androidx.navigation", name = "navigation-compose
 #// Runtime Compose
 #implementation "androidx.lifecycle:lifecycle-runtime-compose:2.6.1"
 
-#Splash API
+# Splash API
 core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "core-splashscreen" }
 
 #// Mongo DB Realm
@@ -76,8 +77,9 @@ core-splashscreen = { group = "androidx.core", name = "core-splashscreen", versi
 #// CLOCK
 #implementation "com.maxkeppeler.sheets-compose-dialogs:clock:1.0.2"
 #
-#// Message Bar Compose
-#implementation 'com.github.stevdza-san:MessageBarCompose:1.0.5'
+# Message Bar Compose
+message-bar-compose = { group = "com.github.stevdza-san", name = "MessageBarCompose", version.ref = "message-bar-compose" }
+
 
 # One-Tap Compose
 one-tap-compose = { group = "com.github.stevdza-san", name = "OneTapCompose", version.ref = "one-tap-compose" }
