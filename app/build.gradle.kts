@@ -2,6 +2,7 @@
 plugins {
     alias(libs.plugins.com.android.application)
     alias(libs.plugins.org.jetbrains.kotlin.android)
+    alias(libs.plugins.realm.kotlin)
 }
 
 android {
@@ -41,7 +42,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.3"
+        kotlinCompilerExtensionVersion = "1.4.6"
     }
     packaging {
         resources {
@@ -72,4 +73,5 @@ dependencies {
     implementation(libs.navigation.compose)
     implementation(libs.one.tap.compose)
     implementation(libs.message.bar.compose)
+    implementation(libs.realm.kotlin)
 }

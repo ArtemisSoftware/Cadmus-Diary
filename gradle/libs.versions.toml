@@ -1,6 +1,6 @@
 [versions]
 agp = "8.1.1"
-org-jetbrains-kotlin-android = "1.8.10"
+org-jetbrains-kotlin-android = "1.8.20"
 core-ktx = "1.10.1"
 junit = "4.13.2"
 androidx-test-ext-junit = "1.1.5"
@@ -13,6 +13,7 @@ navigation-compose = "2.7.1"
 core-splashscreen = "1.0.1"
 one-tap-compose = "1.0.3"
 message-bar-compose = "1.0.5"
+realm-kotlin = "1.10.2"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -53,10 +54,11 @@ navigation-compose = { group = "androidx.navigation", name = "navigation-compose
 # Splash API
 core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "core-splashscreen" }
 
-#// Mongo DB Realm
+# Mongo DB Realm
 #implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.0"
-#implementation "io.realm.kotlin:library-sync:1.10.0"
-#
+realm-kotlin = { group = "io.realm.kotlin", name = "library-sync", version.ref = "realm-kotlin" }
+
+
 #// Dagger Hilt
 #implementation "com.google.dagger:hilt-android:2.44.2"
 #kapt "com.google.dagger:hilt-compiler:2.44.2"
@@ -93,6 +95,7 @@ one-tap-compose = { group = "com.github.stevdza-san", name = "OneTapCompose", ve
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "agp" }
 org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "org-jetbrains-kotlin-android" }
+realm-kotlin = { id = "io.realm.kotlin", version.ref = "realm-kotlin" }
 
 [bundles]
 
