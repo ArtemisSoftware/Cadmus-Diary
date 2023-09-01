@@ -7,6 +7,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.artemissoftware.cadmusdiary.presentation.screens.auth.AuthenticationScreen
 
 @Composable
 fun NavGraph(
@@ -54,14 +55,14 @@ fun NavGraphBuilder.authenticationRoute(
 //        val viewModel: AuthenticationViewModel = viewModel()
 //        val authenticated by viewModel.authenticated
 //        val loadingState by viewModel.loadingState
-//        val oneTapState = rememberOneTapSignInState()
+//
 //        val messageBarState = rememberMessageBarState()
 //
 //        LaunchedEffect(key1 = Unit) {
 //            onDataLoaded()
 //        }
 //
-//        AuthenticationScreen(
+        AuthenticationScreen(
 //            authenticated = authenticated,
 //            loadingState = loadingState,
 //            oneTapState = oneTapState,
@@ -92,7 +93,7 @@ fun NavGraphBuilder.authenticationRoute(
 //                viewModel.setLoading(false)
 //            },
 //            navigateToHome = navigateToHome
-//        )
+        )
     }
 }
 

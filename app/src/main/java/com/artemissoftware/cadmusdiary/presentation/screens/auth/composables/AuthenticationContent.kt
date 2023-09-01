@@ -22,8 +22,8 @@ import com.artemissoftware.cadmusdiary.presentation.components.GoogleButton
 
 @Composable
 fun AuthenticationContent(
-    loadingState: Boolean,
-    onButtonClicked: () -> Unit,
+    isLoading: Boolean,
+    onGoogleAuthenticationButtonClicked: () -> Unit,
 ) {
     Column(
         verticalArrangement = Arrangement.Center,
@@ -63,8 +63,8 @@ fun AuthenticationContent(
                 verticalArrangement = Arrangement.Bottom,
             ) {
                 GoogleButton(
-                    loadingState = loadingState,
-                    onClick = onButtonClicked,
+                    loadingState = isLoading,
+                    onClick = onGoogleAuthenticationButtonClicked,
                 )
             }
         }
@@ -75,8 +75,8 @@ fun AuthenticationContent(
 @Preview
 private fun AuthenticationContentPreview() {
     AuthenticationContent(
-        loadingState = true,
-        onButtonClicked = {},
+        isLoading = true,
+        onGoogleAuthenticationButtonClicked = {},
     )
 }
 
@@ -84,7 +84,7 @@ private fun AuthenticationContentPreview() {
 @Preview
 private fun AuthenticationContent_no_loading_Preview() {
     AuthenticationContent(
-        loadingState = false,
-        onButtonClicked = {},
+        isLoading = false,
+        onGoogleAuthenticationButtonClicked = {},
     )
 }
