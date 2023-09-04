@@ -96,6 +96,7 @@ one-tap-compose = { group = "com.github.stevdza-san", name = "OneTapCompose", ve
 com-android-application = { id = "com.android.application", version.ref = "agp" }
 org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "org-jetbrains-kotlin-android" }
 realm-kotlin = { id = "io.realm.kotlin", version.ref = "realm-kotlin" }
+kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "org-jetbrains-kotlin-android" }
 
 [bundles]
 
