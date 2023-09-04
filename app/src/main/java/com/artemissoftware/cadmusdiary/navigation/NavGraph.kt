@@ -10,10 +10,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.artemissoftware.cadmusdiary.presentation.screens.auth.AuthenticationScreen
 import com.artemissoftware.cadmusdiary.presentation.screens.auth.AuthenticationViewModel
+import com.artemissoftware.cadmusdiary.util.Constants.APP_ID
+import io.realm.kotlin.mongodb.App
 
 @Composable
 fun NavGraph(
-    startDestination: String,
+    startDestination: String = getStartDestination(),
     navController: NavHostController,
 //    onDataLoaded: () -> Unit
 ) {
@@ -249,5 +251,14 @@ fun NavGraphBuilder.writeRoute(
 //            },
 //            onImageDeleteClicked = { galleryState.removeImage(it) }
 //        )
+    }
+}
+
+private fun getStartDestination(): String {
+    val user = App.create(APP_ID).currentUser
+    return if (user != null && user.loggedIn) {
+        Screen.Home.route
+    } else {
+        Screen.Authentication.route
     }
 }

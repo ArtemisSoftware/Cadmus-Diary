@@ -11,9 +11,9 @@ import kotlinx.coroutines.flow.collectLatest
 fun UIEventsManager(
     uiEvent: Flow<UiEvent>,
     showMessageBar: (MessageBarType) -> Unit = {},
-//    onNavigate: (UiEvent.Navigate) -> Unit = {},
+    onNavigate: (UiEvent.Navigate) -> Unit = {},
 //    onNavigateAndPopCurrent: (UiEvent.NavigateAndPopCurrent) -> Unit = {},
-//    onPopBackStack: () -> Unit = {},
+    onPopBackStack: () -> Unit = {},
 //    onPopBackStackWithArguments: (UiEvent.PopBackStackWithArguments<*>) -> Unit = {},
 //    onShowSnackBar: (TaskySnackBarType) -> Unit = {},
 ) {
@@ -23,9 +23,9 @@ fun UIEventsManager(
                 is UiEvent.ShowMessageBar -> {
                     showMessageBar.invoke(event.messageBarType)
                 }
-//                is UiEvent.PopBackStack -> { onPopBackStack.invoke() }
+                is UiEvent.PopBackStack -> { onPopBackStack.invoke() }
 //                is UiEvent.PopBackStackWithArguments<*> -> { onPopBackStackWithArguments(event) }
-//                is UiEvent.Navigate -> { onNavigate(event) }
+                is UiEvent.Navigate -> { onNavigate(event) }
 //                is UiEvent.NavigateAndPopCurrent -> {
 //                    onNavigateAndPopCurrent(event)
 //                }

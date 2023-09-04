@@ -14,6 +14,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavHostController
+import com.artemissoftware.cadmusdiary.navigation.Screen
 import com.artemissoftware.cadmusdiary.presentation.components.UIEventsManager
 import com.artemissoftware.cadmusdiary.presentation.screens.auth.composables.AuthenticationContent
 import com.artemissoftware.cadmusdiary.ui.theme.CadmusDiaryTheme
@@ -29,15 +31,10 @@ import com.stevdzasan.onetap.rememberOneTapSignInState
 @Composable
 fun AuthenticationScreen(
     viewModel: AuthenticationViewModel,
-//    authenticated: Boolean,
-
-//
-//    messageBarState: MessageBarState,
-//
+    navController: NavHostController,
 //    onSuccessfulFirebaseSignIn: (String) -> Unit,
 //    onFailedFirebaseSignIn: (Exception) -> Unit,
 //    onDialogDismissed: (String) -> Unit,
-//    navigateToHome: () -> Unit
 ) {
     val context = LocalContext.current
     val state = viewModel.state.collectAsState().value
@@ -67,6 +64,10 @@ fun AuthenticationScreen(
         uiEvent = viewModel.uiEvent,
         showMessageBar = {
             messageBarState.show(context = context, messageBarType = it)
+        },
+        onNavigate = {
+            navController.popBackStack()
+            navController.navigate(Screen.Home.route)
         },
     )
 
@@ -103,12 +104,6 @@ private fun AuthenticationScreenContent(
         isLoading = isLoading,
         onGoogleAuthenticationButtonClicked = onGoogleAuthenticationButtonClicked,
     )
-
-//    LaunchedEffect(key1 = authenticated) {
-//        if (authenticated) {
-//            navigateToHome()
-//        }
-//    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

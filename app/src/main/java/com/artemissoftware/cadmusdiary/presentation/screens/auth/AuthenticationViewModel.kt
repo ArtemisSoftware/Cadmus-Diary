@@ -10,12 +10,14 @@ import com.artemissoftware.cadmusdiary.util.UiText
 import io.realm.kotlin.mongodb.App
 import io.realm.kotlin.mongodb.Credentials
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlin.time.Duration.Companion.milliseconds
 
 class AuthenticationViewModel(
     // private val signInWithMongoAtlasUseCase: SignInWithMongoAtlasUseCase,
@@ -43,6 +45,14 @@ class AuthenticationViewModel(
         }
     }
 
+    private fun setAuthenticated(authenticated: Boolean) = with(_state) {
+        update {
+            it.copy(
+                authenticated = authenticated,
+            )
+        }
+    }
+
     private fun signInWithMongoAtlas(tokenId: String) {
         viewModelScope.launch {
             try {
@@ -65,17 +75,20 @@ class AuthenticationViewModel(
                                 ),
                             ),
                         )
-//                        delay(600)
-//                        authenticated.value = true
+                        delay(600.milliseconds)
+
+                        sendUiEvent(UiEvent.PopBackStack)
                     } else {
                         sendUiEvent(
                             UiEvent.ShowMessageBar(MessageBarType.Error(Exception("User is not logged in."))),
                         )
                     }
+                    setAuthenticated(isLoggedIn)
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
                     UiEvent.ShowMessageBar(MessageBarType.Error(e))
+                    setAuthenticated(false)
                 }
             }
             setLoading(false)
