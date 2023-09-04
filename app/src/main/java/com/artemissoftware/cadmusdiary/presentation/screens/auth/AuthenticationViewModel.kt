@@ -9,7 +9,6 @@ import com.artemissoftware.cadmusdiary.util.Constants.APP_ID
 import com.artemissoftware.cadmusdiary.util.UiText
 import io.realm.kotlin.mongodb.App
 import io.realm.kotlin.mongodb.Credentials
-import io.realm.kotlin.mongodb.GoogleAuthType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -51,7 +50,7 @@ class AuthenticationViewModel(
 
                 val isLoggedIn = withContext(Dispatchers.IO) {
                     App.create(APP_ID).login(
-                        Credentials.google(tokenId, GoogleAuthType.ID_TOKEN),
+                        Credentials.jwt(tokenId),
                     ).loggedIn
                 }
 
