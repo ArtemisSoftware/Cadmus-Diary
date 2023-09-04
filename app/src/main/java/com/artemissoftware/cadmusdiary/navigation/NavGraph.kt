@@ -24,6 +24,7 @@ fun NavGraph(
         navController = navController,
     ) {
         authenticationRoute(
+            navController
 //            navigateToHome = {
 //                navController.popBackStack()
 //                navController.navigate(Screen.Home.route)
@@ -52,12 +53,11 @@ fun NavGraph(
 }
 
 fun NavGraphBuilder.authenticationRoute(
-//    navigateToHome: () -> Unit,
+    navController: NavHostController
 //    onDataLoaded: () -> Unit
 ) {
     composable(route = Screen.Authentication.route) {
         val viewModel: AuthenticationViewModel = viewModel()
-//        val authenticated by viewModel.authenticated
 
 //
 //        LaunchedEffect(key1 = Unit) {
@@ -66,7 +66,7 @@ fun NavGraphBuilder.authenticationRoute(
 //
         AuthenticationScreen(
             viewModel = viewModel,
-//            authenticated = authenticated,
+            navController = navController,
 //            onSuccessfulFirebaseSignIn = { tokenId ->
 //                viewModel.signInWithMongoAtlas(
 //                    tokenId = tokenId,
@@ -87,8 +87,7 @@ fun NavGraphBuilder.authenticationRoute(
 //            onDialogDismissed = { message ->
 //                messageBarState.addError(Exception(message))
 //                viewModel.setLoading(false)
-//            },
-//            navigateToHome = navigateToHome
+//            }
         )
     }
 }

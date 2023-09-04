@@ -1,4 +1,4 @@
-package com.artemissoftware.cadmusdiary.util
+package com.artemissoftware.cadmusdiary.util.extensions
 
 import android.content.Context
 import com.artemissoftware.cadmusdiary.presentation.components.events.MessageBarType

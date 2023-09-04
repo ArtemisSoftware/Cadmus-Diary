@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.core.view.WindowCompat
 import androidx.navigation.compose.rememberNavController
 import com.artemissoftware.cadmusdiary.navigation.NavGraph
 import com.artemissoftware.cadmusdiary.ui.theme.CadmusDiaryTheme
@@ -13,6 +14,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         installSplashScreen()
+        WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContent {
             CadmusDiaryTheme {
