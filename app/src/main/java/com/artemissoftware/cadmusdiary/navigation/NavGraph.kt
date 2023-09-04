@@ -1,6 +1,7 @@
 package com.artemissoftware.cadmusdiary.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -8,6 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.artemissoftware.cadmusdiary.presentation.screens.auth.AuthenticationScreen
+import com.artemissoftware.cadmusdiary.presentation.screens.auth.AuthenticationViewModel
 
 @Composable
 fun NavGraph(
@@ -52,25 +54,17 @@ fun NavGraphBuilder.authenticationRoute(
 //    onDataLoaded: () -> Unit
 ) {
     composable(route = Screen.Authentication.route) {
-//        val viewModel: AuthenticationViewModel = viewModel()
+        val viewModel: AuthenticationViewModel = viewModel()
 //        val authenticated by viewModel.authenticated
-//        val loadingState by viewModel.loadingState
-//
-//        val messageBarState = rememberMessageBarState()
+
 //
 //        LaunchedEffect(key1 = Unit) {
 //            onDataLoaded()
 //        }
 //
         AuthenticationScreen(
+            viewModel = viewModel,
 //            authenticated = authenticated,
-//            loadingState = loadingState,
-//            oneTapState = oneTapState,
-//            messageBarState = messageBarState,
-//            onButtonClicked = {
-//                oneTapState.open()
-//                viewModel.setLoading(true)
-//            },
 //            onSuccessfulFirebaseSignIn = { tokenId ->
 //                viewModel.signInWithMongoAtlas(
 //                    tokenId = tokenId,
