@@ -1,4 +1,4 @@
-package com.artemissoftware.cadmusdiary.presentation.components
+package com.artemissoftware.cadmusdiary.presentation.components.events
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect

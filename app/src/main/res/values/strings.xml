@@ -6,4 +6,6 @@
     <string name="auth_subtitle">Please sign in to continue.</string>
     <string name="successfully_authenticated">Successfully Authenticated</string>
     <string name="diary">Diary</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>
