@@ -1,6 +1,7 @@
 package com.artemissoftware.cadmusdiary.presentation.screens.home.composables
 
 import android.net.Uri
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -17,6 +18,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -111,28 +113,29 @@ fun DiaryCard(diary: Diary, onClick: (String) -> Unit) {
                     maxLines = 4,
                     overflow = TextOverflow.Ellipsis,
                 )
-//                if (diary.images.isNotEmpty()) {
-//                    ShowGalleryButton(
-//                        galleryOpened = galleryOpened,
-//                        galleryLoading = galleryLoading,
-//                        onClick = {
-//                            galleryOpened = !galleryOpened
-//                        },
-//                    )
-//                }
-//                AnimatedVisibility(
-//                    visible = galleryOpened && !galleryLoading,
+
+                if (diary.images.isNotEmpty()) {
+                    ShowGalleryButton(
+                        galleryOpened = galleryOpened,
+                        galleryLoading = galleryLoading,
+                        onClick = {
+                            galleryOpened = !galleryOpened
+                        },
+                    )
+                }
+                AnimatedVisibility(
+                    visible = galleryOpened /*&& !galleryLoading*/,
 //                    enter = fadeIn() + expandVertically(
 //                        animationSpec = spring(
 //                            dampingRatio = Spring.DampingRatioMediumBouncy,
 //                            stiffness = Spring.StiffnessLow,
 //                        ),
 //                    ),
-//                ) {
-//                    Column(modifier = Modifier.padding(all = 14.dp)) {
-//                        Gallery(images = downloadedImages)
-//                    }
-//                }
+                ) {
+                    Column(modifier = Modifier.padding(all = 14.dp)) {
+                        Gallery(images = downloadedImages)
+                    }
+                }
             }
         }
     }
@@ -183,23 +186,23 @@ private fun DiaryHeaderPreview() {
     )
 }
 
-// @Composable
-// fun ShowGalleryButton(
-//    galleryOpened: Boolean,
-//    galleryLoading: Boolean,
-//    onClick: () -> Unit,
-// ) {
-//    TextButton(onClick = onClick) {
-//        Text(
-//            text = if (galleryOpened) {
-//                if (galleryLoading) "Loading" else "Hide Gallery"
-//            } else {
-//                "Show Gallery"
-//            },
-//            style = TextStyle(fontSize = MaterialTheme.typography.bodySmall.fontSize),
-//        )
-//    }
-// }
+@Composable
+fun ShowGalleryButton(
+    galleryOpened: Boolean,
+    galleryLoading: Boolean,
+    onClick: () -> Unit,
+) {
+    TextButton(onClick = onClick) {
+        Text(
+            text = if (galleryOpened) {
+                if (galleryLoading) "Loading" else "Hide Gallery"
+            } else {
+                "Show Gallery"
+            },
+            style = TextStyle(fontSize = MaterialTheme.typography.bodySmall.fontSize),
+        )
+    }
+}
 
 @Composable
 @Preview
@@ -211,6 +214,21 @@ private fun DiaryCardPreview() {
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
             mood = Mood.Happy.name
             images = realmListOf("", "")
+        },
+        onClick = {},
+    )
+}
+
+@Composable
+@Preview
+private fun DiaryCard_no_images_Preview() {
+    DiaryCard(
+        diary = Diary().apply {
+            title = "My Diary"
+            description =
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+            mood = Mood.Happy.name
+            images = realmListOf()
         },
         onClick = {},
     )
