@@ -75,4 +75,6 @@ dependencies {
     implementation(libs.one.tap.compose)
     implementation(libs.message.bar.compose)
     implementation(libs.realm.kotlin)
+
+    implementation(libs.coil.compose)
 }

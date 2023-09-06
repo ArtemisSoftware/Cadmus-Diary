@@ -14,6 +14,7 @@ core-splashscreen = "1.0.1"
 one-tap-compose = "1.0.3"
 message-bar-compose = "1.0.5"
 realm-kotlin = "1.10.2"
+coil-compose = "2.4.0"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -63,9 +64,12 @@ realm-kotlin = { group = "io.realm.kotlin", name = "library-sync", version.ref =
 #implementation "com.google.dagger:hilt-android:2.44.2"
 #kapt "com.google.dagger:hilt-compiler:2.44.2"
 #implementation "androidx.hilt:hilt-navigation-compose:1.0.0"
-#
-#// Coil
-#implementation "io.coil-kt:coil-compose:2.3.0"
+
+
+#Coil
+coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil-compose" }
+
+
 #
 #// Pager - Accompanist
 #implementation "com.google.accompanist:accompanist-pager:0.27.0"
