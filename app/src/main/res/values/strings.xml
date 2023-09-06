@@ -8,4 +8,6 @@
     <string name="diary">Diary</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="are_you_sure_sign_out_google_account">Are you sure you want to Sign Out from your Google Account?</string>
 </resources>
