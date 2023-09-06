@@ -3,8 +3,6 @@ package com.artemissoftware.cadmusdiary.presentation.components.events
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.NavHostController
-import com.artemissoftware.cadmusdiary.presentation.components.events.MessageBarType
-import com.artemissoftware.cadmusdiary.presentation.components.events.UiEvent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 
@@ -37,7 +35,7 @@ fun UIEventsManager(
                 is UiEvent.NavigatePopCurrent -> {
                     navController.popBackStack()
                     navController.navigate(event.route)
-                    //navController.popBackStack(route = event.route, inclusive = true)
+                    // navController.popBackStack(route = event.route, inclusive = true)
                 }
             }
         }

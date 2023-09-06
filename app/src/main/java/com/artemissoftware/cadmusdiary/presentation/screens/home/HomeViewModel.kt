@@ -42,6 +42,9 @@ class HomeViewModel() : UiEventViewModel() {
 
     private fun signOut() {
         viewModelScope.launch {
+
+            // TODO: chamar o SignOutUseCase
+
             withContext(Dispatchers.IO) {
                 val user = App.create(APP_ID).currentUser
                 if (user != null) {
