@@ -2,6 +2,7 @@ package com.artemissoftware.cadmusdiary.presentation.screens.auth
 
 import androidx.lifecycle.viewModelScope
 import com.artemissoftware.cadmusdiary.R
+import com.artemissoftware.cadmusdiary.navigation.Screen
 import com.artemissoftware.cadmusdiary.presentation.components.events.MessageBarType
 import com.artemissoftware.cadmusdiary.presentation.components.events.UiEvent
 import com.artemissoftware.cadmusdiary.presentation.components.events.UiEventViewModel
@@ -77,7 +78,7 @@ class AuthenticationViewModel(
                         )
                         delay(600.milliseconds)
 
-                        sendUiEvent(UiEvent.PopBackStack)
+                        sendUiEvent(UiEvent.NavigatePopCurrent(Screen.Home.route))
                     } else {
                         sendUiEvent(
                             UiEvent.ShowMessageBar(MessageBarType.Error(Exception("User is not logged in."))),

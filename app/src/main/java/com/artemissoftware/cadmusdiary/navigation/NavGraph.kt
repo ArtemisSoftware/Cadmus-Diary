@@ -10,6 +10,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.artemissoftware.cadmusdiary.presentation.screens.auth.AuthenticationScreen
 import com.artemissoftware.cadmusdiary.presentation.screens.auth.AuthenticationViewModel
+import com.artemissoftware.cadmusdiary.presentation.screens.home.HomeScreen
+import com.artemissoftware.cadmusdiary.presentation.screens.home.HomeViewModel
 import com.artemissoftware.cadmusdiary.util.Constants.APP_ID
 import io.realm.kotlin.mongodb.App
 
@@ -32,6 +34,7 @@ fun NavGraph(
 //            onDataLoaded = onDataLoaded
         )
         homeRoute(
+            navController
 //            navigateToWrite = {
 //                navController.navigate(Screen.Write.route)
 //            },
@@ -93,6 +96,7 @@ fun NavGraphBuilder.authenticationRoute(
 }
 
 fun NavGraphBuilder.homeRoute(
+    navController: NavHostController
 //    navigateToWrite: () -> Unit,
 //    navigateToWriteWithArgs: (String) -> Unit,
 //    navigateToAuth: () -> Unit,
@@ -100,9 +104,10 @@ fun NavGraphBuilder.homeRoute(
 ) {
     composable(route = Screen.Home.route) {
 //        val viewModel: HomeViewModel = hiltViewModel()
+        val viewModel: HomeViewModel = viewModel()
 //        val diaries by viewModel.diaries
-//        val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-//        val scope = rememberCoroutineScope()
+
+
 //        val context = LocalContext.current
 //        var signOutDialogOpened by remember { mutableStateOf(false) }
 //        var deleteAllDialogOpened by remember { mutableStateOf(false) }
@@ -113,14 +118,12 @@ fun NavGraphBuilder.homeRoute(
 //            }
 //        }
 //
-//        HomeScreen(
+        HomeScreen(
+            viewModel = viewModel,
+            navController = navController,
 //            diaries = diaries,
-//            drawerState = drawerState,
-//            onMenuClicked = {
-//                scope.launch {
-//                    drawerState.open()
-//                }
-//            },
+
+
 //            dateIsSelected = viewModel.dateIsSelected,
 //            onDateSelected = { viewModel.getDiaries(zonedDateTime = it) },
 //            onDateReset = { viewModel.getDiaries() },
@@ -128,25 +131,8 @@ fun NavGraphBuilder.homeRoute(
 //            onDeleteAllClicked = { deleteAllDialogOpened = true },
 //            navigateToWrite = navigateToWrite,
 //            navigateToWriteWithArgs = navigateToWriteWithArgs
-//        )
-//
-//        DisplayAlertDialog(
-//            title = "Sign Out",
-//            message = "Are you sure you want to Sign Out from your Google Account?",
-//            dialogOpened = signOutDialogOpened,
-//            onDialogClosed = { signOutDialogOpened = false },
-//            onYesClicked = {
-//                scope.launch(Dispatchers.IO) {
-//                    val user = App.create(APP_ID).currentUser
-//                    if (user != null) {
-//                        user.logOut()
-//                        withContext(Dispatchers.Main) {
-//                            navigateToAuth()
-//                        }
-//                    }
-//                }
-//            }
-//        )
+        )
+
 //
 //        DisplayAlertDialog(
 //            title = "Delete All Diaries",

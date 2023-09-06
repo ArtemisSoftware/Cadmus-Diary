@@ -7,4 +7,6 @@ sealed class UiEvent {
     object PopBackStack : UiEvent()
 
     data class Navigate(val route: String) : UiEvent()
+
+    data class NavigatePopCurrent(val route: String) : UiEvent()
 }

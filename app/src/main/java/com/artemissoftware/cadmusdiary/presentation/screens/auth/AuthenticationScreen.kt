@@ -13,7 +13,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import com.artemissoftware.cadmusdiary.navigation.Screen
-import com.artemissoftware.cadmusdiary.presentation.components.UIEventsManager
+import com.artemissoftware.cadmusdiary.presentation.components.events.UIEventsManager
 import com.artemissoftware.cadmusdiary.presentation.screens.auth.composables.AuthenticationContent
 import com.artemissoftware.cadmusdiary.ui.theme.CadmusDiaryTheme
 import com.artemissoftware.cadmusdiary.util.Constants.CLIENT_ID
@@ -56,12 +56,9 @@ fun AuthenticationScreen(
 
     UIEventsManager(
         uiEvent = viewModel.uiEvent,
+        navController = navController,
         showMessageBar = {
             messageBarState.show(context = context, messageBarType = it)
-        },
-        onNavigate = {
-            navController.popBackStack()
-            navController.navigate(Screen.Home.route)
         },
     )
 
