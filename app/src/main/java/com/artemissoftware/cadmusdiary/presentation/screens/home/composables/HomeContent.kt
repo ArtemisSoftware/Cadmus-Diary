@@ -1,5 +1,6 @@
 package com.artemissoftware.cadmusdiary.presentation.screens.home.composables
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,9 +15,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.artemissoftware.cadmusdiary.R
 import com.artemissoftware.cadmusdiary.domain.model.Diary
 import java.time.LocalDate
 
@@ -54,8 +57,8 @@ fun HomeContent(
 
 @Composable
 private fun EmptyPage(
-    title: String = "Empty Diary",
-    subtitle: String = "Write Something",
+    @StringRes title: Int = R.string.empty_diary,
+    @StringRes subtitle: Int = R.string.write_something,
 ) {
     Column(
         modifier = Modifier
@@ -65,14 +68,14 @@ private fun EmptyPage(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
-            text = title,
+            text = stringResource(id = title),
             style = TextStyle(
                 fontSize = MaterialTheme.typography.titleMedium.fontSize,
                 fontWeight = FontWeight.Medium,
             ),
         )
         Text(
-            text = subtitle,
+            text = stringResource(id = subtitle),
             style = TextStyle(
                 fontSize = MaterialTheme.typography.bodyMedium.fontSize,
                 fontWeight = FontWeight.Normal,
