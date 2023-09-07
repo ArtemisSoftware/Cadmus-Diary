@@ -20,7 +20,6 @@ import com.artemissoftware.cadmusdiary.presentation.components.dialog.DisplayAle
 import com.artemissoftware.cadmusdiary.presentation.components.events.UIEventsManager
 import com.artemissoftware.cadmusdiary.presentation.screens.home.composables.HomeTopBar
 import com.artemissoftware.cadmusdiary.presentation.screens.home.composables.NavigationDrawer
-import com.artemissoftware.cadmusdiary.util.extensions.show
 import kotlinx.coroutines.launch
 
 @Composable
