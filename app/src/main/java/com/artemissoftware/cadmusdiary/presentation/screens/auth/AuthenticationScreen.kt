@@ -7,6 +7,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -30,6 +31,7 @@ import com.stevdzasan.onetap.rememberOneTapSignInState
 fun AuthenticationScreen(
     viewModel: AuthenticationViewModel,
     navController: NavHostController,
+    onDataLoaded: () -> Unit,
 //    onSuccessfulFirebaseSignIn: (String) -> Unit,
 //    onFailedFirebaseSignIn: (Exception) -> Unit,
 //    onDialogDismissed: (String) -> Unit,
@@ -83,6 +85,10 @@ fun AuthenticationScreen(
 //            onDialogDismissed(message)
         },
     )
+
+    LaunchedEffect(key1 = Unit) {
+        onDataLoaded()
+    }
 }
 
 @ExperimentalMaterial3Api

@@ -11,17 +11,27 @@ import com.artemissoftware.cadmusdiary.navigation.NavGraph
 import com.artemissoftware.cadmusdiary.ui.theme.CadmusDiaryTheme
 
 class MainActivity : ComponentActivity() {
+
+    private var keepSplashOpened = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        installSplashScreen()
+        installSplashScreen().setKeepOnScreenCondition {
+            keepSplashOpened
+        }
         WindowCompat.setDecorFitsSystemWindows(window, false)
         MongoDB.configureTheRealm()
 
         setContent {
             CadmusDiaryTheme {
                 val navController = rememberNavController()
-                NavGraph(navController = navController)
+                NavGraph(
+                    navController = navController,
+                    onDataLoaded = {
+                        keepSplashOpened = false
+                    },
+                )
             }
         }
     }

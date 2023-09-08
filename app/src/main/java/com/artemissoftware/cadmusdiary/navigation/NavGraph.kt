@@ -19,33 +19,30 @@ import io.realm.kotlin.mongodb.App
 fun NavGraph(
     startDestination: String = getStartDestination(),
     navController: NavHostController,
-//    onDataLoaded: () -> Unit
+    onDataLoaded: () -> Unit,
 ) {
     NavHost(
         startDestination = startDestination,
         navController = navController,
     ) {
         authenticationRoute(
-            navController
+            navController,
+            onDataLoaded = onDataLoaded,
 //            navigateToHome = {
 //                navController.popBackStack()
 //                navController.navigate(Screen.Home.route)
 //            },
-//            onDataLoaded = onDataLoaded
+
         )
         homeRoute(
-            navController
+            navController,
+            onDataLoaded = onDataLoaded,
 //            navigateToWrite = {
 //                navController.navigate(Screen.Write.route)
 //            },
 //            navigateToWriteWithArgs = {
 //                navController.navigate(Screen.Write.passDiaryId(diaryId = it))
 //            },
-//            navigateToAuth = {
-//                navController.popBackStack()
-//                navController.navigate(Screen.Authentication.route)
-//            },
-//            onDataLoaded = onDataLoaded
         )
         writeRoute(
 //            navigateBack = {
@@ -56,20 +53,16 @@ fun NavGraph(
 }
 
 fun NavGraphBuilder.authenticationRoute(
-    navController: NavHostController
-//    onDataLoaded: () -> Unit
+    navController: NavHostController,
+    onDataLoaded: () -> Unit
 ) {
     composable(route = Screen.Authentication.route) {
         val viewModel: AuthenticationViewModel = viewModel()
 
-//
-//        LaunchedEffect(key1 = Unit) {
-//            onDataLoaded()
-//        }
-//
         AuthenticationScreen(
             viewModel = viewModel,
             navController = navController,
+            onDataLoaded = onDataLoaded,
 //            onSuccessfulFirebaseSignIn = { tokenId ->
 //                viewModel.signInWithMongoAtlas(
 //                    tokenId = tokenId,
@@ -96,34 +89,26 @@ fun NavGraphBuilder.authenticationRoute(
 }
 
 fun NavGraphBuilder.homeRoute(
-    navController: NavHostController
+    navController: NavHostController,
+    onDataLoaded: () -> Unit,
 //    navigateToWrite: () -> Unit,
 //    navigateToWriteWithArgs: (String) -> Unit,
-//    navigateToAuth: () -> Unit,
-//    onDataLoaded: () -> Unit
+
 ) {
     composable(route = Screen.Home.route) {
 //        val viewModel: HomeViewModel = hiltViewModel()
         val viewModel: HomeViewModel = viewModel()
-//        val diaries by viewModel.diaries
-
 
 //        val context = LocalContext.current
 //        var signOutDialogOpened by remember { mutableStateOf(false) }
 //        var deleteAllDialogOpened by remember { mutableStateOf(false) }
 //
-//        LaunchedEffect(key1 = diaries) {
-//            if (diaries !is RequestState.Loading) {
-//                onDataLoaded()
-//            }
-//        }
+
 //
         HomeScreen(
             viewModel = viewModel,
             navController = navController,
-//            diaries = diaries,
-
-
+            onDataLoaded = onDataLoaded,
 //            dateIsSelected = viewModel.dateIsSelected,
 //            onDateSelected = { viewModel.getDiaries(zonedDateTime = it) },
 //            onDateReset = { viewModel.getDiaries() },
