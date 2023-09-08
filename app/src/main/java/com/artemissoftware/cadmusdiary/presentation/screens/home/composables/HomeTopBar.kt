@@ -9,6 +9,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -17,7 +19,7 @@ import com.artemissoftware.cadmusdiary.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeTopBar(
-//    scrollBehavior: TopAppBarScrollBehavior,
+    scrollBehavior: TopAppBarScrollBehavior,
     onMenuClicked: () -> Unit,
 //    dateIsSelected: Boolean,
 //    onDateSelected: (ZonedDateTime) -> Unit,
@@ -25,7 +27,7 @@ fun HomeTopBar(
 ) {
 //    val dateDialog = rememberSheetState()
     TopAppBar(
-//        scrollBehavior = scrollBehavior,
+        scrollBehavior = scrollBehavior,
         navigationIcon = {
             IconButton(onClick = onMenuClicked) {
                 Icon(
@@ -76,10 +78,12 @@ fun HomeTopBar(
 //    )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @Preview
 private fun HomeTopBarPreview() {
     HomeTopBar(
         onMenuClicked = {},
+        scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(),
     )
 }
