@@ -1,8 +1,14 @@
 package com.artemissoftware.cadmusdiary.presentation.screens.home
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -11,13 +17,23 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.navigation.NavHostController
 import com.artemissoftware.cadmusdiary.R
+import com.artemissoftware.cadmusdiary.domain.RequestState
 import com.artemissoftware.cadmusdiary.presentation.components.dialog.DisplayAlertDialog
 import com.artemissoftware.cadmusdiary.presentation.components.events.UIEventsManager
+import com.artemissoftware.cadmusdiary.presentation.screens.home.composables.EmptyPage
+import com.artemissoftware.cadmusdiary.presentation.screens.home.composables.HomeContent
 import com.artemissoftware.cadmusdiary.presentation.screens.home.composables.HomeTopBar
 import com.artemissoftware.cadmusdiary.presentation.screens.home.composables.NavigationDrawer
 import kotlinx.coroutines.launch
@@ -39,6 +55,7 @@ fun HomeScreen(
         onDeleteAllClicked = {},
     ) {
         HomeScreenContent(
+            state = state,
             onMenuClicked = {
                 scope.launch {
                     drawerState.open()
@@ -71,13 +88,14 @@ fun HomeScreen(
 private fun HomeScreenContent(
 //    diaries: Diaries,
     onMenuClicked: () -> Unit,
+    state: HomeState,
 //    dateIsSelected: Boolean,
 //    onDateSelected: (ZonedDateTime) -> Unit,
 //    onDateReset: () -> Unit,
 //    navigateToWrite: () -> Unit,
 //    navigateToWriteWithArgs: (String) -> Unit
 ) {
-//    var padding by remember { mutableStateOf(PaddingValues()) }
+    var padding by remember { mutableStateOf(PaddingValues()) }
 //    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
     Scaffold(
@@ -93,9 +111,9 @@ private fun HomeScreenContent(
         },
         floatingActionButton = {
             FloatingActionButton(
-//                    modifier = Modifier.padding(
-//                        end = padding.calculateEndPadding(LayoutDirection.Ltr)
-//                    ),
+                modifier = Modifier.padding(
+                    end = padding.calculateEndPadding(LayoutDirection.Ltr),
+                ),
                 onClick = { /*navigateToWrite*/ },
             ) {
                 Icon(
@@ -105,31 +123,31 @@ private fun HomeScreenContent(
             }
         },
         content = {
-//                padding = it
-//                when (diaries) {
-//                    is RequestState.Success -> {
-//                        HomeContent(
-//                            paddingValues = it,
-//                            diaryNotes = diaries.data,
-//                            onClick = navigateToWriteWithArgs
-//                        )
-//                    }
-//                    is RequestState.Error -> {
-//                        EmptyPage(
-//                            title = "Error",
-//                            subtitle = "${diaries.error.message}"
-//                        )
-//                    }
-//                    is RequestState.Loading -> {
-//                        Box(
-//                            modifier = Modifier.fillMaxSize(),
-//                            contentAlignment = Alignment.Center
-//                        ) {
-//                            CircularProgressIndicator()
-//                        }
-//                    }
-//                    else -> {}
-//                }
+            padding = it
+            when (state.diaries) {
+                is RequestState.Success -> {
+                    HomeContent(
+                        paddingValues = it,
+                        diaryNotes = state.diaries.data,
+                        onClick = {}, /*navigateToWriteWithArgs*/
+                    )
+                }
+                is RequestState.Error -> {
+                    EmptyPage(
+                        title = R.string.error,
+                        subtitle = "${state.diaries.error.message}",
+                    )
+                }
+                is RequestState.Loading -> {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        CircularProgressIndicator()
+                    }
+                }
+                else -> {}
+            }
         },
     )
 }
@@ -139,5 +157,6 @@ private fun HomeScreenContent(
 private fun HomeTopBarPreview() {
     HomeScreenContent(
         onMenuClicked = {},
+        state = HomeState(),
     )
 }

@@ -1,10 +1,15 @@
 package com.artemissoftware.cadmusdiary.data.repository
 
-// typealias Diaries = RequestState<Map<LocalDate, List<Diary>>>
+import com.artemissoftware.cadmusdiary.domain.RequestState
+import com.artemissoftware.cadmusdiary.domain.model.Diary
+import kotlinx.coroutines.flow.Flow
+import java.time.LocalDate
+
+typealias Diaries = RequestState<Map<LocalDate, List<Diary>>>
 
 interface MongoRepository {
     fun configureTheRealm()
-//    fun getAllDiaries(): Flow<Diaries>
+    fun getAllDiaries(): Flow<Diaries>
 //    fun getFilteredDiaries(zonedDateTime: ZonedDateTime): Flow<Diaries>
 //    fun getSelectedDiary(diaryId: ObjectId): Flow<RequestState<Diary>>
 //    suspend fun insertDiary(diary: Diary): RequestState<Diary>

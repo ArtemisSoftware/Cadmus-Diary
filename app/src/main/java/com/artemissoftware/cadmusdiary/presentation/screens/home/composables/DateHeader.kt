@@ -24,7 +24,7 @@ fun DateHeader(localDate: LocalDate) {
         modifier = Modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.surface)
-            .padding(vertical = 14.dp),
+            .padding(vertical = 16.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Column(horizontalAlignment = Alignment.End) {
@@ -43,7 +43,7 @@ fun DateHeader(localDate: LocalDate) {
                 ),
             )
         }
-        Spacer(modifier = Modifier.width(14.dp))
+        Spacer(modifier = Modifier.width(16.dp))
         Column(horizontalAlignment = Alignment.Start) {
             Text(
                 text = localDate.month.toString().lowercase()

@@ -1,12 +1,20 @@
 package com.artemissoftware.cadmusdiary.data.repository
 
+import com.artemissoftware.cadmusdiary.data.exceptions.UserNotAuthenticatedException
+import com.artemissoftware.cadmusdiary.domain.RequestState
 import com.artemissoftware.cadmusdiary.domain.model.Diary
 import com.artemissoftware.cadmusdiary.util.Constants.APP_ID
+import com.artemissoftware.cadmusdiary.util.extensions.toInstant
 import io.realm.kotlin.Realm
 import io.realm.kotlin.ext.query
 import io.realm.kotlin.log.LogLevel
 import io.realm.kotlin.mongodb.App
 import io.realm.kotlin.mongodb.sync.SyncConfiguration
+import io.realm.kotlin.query.Sort
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
+import java.time.ZoneId
 
 object MongoDB : MongoRepository {
     private val app = App.create(APP_ID)
@@ -31,30 +39,30 @@ object MongoDB : MongoRepository {
             realm = Realm.open(config)
         }
     }
-//
-//    override fun getAllDiaries(): Flow<Diaries> {
-//        return if (user != null) {
-//            try {
-//                realm.query<Diary>(query = "ownerId == $0", user.id)
-//                    .sort(property = "date", sortOrder = Sort.DESCENDING)
-//                    .asFlow()
-//                    .map { result ->
-//                        RequestState.Success(
-//                            data = result.list.groupBy {
-//                                it.date.toInstant()
-//                                    .atZone(ZoneId.systemDefault())
-//                                    .toLocalDate()
-//                            }
-//                        )
-//                    }
-//            } catch (e: Exception) {
-//                flow { emit(RequestState.Error(e)) }
-//            }
-//        } else {
-//            flow { emit(RequestState.Error(UserNotAuthenticatedException())) }
-//        }
-//    }
-//
+
+    override fun getAllDiaries(): Flow<Diaries> {
+        return if (user != null) {
+            try {
+                realm.query<Diary>(query = "ownerId == $0", user.identity)
+                    .sort(property = "date", sortOrder = Sort.DESCENDING)
+                    .asFlow()
+                    .map { result ->
+                        RequestState.Success(
+                            data = result.list.groupBy {
+                                it.date.toInstant()
+                                    .atZone(ZoneId.systemDefault())
+                                    .toLocalDate()
+                            },
+                        )
+                    }
+            } catch (e: Exception) {
+                flow { emit(RequestState.Error(e)) }
+            }
+        } else {
+            flow { emit(RequestState.Error(UserNotAuthenticatedException())) }
+        }
+    }
+
 //    override fun getFilteredDiaries(zonedDateTime: ZonedDateTime): Flow<Diaries> {
 //        return if (user != null) {
 //            try {
@@ -177,5 +185,3 @@ object MongoDB : MongoRepository {
 //        }
 //    }
 }
-
-// private class UserNotAuthenticatedException : Exception("User is not Logged in.")

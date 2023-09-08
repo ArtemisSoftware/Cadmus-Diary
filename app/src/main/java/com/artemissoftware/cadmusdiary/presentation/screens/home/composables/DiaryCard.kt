@@ -133,7 +133,7 @@ fun DiaryCard(diary: Diary, onClick: (String) -> Unit) {
 //                    ),
                 ) {
                     Column(modifier = Modifier.padding(all = 14.dp)) {
-                        Gallery(images = downloadedImages)
+                        Gallery(images = /*downloadedImages*/diary.images)
                     }
                 }
             }

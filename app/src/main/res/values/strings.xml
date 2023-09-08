@@ -12,4 +12,5 @@
     <string name="are_you_sure_sign_out_google_account">Are you sure you want to Sign Out from your Google Account?</string>
     <string name="empty_diary">Empty Diary</string>
     <string name="write_something">Write Something</string>
+    <string name="error">Error</string>
 </resources>
