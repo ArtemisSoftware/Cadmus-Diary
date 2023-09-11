@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.navigation.NavHostController
 import com.artemissoftware.cadmusdiary.R
 import com.artemissoftware.cadmusdiary.domain.RequestState
+import com.artemissoftware.cadmusdiary.navigation.Screen
 import com.artemissoftware.cadmusdiary.presentation.components.dialog.DisplayAlertDialog
 import com.artemissoftware.cadmusdiary.presentation.components.events.UIEventsManager
 import com.artemissoftware.cadmusdiary.presentation.screens.home.composables.EmptyPage
@@ -60,6 +61,7 @@ fun HomeScreen(
     ) {
         HomeScreenContent(
             state = state,
+            events = viewModel::onTriggerEvent,
             onMenuClicked = {
                 scope.launch {
                     drawerState.open()
@@ -99,6 +101,7 @@ private fun HomeScreenContent(
 //    diaries: Diaries,
     onMenuClicked: () -> Unit,
     state: HomeState,
+    events: (HomeEvents) -> Unit,
 //    dateIsSelected: Boolean,
 //    onDateSelected: (ZonedDateTime) -> Unit,
 //    onDateReset: () -> Unit,
@@ -124,7 +127,9 @@ private fun HomeScreenContent(
                 modifier = Modifier.padding(
                     end = padding.calculateEndPadding(LayoutDirection.Ltr),
                 ),
-                onClick = { /*navigateToWrite*/ },
+                onClick = {
+                    events.invoke(HomeEvents.Navigate(Screen.Home.route))
+                },
             ) {
                 Icon(
                     imageVector = Icons.Default.Edit,
@@ -168,5 +173,6 @@ private fun HomeTopBarPreview() {
     HomeScreenContent(
         onMenuClicked = {},
         state = HomeState(),
+        events = {},
     )
 }

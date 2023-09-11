@@ -12,6 +12,7 @@ import com.artemissoftware.cadmusdiary.presentation.screens.auth.AuthenticationS
 import com.artemissoftware.cadmusdiary.presentation.screens.auth.AuthenticationViewModel
 import com.artemissoftware.cadmusdiary.presentation.screens.home.HomeScreen
 import com.artemissoftware.cadmusdiary.presentation.screens.home.HomeViewModel
+import com.artemissoftware.cadmusdiary.presentation.screens.write.WriteScreen
 import com.artemissoftware.cadmusdiary.util.Constants.APP_ID
 import io.realm.kotlin.mongodb.App
 
@@ -174,7 +175,7 @@ fun NavGraphBuilder.writeRoute(
 //        val pagerState = rememberPagerState()
 //        val pageNumber by remember { derivedStateOf { pagerState.currentPage } }
 //
-//        WriteScreen(
+        WriteScreen(
 //            uiState = uiState,
 //            pagerState = pagerState,
 //            galleryState = galleryState,
@@ -220,7 +221,7 @@ fun NavGraphBuilder.writeRoute(
 //                viewModel.addImage(image = it, imageType = type)
 //            },
 //            onImageDeleteClicked = { galleryState.removeImage(it) }
-//        )
+        )
     }
 }
 

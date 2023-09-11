@@ -6,4 +6,6 @@ sealed class HomeEvents {
     object CloseSignOutDialog : HomeEvents()
 
     object SignOutGoogleAccount : HomeEvents()
+
+    data class Navigate(val route: String) : HomeEvents()
 }

@@ -1,11 +1,8 @@
 package com.artemissoftware.cadmusdiary.presentation.screens.home
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.artemissoftware.cadmusdiary.data.repository.Diaries
 import com.artemissoftware.cadmusdiary.data.repository.MongoDB
-import com.artemissoftware.cadmusdiary.domain.RequestState
 import com.artemissoftware.cadmusdiary.navigation.Screen
 import com.artemissoftware.cadmusdiary.presentation.components.events.UiEvent
 import com.artemissoftware.cadmusdiary.presentation.components.events.UiEventViewModel
@@ -39,6 +36,10 @@ class HomeViewModel() : UiEventViewModel() {
 
             HomeEvents.OpenSignOutDialog -> {
                 updateSignOutDialog(open = true)
+            }
+
+            is HomeEvents.Navigate -> {
+                navigate(event.route)
             }
         }
     }
@@ -91,6 +92,12 @@ class HomeViewModel() : UiEventViewModel() {
                     }
                 }
             }
+        }
+    }
+
+    private fun navigate(route: String) {
+        viewModelScope.launch {
+            sendUiEvent(UiEvent.Navigate(route))
         }
     }
 
