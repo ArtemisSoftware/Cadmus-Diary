@@ -144,7 +144,9 @@ private fun HomeScreenContent(
                     HomeContent(
                         paddingValues = it,
                         diaryNotes = state.diaries.data,
-                        onClick = {}, /*navigateToWriteWithArgs*/
+                        onClick = { diaryId ->
+                            events.invoke(HomeEvents.Navigate(Screen.Write.passDiaryId(diaryId = diaryId)))
+                        },
                     )
                 }
                 is RequestState.Error -> {

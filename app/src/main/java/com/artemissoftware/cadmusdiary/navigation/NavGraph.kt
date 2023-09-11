@@ -13,6 +13,7 @@ import com.artemissoftware.cadmusdiary.presentation.screens.auth.AuthenticationV
 import com.artemissoftware.cadmusdiary.presentation.screens.home.HomeScreen
 import com.artemissoftware.cadmusdiary.presentation.screens.home.HomeViewModel
 import com.artemissoftware.cadmusdiary.presentation.screens.write.WriteScreen
+import com.artemissoftware.cadmusdiary.presentation.screens.write.WriteViewModel
 import com.artemissoftware.cadmusdiary.util.Constants.APP_ID
 import io.realm.kotlin.mongodb.App
 
@@ -27,7 +28,7 @@ fun NavGraph(
         navController = navController,
     ) {
         authenticationRoute(
-            navController,
+            navController = navController,
             onDataLoaded = onDataLoaded,
 //            navigateToHome = {
 //                navController.popBackStack()
@@ -36,26 +37,18 @@ fun NavGraph(
 
         )
         homeRoute(
-            navController,
+            navController = navController,
             onDataLoaded = onDataLoaded,
-//            navigateToWrite = {
-//                navController.navigate(Screen.Write.route)
-//            },
-//            navigateToWriteWithArgs = {
-//                navController.navigate(Screen.Write.passDiaryId(diaryId = it))
-//            },
         )
         writeRoute(
-//            navigateBack = {
-//                navController.popBackStack()
-//            }
+            navController = navController,
         )
     }
 }
 
 fun NavGraphBuilder.authenticationRoute(
     navController: NavHostController,
-    onDataLoaded: () -> Unit
+    onDataLoaded: () -> Unit,
 ) {
     composable(route = Screen.Authentication.route) {
         val viewModel: AuthenticationViewModel = viewModel()
@@ -92,8 +85,6 @@ fun NavGraphBuilder.authenticationRoute(
 fun NavGraphBuilder.homeRoute(
     navController: NavHostController,
     onDataLoaded: () -> Unit,
-//    navigateToWrite: () -> Unit,
-//    navigateToWriteWithArgs: (String) -> Unit,
 
 ) {
     composable(route = Screen.Home.route) {
@@ -115,8 +106,6 @@ fun NavGraphBuilder.homeRoute(
 //            onDateReset = { viewModel.getDiaries() },
 //            onSignOutClicked = { signOutDialogOpened = true },
 //            onDeleteAllClicked = { deleteAllDialogOpened = true },
-//            navigateToWrite = navigateToWrite,
-//            navigateToWriteWithArgs = navigateToWriteWithArgs
         )
 
 //
@@ -156,7 +145,7 @@ fun NavGraphBuilder.homeRoute(
 }
 
 fun NavGraphBuilder.writeRoute(
-//    navigateBack: () -> Unit
+    navController: NavHostController,
 ) {
     composable(
         route = Screen.Write.route,
@@ -168,14 +157,15 @@ fun NavGraphBuilder.writeRoute(
             },
         ),
     ) {
-//        val viewModel: WriteViewModel = hiltViewModel()
+        val viewModel: WriteViewModel = viewModel() // hiltViewModel()
 //        val context = LocalContext.current
-//        val uiState = viewModel.uiState
 //        val galleryState = viewModel.galleryState
 //        val pagerState = rememberPagerState()
 //        val pageNumber by remember { derivedStateOf { pagerState.currentPage } }
 //
         WriteScreen(
+            viewModel = viewModel,
+            navController = navController,
 //            uiState = uiState,
 //            pagerState = pagerState,
 //            galleryState = galleryState,

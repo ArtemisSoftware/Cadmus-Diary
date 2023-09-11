@@ -87,7 +87,6 @@ class HomeViewModel() : UiEventViewModel() {
                     user.logOut()
 
                     withContext(Dispatchers.Main) {
-                        // --navigateToAuth()
                         sendUiEvent(UiEvent.NavigatePopCurrent(Screen.Authentication.route))
                     }
                 }

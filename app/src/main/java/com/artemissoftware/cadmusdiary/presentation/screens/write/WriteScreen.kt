@@ -2,12 +2,17 @@ package com.artemissoftware.cadmusdiary.presentation.screens.write
 
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavHostController
+import com.artemissoftware.cadmusdiary.presentation.components.events.UIEventsManager
 import com.artemissoftware.cadmusdiary.presentation.screens.write.composables.WriteContent
 import com.artemissoftware.cadmusdiary.presentation.screens.write.composables.WriteTopBar
 
 @Composable
 fun WriteScreen(
+    viewModel: WriteViewModel,
+    navController: NavHostController,
 //    uiState: UiState,
 //    pagerState: PagerState,
 //    galleryState: GalleryState,
@@ -27,19 +32,23 @@ fun WriteScreen(
 //        pagerState.scrollToPage(Mood.valueOf(uiState.mood.name).ordinal)
 //    }
 
+    val state = viewModel.state.collectAsState().value
+
     WriteScreenContent(
+        state = state,
         events = {},
     )
 
-//    UIEventsManager(
-//        uiEvent = viewModel.uiEvent,
-//        navController = navController,
-//    )
+    UIEventsManager(
+        uiEvent = viewModel.uiEvent,
+        navController = navController,
+    )
 }
 
 @Composable
 fun WriteScreenContent(
     events: (WriteEvents) -> Unit,
+    state: WriteState,
 ) {
     Scaffold(
         topBar = {
@@ -90,6 +99,7 @@ fun WriteScreenContent(
 private fun WriteScreenContentPreview() {
     WriteScreenContent(
         events = {},
+        state = state,
 //        state = HomeState(),
     )
 }
