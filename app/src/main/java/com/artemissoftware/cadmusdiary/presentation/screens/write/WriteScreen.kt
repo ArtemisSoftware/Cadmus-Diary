@@ -1,9 +1,9 @@
 package com.artemissoftware.cadmusdiary.presentation.screens.write
 
-import android.annotation.SuppressLint
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import com.artemissoftware.cadmusdiary.presentation.screens.write.composables.WriteContent
 import com.artemissoftware.cadmusdiary.presentation.screens.write.composables.WriteTopBar
 
 @Composable
@@ -37,7 +37,6 @@ fun WriteScreen(
 //    )
 }
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun WriteScreenContent(
     events: (WriteEvents) -> Unit,
@@ -53,19 +52,19 @@ fun WriteScreenContent(
             )
         },
         content = { paddingValues ->
-//            WriteContent(
+            WriteContent(
 //                uiState = uiState,
 //                pagerState = pagerState,
 //                galleryState = galleryState,
-//                title = uiState.title,
-//                onTitleChanged = onTitleChanged,
-//                description = uiState.description,
-//                onDescriptionChanged = onDescriptionChanged,
-//                paddingValues = paddingValues,
+                title = "uiState.title",
+                onTitleChanged = { /*onTitleChanged*/ },
+                description = "uiState.description",
+                onDescriptionChanged = { /*onDescriptionChanged*/ },
+                paddingValues = paddingValues,
 //                onSaveClicked = onSaveClicked,
 //                onImageSelect = onImageSelect,
 //                onImageClicked = { selectedGalleryImage = it }
-//            )
+            )
 //            AnimatedVisibility(visible = selectedGalleryImage != null) {
 //                Dialog(onDismissRequest = { selectedGalleryImage = null }) {
 //                    if (selectedGalleryImage != null) {
