@@ -2,6 +2,11 @@ package com.artemissoftware.cadmusdiary.presentation.screens.write
 
 import com.artemissoftware.cadmusdiary.domain.model.Diary
 import com.artemissoftware.cadmusdiary.domain.model.Mood
+import com.artemissoftware.cadmusdiary.util.DateTimeConstants
+import com.artemissoftware.cadmusdiary.util.extensions.toInstant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 data class WriteState(
     val selectedDiaryId: String? = null,
@@ -10,4 +15,15 @@ data class WriteState(
     val description: String = "",
     val mood: Mood = Mood.Neutral,
 //    val updatedDateTime: RealmInstant? = null
-)
+) {
+
+    fun getSelectedDiaryDateTime(): String {
+        return if (selectedDiary != null) {
+            DateTimeFormatter.ofPattern(DateTimeConstants.FORMAT_dd_MMM_yyyy__hh_mm_a, Locale.getDefault())
+                .withZone(ZoneId.systemDefault())
+                .format(selectedDiary.date.toInstant())
+        } else {
+            "Unknown"
+        }
+    }
+}

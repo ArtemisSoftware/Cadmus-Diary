@@ -12,44 +12,46 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import com.artemissoftware.cadmusdiary.domain.model.Diary
+import com.artemissoftware.cadmusdiary.domain.model.Mood
+import com.artemissoftware.cadmusdiary.presentation.screens.write.WriteState
+import com.artemissoftware.cadmusdiary.util.DateTimeConstants
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WriteTopBar(
-    selectedDiary: Diary?,
-//    moodName: () -> String,
+    state: WriteState,
 //    onDateTimeUpdated: (ZonedDateTime) -> Unit,
     onDeleteConfirmed: () -> Unit,
     onBackPressed: () -> Unit,
 ) {
-//    var currentDate by remember { mutableStateOf(LocalDate.now()) }
-//    var currentTime by remember { mutableStateOf(LocalTime.now()) }
+    var currentDate by remember { mutableStateOf(LocalDate.now()) }
+    var currentTime by remember { mutableStateOf(LocalTime.now()) }
 //    val dateDialog = rememberSheetState()
 //    val timeDialog = rememberSheetState()
-//    val formattedDate = remember(key1 = currentDate) {
-//        DateTimeFormatter
-//            .ofPattern("dd MMM yyyy")
-//            .format(currentDate).uppercase()
-//    }
-//    val formattedTime = remember(key1 = currentTime) {
-//        DateTimeFormatter
-//            .ofPattern("hh:mm a")
-//            .format(currentTime).uppercase()
-//    }
+    val formattedDate = remember(key1 = currentDate) {
+        DateTimeFormatter
+            .ofPattern(DateTimeConstants.FORMAT_dd_MM_yyyy)
+            .format(currentDate).uppercase()
+    }
+    val formattedTime = remember(key1 = currentTime) {
+        DateTimeFormatter
+            .ofPattern(DateTimeConstants.FORMAT_hh_mm_a)
+            .format(currentTime).uppercase()
+    }
 //    var dateTimeUpdated by remember { mutableStateOf(false) }
-//    val selectedDiaryDateTime = remember(selectedDiary) {
-//        if (selectedDiary != null) {
-//            DateTimeFormatter.ofPattern("dd MMM yyyy, hh:mm a", Locale.getDefault())
-//                .withZone(ZoneId.systemDefault())
-//                .format(selectedDiary.date.toInstant())
-//        } else "Unknown"
-//    }
+
     CenterAlignedTopAppBar(
         navigationIcon = {
             IconButton(onClick = onBackPressed) {
@@ -63,7 +65,7 @@ fun WriteTopBar(
             Column {
                 Text(
                     modifier = Modifier.fillMaxWidth(),
-                    text = /*moodName()*/"Happy",
+                    text = state.mood.name,
                     style = TextStyle(
                         fontSize = MaterialTheme.typography.titleLarge.fontSize,
                         fontWeight = FontWeight.Bold,
@@ -72,9 +74,7 @@ fun WriteTopBar(
                 )
                 Text(
                     modifier = Modifier.fillMaxWidth(),
-                    text = /*if (selectedDiary != null && dateTimeUpdated) "$formattedDate, $formattedTime"
-                else if (selectedDiary != null) selectedDiaryDateTime
-                else "$formattedDate, $formattedTime"*/ "10 Jan",
+                    text = getDateTime(state = state, formattedDate = formattedDate, formattedTime = formattedTime),
                     style = TextStyle(fontSize = MaterialTheme.typography.bodySmall.fontSize),
                     textAlign = TextAlign.Center,
                 )
@@ -109,9 +109,9 @@ fun WriteTopBar(
                 )
             }
 //        }
-            if (selectedDiary != null) {
+            state.selectedDiary?.let {
                 DeleteDiaryAction(
-                    selectedDiary = selectedDiary,
+                    selectedDiary = it,
                     onDeleteConfirmed = onDeleteConfirmed,
                 )
             }
@@ -143,11 +143,27 @@ fun WriteTopBar(
 //    )
 }
 
+private fun getDateTime(state: WriteState, formattedDate: String, formattedTime: String): String {
+    return state.selectedDiary?.let {
+        state.getSelectedDiaryDateTime()
+    } ?: run {
+        "$formattedDate, $formattedTime"
+    }
+
+//    if (selectedDiary != null && dateTimeUpdated) "$formattedDate, $formattedTime"
+//                else if (selectedDiary != null) selectedDiaryDateTime
+//                else "$formattedDate, $formattedTime"*/ state.getSelectedDiaryDateTime()
+}
+
 @Composable
 @Preview
 private fun WriteTopBarPreview() {
     WriteTopBar(
-        selectedDiary = null,
+        state = WriteState(
+            title = "Title one",
+            description = "Description one",
+            mood = Mood.Angry,
+        ),
         onBackPressed = {},
         onDeleteConfirmed = {},
 //        state = HomeState(),

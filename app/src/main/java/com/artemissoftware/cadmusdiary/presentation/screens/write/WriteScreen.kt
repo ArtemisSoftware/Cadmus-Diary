@@ -52,8 +52,7 @@ fun WriteScreenContent(
     Scaffold(
         topBar = {
             WriteTopBar(
-                selectedDiary = /*uiState.selectedDiary*/ null,
-//                moodName = moodName,
+                state = state,
                 onDeleteConfirmed = /*onDeleteConfirmed*/ {},
                 onBackPressed = { events.invoke(WriteEvents.PopBackStack) },
 //                onDateTimeUpdated = onDateTimeUpdated
@@ -69,6 +68,9 @@ fun WriteScreenContent(
                 },
                 onDescriptionChanged = {
                     events.invoke(WriteEvents.SetDescription(description = it))
+                },
+                onMoodScroll = {
+                    events.invoke(WriteEvents.SetMood(mood = it))
                 },
                 paddingValues = paddingValues,
 //                onSaveClicked = onSaveClicked,

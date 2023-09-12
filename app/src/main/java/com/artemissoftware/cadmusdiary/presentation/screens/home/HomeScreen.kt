@@ -128,7 +128,7 @@ private fun HomeScreenContent(
                     end = padding.calculateEndPadding(LayoutDirection.Ltr),
                 ),
                 onClick = {
-                    events.invoke(HomeEvents.Navigate(Screen.Home.route))
+                    events.invoke(HomeEvents.Navigate(Screen.Write.route))
                 },
             ) {
                 Icon(

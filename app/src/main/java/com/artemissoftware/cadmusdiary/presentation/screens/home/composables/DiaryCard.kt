@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.dp
 import com.artemissoftware.cadmusdiary.domain.model.Diary
 import com.artemissoftware.cadmusdiary.domain.model.Mood
 import com.artemissoftware.cadmusdiary.ui.theme.Elevation
+import com.artemissoftware.cadmusdiary.util.DateTimeConstants
 import com.artemissoftware.cadmusdiary.util.extensions.toInstant
 import io.realm.kotlin.ext.realmListOf
 import java.time.Instant
@@ -149,7 +150,7 @@ fun DiaryCard(diary: Diary, onClick: (String) -> Unit) {
 private fun DiaryHeader(moodName: String, time: Instant) {
     val mood by remember { mutableStateOf(Mood.valueOf(moodName)) }
     val formatter = remember {
-        DateTimeFormatter.ofPattern("hh:mm a", Locale.getDefault())
+        DateTimeFormatter.ofPattern(DateTimeConstants.FORMAT_hh_mm_a, Locale.getDefault())
             .withZone(ZoneId.systemDefault())
     }
     Row(

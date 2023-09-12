@@ -48,6 +48,7 @@ fun WriteContent(
     onTitleChanged: (String) -> Unit,
     onDescriptionChanged: (String) -> Unit,
     paddingValues: PaddingValues,
+    onMoodScroll: (Mood) -> Unit,
 //    onSaveClicked: (Diary) -> Unit,
 //    onImageSelect: (Uri) -> Unit,
 //    onImageClicked: (GalleryImage) -> Unit
@@ -65,6 +66,13 @@ fun WriteContent(
 
     LaunchedEffect(key1 = state.mood) {
         pagerState.scrollToPage(Mood.valueOf(state.mood.name).ordinal)
+    }
+
+    LaunchedEffect(key1 = pagerState.currentPage) {
+        val pageMood = Mood.values()[pagerState.currentPage]
+        if(pageMood != state.mood) {
+            onMoodScroll.invoke(pageMood)
+        }
     }
 
     Column(
@@ -208,6 +216,7 @@ private fun WriteContentPreview() {
         onTitleChanged = {},
         onDescriptionChanged = {},
         paddingValues = PaddingValues(16.dp),
+        onMoodScroll = {},
 //        events = {},
 //        state = HomeState(),
     )

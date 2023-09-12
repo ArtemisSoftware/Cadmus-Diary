@@ -54,6 +54,10 @@ class WriteViewModel /*@Inject*/ constructor(
             is WriteEvents.SetTitle -> {
                 setTitle(title = event.title)
             }
+
+            is WriteEvents.SetMood -> {
+                setMood(mood = event.mood)
+            }
         }
     }
 
