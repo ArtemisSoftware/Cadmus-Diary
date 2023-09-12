@@ -13,7 +13,6 @@ import com.artemissoftware.cadmusdiary.presentation.screens.write.composables.Wr
 fun WriteScreen(
     viewModel: WriteViewModel,
     navController: NavHostController,
-//    uiState: UiState,
 //    pagerState: PagerState,
 //    galleryState: GalleryState,
 //    moodName: () -> String,
@@ -36,7 +35,7 @@ fun WriteScreen(
 
     WriteScreenContent(
         state = state,
-        events = {},
+        events = viewModel::onTriggerEvent,
     )
 
     UIEventsManager(
@@ -62,13 +61,15 @@ fun WriteScreenContent(
         },
         content = { paddingValues ->
             WriteContent(
-//                uiState = uiState,
+                state = state,
 //                pagerState = pagerState,
 //                galleryState = galleryState,
-                title = "uiState.title",
-                onTitleChanged = { /*onTitleChanged*/ },
-                description = "uiState.description",
-                onDescriptionChanged = { /*onDescriptionChanged*/ },
+                onTitleChanged = {
+                    events.invoke(WriteEvents.SetTitle(title = it))
+                },
+                onDescriptionChanged = {
+                    events.invoke(WriteEvents.SetDescription(description = it))
+                },
                 paddingValues = paddingValues,
 //                onSaveClicked = onSaveClicked,
 //                onImageSelect = onImageSelect,
@@ -99,7 +100,7 @@ fun WriteScreenContent(
 private fun WriteScreenContentPreview() {
     WriteScreenContent(
         events = {},
-        state = state,
+        state = WriteState(),
 //        state = HomeState(),
     )
 }

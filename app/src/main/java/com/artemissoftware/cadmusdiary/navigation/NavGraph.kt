@@ -166,7 +166,6 @@ fun NavGraphBuilder.writeRoute(
         WriteScreen(
             viewModel = viewModel,
             navController = navController,
-//            uiState = uiState,
 //            pagerState = pagerState,
 //            galleryState = galleryState,
 //            moodName = { Mood.values()[pageNumber].name },

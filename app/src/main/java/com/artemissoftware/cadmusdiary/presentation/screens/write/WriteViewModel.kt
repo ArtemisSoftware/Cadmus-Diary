@@ -1,13 +1,21 @@
 package com.artemissoftware.cadmusdiary.presentation.screens.write
 
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.artemissoftware.cadmusdiary.data.repository.MongoDB
+import com.artemissoftware.cadmusdiary.domain.RequestState
+import com.artemissoftware.cadmusdiary.domain.model.Diary
+import com.artemissoftware.cadmusdiary.domain.model.Mood
 import com.artemissoftware.cadmusdiary.navigation.Screen.Companion.WRITE_SCREEN_ARGUMENT_KEY
+import com.artemissoftware.cadmusdiary.presentation.components.events.UiEvent
 import com.artemissoftware.cadmusdiary.presentation.components.events.UiEventViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import org.mongodb.kbson.ObjectId
 
 // @HiltViewModel
 class WriteViewModel /*@Inject*/ constructor(
@@ -22,7 +30,7 @@ class WriteViewModel /*@Inject*/ constructor(
 
     init {
         getDiaryIdArgument()
-//        fetchSelectedDiary()
+        fetchSelectedDiary()
     }
 
     private fun getDiaryIdArgument() = with(_state) {
@@ -34,21 +42,36 @@ class WriteViewModel /*@Inject*/ constructor(
             )
         }
     }
-//
-//    private fun fetchSelectedDiary() {
-//        if (uiState.selectedDiaryId != null) {
-//            viewModelScope.launch {
-//                MongoDB.getSelectedDiary(diaryId = ObjectId.invoke(uiState.selectedDiaryId!!))
-//                    .catch {
-//                        emit(RequestState.Error(Exception("Diary is already deleted.")))
-//                    }
-//                    .collect { diary ->
-//                        if (diary is RequestState.Success) {
-//                            setMood(mood = Mood.valueOf(diary.data.mood))
-//                            setSelectedDiary(diary = diary.data)
-//                            setTitle(title = diary.data.title)
-//                            setDescription(description = diary.data.description)
-//
+
+    fun onTriggerEvent(event: WriteEvents) {
+        when (event) {
+            WriteEvents.PopBackStack -> {
+                popBackStack()
+            }
+            is WriteEvents.SetDescription -> {
+                setDescription(description = event.description)
+            }
+            is WriteEvents.SetTitle -> {
+                setTitle(title = event.title)
+            }
+        }
+    }
+
+    private fun fetchSelectedDiary() {
+        _state.value.selectedDiaryId?.let { selectedDiaryId ->
+            viewModelScope.launch {
+                // TODO: GetDiaryUseCase
+
+                MongoDB.getSelectedDiary(diaryId = ObjectId.invoke(selectedDiaryId))
+                    .catch {
+                        emit(RequestState.Error(Exception("Diary is already deleted.")))
+                    }
+                    .collect { request ->
+
+                        when (request) {
+                            is RequestState.Success -> {
+                                setSelectedDiary(request.data)
+
 //                            fetchImagesFromFirebase(
 //                                remoteImagePaths = diary.data.images,
 //                                onImageDownload = { downloadedImage ->
@@ -62,28 +85,55 @@ class WriteViewModel /*@Inject*/ constructor(
 //                                    )
 //                                }
 //                            )
-//                        }
-//                    }
-//            }
+                            }
+                            else -> Unit
+                        }
+                    }
+            }
+        }
+    }
+
+    private fun setSelectedDiary(diary: Diary) = with(_state) {
+        update {
+            it.copy(
+                selectedDiary = diary,
+                title = diary.title,
+                description = diary.description,
+                mood = Mood.valueOf(diary.mood),
+            )
+        }
+    }
+
+//    private fun setSelectedDiary(diary: Diary) = with(_state) {
+//        update {
+//            it.copy(selectedDiary = diary)
 //        }
 //    }
-//
-//    private fun setSelectedDiary(diary: Diary) {
-//        uiState = uiState.copy(selectedDiary = diary)
-//    }
-//
-//    fun setTitle(title: String) {
-//        uiState = uiState.copy(title = title)
-//    }
-//
-//    fun setDescription(description: String) {
-//        uiState = uiState.copy(description = description)
-//    }
-//
-//    private fun setMood(mood: Mood) {
-//        uiState = uiState.copy(mood = mood)
-//    }
-//
+
+    private fun setTitle(title: String) = with(_state) {
+        update {
+            it.copy(title = title)
+        }
+    }
+
+    private fun setDescription(description: String) = with(_state) {
+        update {
+            it.copy(description = description)
+        }
+    }
+
+    private fun setMood(mood: Mood) = with(_state) {
+        update {
+            it.copy(mood = mood)
+        }
+    }
+
+    private fun popBackStack() {
+        viewModelScope.launch {
+            sendUiEvent(UiEvent.PopBackStack)
+        }
+    }
+
 //    fun updateDateTime(zonedDateTime: ZonedDateTime) {
 //        uiState = uiState.copy(updatedDateTime = zonedDateTime.toInstant().toRealmInstant())
 //    }

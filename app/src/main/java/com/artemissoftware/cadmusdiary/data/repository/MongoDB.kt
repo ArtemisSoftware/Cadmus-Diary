@@ -14,6 +14,7 @@ import io.realm.kotlin.query.Sort
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import org.mongodb.kbson.ObjectId
 import java.time.ZoneId
 
 object MongoDB : MongoRepository {
@@ -97,21 +98,21 @@ object MongoDB : MongoRepository {
 //            flow { emit(RequestState.Error(UserNotAuthenticatedException())) }
 //        }
 //    }
-//
-//    override fun getSelectedDiary(diaryId: ObjectId): Flow<RequestState<Diary>> {
-//        return if (user != null) {
-//            try {
-//                realm.query<Diary>(query = "_id == $0", diaryId).asFlow().map {
-//                    RequestState.Success(data = it.list.first())
-//                }
-//            } catch (e: Exception) {
-//                flow { emit(RequestState.Error(e)) }
-//            }
-//        } else {
-//            flow { emit(RequestState.Error(UserNotAuthenticatedException())) }
-//        }
-//    }
-//
+
+    override fun getSelectedDiary(diaryId: ObjectId): Flow<RequestState<Diary>> {
+        return if (user != null) {
+            try {
+                realm.query<Diary>(query = "_id == $0", diaryId).asFlow().map {
+                    RequestState.Success(data = it.list.first())
+                }
+            } catch (e: Exception) {
+                flow { emit(RequestState.Error(e)) }
+            }
+        } else {
+            flow { emit(RequestState.Error(UserNotAuthenticatedException())) }
+        }
+    }
+
 //    override suspend fun insertDiary(diary: Diary): RequestState<Diary> {
 //        return if (user != null) {
 //            realm.write {

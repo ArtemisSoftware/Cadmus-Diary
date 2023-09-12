@@ -24,6 +24,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -36,16 +37,15 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.artemissoftware.cadmusdiary.R
 import com.artemissoftware.cadmusdiary.domain.model.Mood
+import com.artemissoftware.cadmusdiary.presentation.screens.write.WriteState
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun WriteContent(
-//    uiState: UiState,
+    state: WriteState,
 //    pagerState: PagerState,
 //    galleryState: GalleryState,
-    title: String,
     onTitleChanged: (String) -> Unit,
-    description: String,
     onDescriptionChanged: (String) -> Unit,
     paddingValues: PaddingValues,
 //    onSaveClicked: (Diary) -> Unit,
@@ -62,6 +62,11 @@ fun WriteContent(
 //        scrollState.scrollTo(scrollState.maxValue)
 //    }
 //
+
+    LaunchedEffect(key1 = state.mood) {
+        pagerState.scrollToPage(Mood.valueOf(state.mood.name).ordinal)
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -103,7 +108,7 @@ fun WriteContent(
             Spacer(modifier = Modifier.height(30.dp))
             TextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = title,
+                value = state.title,
                 onValueChange = onTitleChanged,
                 placeholder = { Text(text = stringResource(R.string.title)) },
                 colors = TextFieldDefaults.colors(
@@ -131,7 +136,7 @@ fun WriteContent(
             )
             TextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = description,
+                value = state.description,
                 onValueChange = onDescriptionChanged,
                 placeholder = { Text(text = "Tell me about it.") },
                 colors = TextFieldDefaults.colors(
@@ -196,9 +201,11 @@ fun WriteContent(
 @Preview
 private fun WriteContentPreview() {
     WriteContent(
-        title = "title",
+        state = WriteState(
+            title = "Title one",
+            description = "Description one",
+        ),
         onTitleChanged = {},
-        description = "description",
         onDescriptionChanged = {},
         paddingValues = PaddingValues(16.dp),
 //        events = {},
