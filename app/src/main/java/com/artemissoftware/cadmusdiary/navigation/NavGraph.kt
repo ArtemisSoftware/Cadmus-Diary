@@ -160,19 +160,12 @@ fun NavGraphBuilder.writeRoute(
         val viewModel: WriteViewModel = viewModel() // hiltViewModel()
 //        val context = LocalContext.current
 //        val galleryState = viewModel.galleryState
-//        val pagerState = rememberPagerState()
 //        val pageNumber by remember { derivedStateOf { pagerState.currentPage } }
 //
         WriteScreen(
             viewModel = viewModel,
             navController = navController,
-//            pagerState = pagerState,
 //            galleryState = galleryState,
-//            moodName = { Mood.values()[pageNumber].name },
-//            onTitleChanged = { viewModel.setTitle(title = it) },
-//            onDescriptionChanged = { viewModel.setDescription(description = it) },
-//            onDateTimeUpdated = { viewModel.updateDateTime(zonedDateTime = it) },
-//            onBackPressed = navigateBack,
 //            onDeleteConfirmed = {
 //                viewModel.deleteDiary(
 //                    onSuccess = {

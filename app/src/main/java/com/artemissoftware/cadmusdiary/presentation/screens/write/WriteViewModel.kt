@@ -174,7 +174,20 @@ class WriteViewModel /*@Inject*/ constructor(
                 // this.images = galleryState.images.map { it.remoteImagePath }.toRealmList()
             }
 
-            insertDiary(diary = diary)
+            selectedDiaryId?.let {
+                diary.apply {
+                    _id = ObjectId.invoke(it)
+//                    date = if (uiState.updatedDateTime != null) {
+//                        uiState.updatedDateTime!!
+//                    } else {
+//                        uiState.selectedDiary!!.date
+//                    }
+                }
+
+                updateDiary(diary = diary)
+            } ?: run {
+                insertDiary(diary = diary)
+            }
         } else {
             viewModelScope.launch {
                 sendUiEvent(UiEvent.ShowToast(UiText.StringResource(R.string.fields_cannot_be_empty), Toast.LENGTH_SHORT))
@@ -186,7 +199,6 @@ class WriteViewModel /*@Inject*/ constructor(
         diary: Diary,
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-
             // TODO : InsertDiaryUseCase
 
             val result = MongoDB.insertDiary(
@@ -203,38 +215,37 @@ class WriteViewModel /*@Inject*/ constructor(
                 }
             } else if (result is RequestState.Error) {
                 withContext(Dispatchers.Main) {
-                    // --onError(result.error.message.toString())
+                    sendUiEvent(UiEvent.ShowToast(UiText.DynamicString(result.error.message.toString()), Toast.LENGTH_SHORT))
                 }
             }
         }
     }
 
-//    private suspend fun updateDiary(
-//        diary: Diary,
-//        onSuccess: () -> Unit,
-//        onError: (String) -> Unit
-//    ) {
-//        val result = MongoDB.updateDiary(diary = diary.apply {
-//            _id = ObjectId.invoke(uiState.selectedDiaryId!!)
-//            date = if (uiState.updatedDateTime != null) {
-//                uiState.updatedDateTime!!
-//            } else {
-//                uiState.selectedDiary!!.date
-//            }
-//        })
-//        if (result is RequestState.Success) {
-//            uploadImagesToFirebase()
-//            deleteImagesFromFirebase()
-//            withContext(Dispatchers.Main) {
-//                onSuccess()
-//            }
-//        } else if (result is RequestState.Error) {
-//            withContext(Dispatchers.Main) {
-//                onError(result.error.message.toString())
-//            }
-//        }
-//    }
-//
+    private fun updateDiary(diary: Diary) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val result = MongoDB.updateDiary(
+                diary = diary, /*.apply {
+                date = if (uiState.updatedDateTime != null) {
+                    uiState.updatedDateTime!!
+                } else {
+                    uiState.selectedDiary!!.date
+                }
+            }*/
+            )
+            if (result is RequestState.Success) {
+//                uploadImagesToFirebase()
+//                deleteImagesFromFirebase()
+                withContext(Dispatchers.Main) {
+                    sendUiEvent(UiEvent.PopBackStack)
+                }
+            } else if (result is RequestState.Error) {
+                withContext(Dispatchers.Main) {
+                    sendUiEvent(UiEvent.ShowToast(UiText.DynamicString(result.error.message.toString()), Toast.LENGTH_SHORT))
+                }
+            }
+        }
+    }
+
 //    fun deleteDiary(
 //        onSuccess: () -> Unit,
 //        onError: (String) -> Unit
