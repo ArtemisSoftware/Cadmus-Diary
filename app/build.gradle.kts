@@ -77,4 +77,8 @@ dependencies {
     implementation(libs.realm.kotlin)
 
     implementation(libs.coil.compose)
+
+    implementation(libs.sheets.compose.dialogs.core)
+    implementation(libs.sheets.compose.dialogs.calendar)
+    implementation(libs.sheets.compose.dialogs.clock)
 }
