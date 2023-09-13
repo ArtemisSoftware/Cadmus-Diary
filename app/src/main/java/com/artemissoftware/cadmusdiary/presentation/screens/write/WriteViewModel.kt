@@ -1,7 +1,9 @@
 package com.artemissoftware.cadmusdiary.presentation.screens.write
 
+import android.widget.Toast
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.artemissoftware.cadmusdiary.R
 import com.artemissoftware.cadmusdiary.data.repository.MongoDB
 import com.artemissoftware.cadmusdiary.domain.RequestState
 import com.artemissoftware.cadmusdiary.domain.model.Diary
@@ -9,12 +11,15 @@ import com.artemissoftware.cadmusdiary.domain.model.Mood
 import com.artemissoftware.cadmusdiary.navigation.Screen.Companion.WRITE_SCREEN_ARGUMENT_KEY
 import com.artemissoftware.cadmusdiary.presentation.components.events.UiEvent
 import com.artemissoftware.cadmusdiary.presentation.components.events.UiEventViewModel
+import com.artemissoftware.cadmusdiary.util.UiText
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.mongodb.kbson.ObjectId
 
 // @HiltViewModel
@@ -57,6 +62,10 @@ class WriteViewModel /*@Inject*/ constructor(
 
             is WriteEvents.SetMood -> {
                 setMood(mood = event.mood)
+            }
+
+            WriteEvents.SaveDiary -> {
+                save()
             }
         }
     }
@@ -155,29 +164,51 @@ class WriteViewModel /*@Inject*/ constructor(
 //            }
 //        }
 //    }
-//
-//    private suspend fun insertDiary(
-//        diary: Diary,
-//        onSuccess: () -> Unit,
-//        onError: (String) -> Unit,
-//    ) {
-//        val result = MongoDB.insertDiary(diary = diary.apply {
-//            if (uiState.updatedDateTime != null) {
-//                date = uiState.updatedDateTime!!
-//            }
-//        })
-//        if (result is RequestState.Success) {
+
+    private fun save() = with(_state.value) {
+        if (title.isNotEmpty() && description.isNotEmpty()) {
+            val diary = Diary().apply {
+                this.title = _state.value.title
+                this.description = _state.value.description
+                this.mood = _state.value.mood.name
+                // this.images = galleryState.images.map { it.remoteImagePath }.toRealmList()
+            }
+
+            insertDiary(diary = diary)
+        } else {
+            viewModelScope.launch {
+                sendUiEvent(UiEvent.ShowToast(UiText.StringResource(R.string.fields_cannot_be_empty), Toast.LENGTH_SHORT))
+            }
+        }
+    }
+
+    private fun insertDiary(
+        diary: Diary,
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+
+            // TODO : InsertDiaryUseCase
+
+            val result = MongoDB.insertDiary(
+                diary = diary, /*.apply {
+            if (uiState.updatedDateTime != null) {
+                date = uiState.updatedDateTime!!
+            }
+        }*/
+            )
+            if (result is RequestState.Success) {
 //            uploadImagesToFirebase()
-//            withContext(Dispatchers.Main) {
-//                onSuccess()
-//            }
-//        } else if (result is RequestState.Error) {
-//            withContext(Dispatchers.Main) {
-//                onError(result.error.message.toString())
-//            }
-//        }
-//    }
-//
+                withContext(Dispatchers.Main) {
+                    sendUiEvent(UiEvent.PopBackStack)
+                }
+            } else if (result is RequestState.Error) {
+                withContext(Dispatchers.Main) {
+                    // --onError(result.error.message.toString())
+                }
+            }
+        }
+    }
+
 //    private suspend fun updateDiary(
 //        diary: Diary,
 //        onSuccess: () -> Unit,

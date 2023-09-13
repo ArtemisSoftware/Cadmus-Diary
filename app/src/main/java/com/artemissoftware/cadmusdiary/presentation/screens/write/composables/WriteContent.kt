@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
@@ -49,7 +50,7 @@ fun WriteContent(
     onDescriptionChanged: (String) -> Unit,
     paddingValues: PaddingValues,
     onMoodScroll: (Mood) -> Unit,
-//    onSaveClicked: (Diary) -> Unit,
+    onSaveClicked: () -> Unit,
 //    onImageSelect: (Uri) -> Unit,
 //    onImageClicked: (GalleryImage) -> Unit
 ) {
@@ -70,7 +71,7 @@ fun WriteContent(
 
     LaunchedEffect(key1 = pagerState.currentPage) {
         val pageMood = Mood.values()[pagerState.currentPage]
-        if(pageMood != state.mood) {
+        if (pageMood != state.mood) {
             onMoodScroll.invoke(pageMood)
         }
     }
@@ -79,7 +80,7 @@ fun WriteContent(
         modifier = Modifier
             .fillMaxSize()
 //            .imePadding()
-//            .navigationBarsPadding()
+            .navigationBarsPadding()
             .padding(top = paddingValues.calculateTopPadding())
             .padding(bottom = 24.dp)
             .padding(horizontal = 24.dp),
@@ -180,23 +181,7 @@ fun WriteContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(54.dp),
-                onClick = {
-//                    if (uiState.title.isNotEmpty() && uiState.description.isNotEmpty()) {
-//                        onSaveClicked(
-//                            Diary().apply {
-//                                this.title = uiState.title
-//                                this.description = uiState.description
-//                                this.images = galleryState.images.map { it.remoteImagePath }.toRealmList()
-//                            }
-//                        )
-//                    } else {
-//                        Toast.makeText(
-//                            context,
-//                            "Fields cannot be empty.",
-//                            Toast.LENGTH_SHORT
-//                        ).show()
-//                    }
-                },
+                onClick = onSaveClicked,
                 shape = Shapes().small,
             ) {
                 Text(text = stringResource(R.string.save))
@@ -217,6 +202,7 @@ private fun WriteContentPreview() {
         onDescriptionChanged = {},
         paddingValues = PaddingValues(16.dp),
         onMoodScroll = {},
+        onSaveClicked = {},
 //        events = {},
 //        state = HomeState(),
     )

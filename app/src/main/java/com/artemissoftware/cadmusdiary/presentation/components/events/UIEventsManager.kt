@@ -1,7 +1,10 @@
 package com.artemissoftware.cadmusdiary.presentation.components.events
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
@@ -10,6 +13,7 @@ import kotlinx.coroutines.flow.collectLatest
 fun UIEventsManager(
     uiEvent: Flow<UiEvent>,
     navController: NavHostController,
+    context: Context = LocalContext.current,
     showMessageBar: (MessageBarType) -> Unit = {},
 //    onNavigateAndPopCurrent: (UiEvent.NavigateAndPopCurrent) -> Unit = {},
 //    onPopBackStackWithArguments: (UiEvent.PopBackStackWithArguments<*>) -> Unit = {},
@@ -25,6 +29,9 @@ fun UIEventsManager(
 //                is UiEvent.PopBackStackWithArguments<*> -> { onPopBackStackWithArguments(event) }
                 is UiEvent.Navigate -> {
                     navController.navigate(event.route)
+                }
+                is UiEvent.ShowToast -> {
+                    Toast.makeText(context, event.uiText.asString(context), event.duration).show()
                 }
 //                is UiEvent.NavigateAndPopCurrent -> {
 //                    onNavigateAndPopCurrent(event)

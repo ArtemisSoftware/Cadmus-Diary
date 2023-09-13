@@ -72,6 +72,9 @@ fun WriteScreenContent(
                 onMoodScroll = {
                     events.invoke(WriteEvents.SetMood(mood = it))
                 },
+                onSaveClicked = {
+                    events.invoke(WriteEvents.SaveDiary)
+                },
                 paddingValues = paddingValues,
 //                onSaveClicked = onSaveClicked,
 //                onImageSelect = onImageSelect,

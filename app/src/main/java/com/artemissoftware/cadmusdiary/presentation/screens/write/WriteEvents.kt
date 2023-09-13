@@ -11,4 +11,6 @@ sealed class WriteEvents {
     data class SetDescription(val description: String) : WriteEvents()
 
     data class SetMood(val mood: Mood) : WriteEvents()
+
+    object SaveDiary : WriteEvents()
 }
