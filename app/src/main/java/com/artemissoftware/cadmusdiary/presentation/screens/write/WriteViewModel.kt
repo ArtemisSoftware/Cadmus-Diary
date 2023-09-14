@@ -183,10 +183,11 @@ class WriteViewModel /*@Inject*/ constructor(
                 this.title = _state.value.title
                 this.description = _state.value.description
                 this.mood = _state.value.mood.name
-                this.date = if (_state.value.updatedDateTime != null) {
-                    _state.value.updatedDateTime!!
+
+                if (_state.value.updatedDateTime != null) {
+                    this.date = _state.value.updatedDateTime!!
                 } else {
-                    _state.value.selectedDiary!!.date
+                    _state.value.selectedDiary?.let { this.date = it.date }
                 }
                 // this.images = galleryState.images.map { it.remoteImagePath }.toRealmList()
             }

@@ -27,10 +27,13 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
@@ -40,6 +43,7 @@ import coil.request.ImageRequest
 import com.artemissoftware.cadmusdiary.R
 import com.artemissoftware.cadmusdiary.domain.model.Mood
 import com.artemissoftware.cadmusdiary.presentation.screens.write.WriteState
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -57,14 +61,13 @@ fun WriteContent(
 ) {
     val pagerState = rememberPagerState { Mood.values().size }
     val scrollState = rememberScrollState()
-//    val scope = rememberCoroutineScope()
+    val scope = rememberCoroutineScope()
 //    val context = LocalContext.current
-//    val focusManager = LocalFocusManager.current
-//
-//    LaunchedEffect(key1 = scrollState.maxValue) {
-//        scrollState.scrollTo(scrollState.maxValue)
-//    }
-//
+    val focusManager = LocalFocusManager.current
+
+    LaunchedEffect(key1 = scrollState.maxValue) {
+        scrollState.scrollTo(scrollState.maxValue)
+    }
 
     LaunchedEffect(key1 = state.mood) {
         pagerState.scrollToPage(Mood.valueOf(state.mood.name).ordinal)
@@ -135,10 +138,10 @@ fun WriteContent(
                 ),
                 keyboardActions = KeyboardActions(
                     onNext = {
-//                        scope.launch {
-//                            scrollState.animateScrollTo(Int.MAX_VALUE)
-//                            focusManager.moveFocus(FocusDirection.Down)
-//                        }
+                        scope.launch {
+                            scrollState.animateScrollTo(Int.MAX_VALUE)
+                            focusManager.moveFocus(FocusDirection.Down)
+                        }
                     },
                 ),
                 maxLines = 1,
@@ -163,7 +166,7 @@ fun WriteContent(
                 ),
                 keyboardActions = KeyboardActions(
                     onNext = {
-//                        focusManager.clearFocus()
+                        focusManager.clearFocus()
                     },
                 ),
             )
