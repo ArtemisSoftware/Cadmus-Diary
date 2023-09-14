@@ -1,6 +1,7 @@
 package com.artemissoftware.cadmusdiary.presentation.screens.write
 
 import com.artemissoftware.cadmusdiary.domain.model.Mood
+import java.time.ZonedDateTime
 
 sealed class WriteEvents {
 
@@ -13,4 +14,6 @@ sealed class WriteEvents {
     data class SetMood(val mood: Mood) : WriteEvents()
 
     object SaveDiary : WriteEvents()
+
+    data class UpdateDateTime(val zonedDateTime: ZonedDateTime) : WriteEvents()
 }

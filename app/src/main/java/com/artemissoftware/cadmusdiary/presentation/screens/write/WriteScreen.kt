@@ -19,7 +19,6 @@ fun WriteScreen(
 //    onTitleChanged: (String) -> Unit,
 //    onDescriptionChanged: (String) -> Unit,
 //    onDeleteConfirmed: () -> Unit,
-//    onDateTimeUpdated: (ZonedDateTime) -> Unit,
 //    onBackPressed: () -> Unit,
 //    onSaveClicked: (Diary) -> Unit,
 //    onImageSelect: (Uri) -> Unit,
@@ -55,7 +54,9 @@ fun WriteScreenContent(
                 state = state,
                 onDeleteConfirmed = /*onDeleteConfirmed*/ {},
                 onBackPressed = { events.invoke(WriteEvents.PopBackStack) },
-//                onDateTimeUpdated = onDateTimeUpdated
+                onDateTimeUpdated = {
+                    events.invoke(WriteEvents.UpdateDateTime(zonedDateTime = it))
+                },
             )
         },
         content = { paddingValues ->

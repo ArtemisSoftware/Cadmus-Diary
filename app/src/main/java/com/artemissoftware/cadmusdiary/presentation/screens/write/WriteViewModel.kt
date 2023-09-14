@@ -12,6 +12,7 @@ import com.artemissoftware.cadmusdiary.navigation.Screen.Companion.WRITE_SCREEN_
 import com.artemissoftware.cadmusdiary.presentation.components.events.UiEvent
 import com.artemissoftware.cadmusdiary.presentation.components.events.UiEventViewModel
 import com.artemissoftware.cadmusdiary.util.UiText
+import com.artemissoftware.cadmusdiary.util.extensions.toRealmInstant
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,6 +22,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.mongodb.kbson.ObjectId
+import java.time.ZonedDateTime
 
 // @HiltViewModel
 class WriteViewModel /*@Inject*/ constructor(
@@ -66,6 +68,10 @@ class WriteViewModel /*@Inject*/ constructor(
 
             WriteEvents.SaveDiary -> {
                 save()
+            }
+
+            is WriteEvents.UpdateDateTime -> {
+                updateDateTime(event.zonedDateTime)
             }
         }
     }
@@ -147,10 +153,12 @@ class WriteViewModel /*@Inject*/ constructor(
         }
     }
 
-//    fun updateDateTime(zonedDateTime: ZonedDateTime) {
-//        uiState = uiState.copy(updatedDateTime = zonedDateTime.toInstant().toRealmInstant())
-//    }
-//
+    private fun updateDateTime(zonedDateTime: ZonedDateTime) = with(_state) {
+        update {
+            it.copy(updatedDateTime = zonedDateTime.toInstant().toRealmInstant())
+        }
+    }
+
 //    fun upsertDiary(
 //        diary: Diary,
 //        onSuccess: () -> Unit,
@@ -171,17 +179,17 @@ class WriteViewModel /*@Inject*/ constructor(
                 this.title = _state.value.title
                 this.description = _state.value.description
                 this.mood = _state.value.mood.name
+                this.date = if (_state.value.updatedDateTime != null) {
+                    _state.value.updatedDateTime!!
+                } else {
+                    _state.value.selectedDiary!!.date
+                }
                 // this.images = galleryState.images.map { it.remoteImagePath }.toRealmList()
             }
 
             selectedDiaryId?.let {
                 diary.apply {
                     _id = ObjectId.invoke(it)
-//                    date = if (uiState.updatedDateTime != null) {
-//                        uiState.updatedDateTime!!
-//                    } else {
-//                        uiState.selectedDiary!!.date
-//                    }
                 }
 
                 updateDiary(diary = diary)
@@ -202,11 +210,7 @@ class WriteViewModel /*@Inject*/ constructor(
             // TODO : InsertDiaryUseCase
 
             val result = MongoDB.insertDiary(
-                diary = diary, /*.apply {
-            if (uiState.updatedDateTime != null) {
-                date = uiState.updatedDateTime!!
-            }
-        }*/
+                diary = diary,
             )
             if (result is RequestState.Success) {
 //            uploadImagesToFirebase()
