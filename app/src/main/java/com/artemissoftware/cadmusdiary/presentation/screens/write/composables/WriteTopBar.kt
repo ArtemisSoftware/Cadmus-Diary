@@ -59,6 +59,7 @@ fun WriteTopBar(
             .format(currentTime).uppercase()
     }
 
+    // TODO: In the latest version of compose dialog by maxkeppeler, rememberSheetState has been replaced with rememberUseCaseState.
     val dateDialog = rememberSheetState()
     val timeDialog = rememberSheetState()
     var dateTimeUpdated by remember { mutableStateOf(false) }
