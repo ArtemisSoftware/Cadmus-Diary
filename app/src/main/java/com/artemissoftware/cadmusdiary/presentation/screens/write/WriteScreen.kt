@@ -18,7 +18,6 @@ fun WriteScreen(
 //    moodName: () -> String,
 //    onTitleChanged: (String) -> Unit,
 //    onDescriptionChanged: (String) -> Unit,
-//    onDeleteConfirmed: () -> Unit,
 //    onBackPressed: () -> Unit,
 //    onSaveClicked: (Diary) -> Unit,
 //    onImageSelect: (Uri) -> Unit,
@@ -52,7 +51,9 @@ fun WriteScreenContent(
         topBar = {
             WriteTopBar(
                 state = state,
-                onDeleteConfirmed = /*onDeleteConfirmed*/ {},
+                onDeleteConfirmed = {
+                    events.invoke(WriteEvents.DeleteDiary)
+                },
                 onBackPressed = { events.invoke(WriteEvents.PopBackStack) },
                 onDateTimeUpdated = {
                     events.invoke(WriteEvents.UpdateDateTime(zonedDateTime = it))

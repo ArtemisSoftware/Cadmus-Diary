@@ -166,25 +166,6 @@ fun NavGraphBuilder.writeRoute(
             viewModel = viewModel,
             navController = navController,
 //            galleryState = galleryState,
-//            onDeleteConfirmed = {
-//                viewModel.deleteDiary(
-//                    onSuccess = {
-//                        Toast.makeText(
-//                            context,
-//                            "Deleted",
-//                            Toast.LENGTH_SHORT
-//                        ).show()
-//                        navigateBack()
-//                    },
-//                    onError = { message ->
-//                        Toast.makeText(
-//                            context,
-//                            message,
-//                            Toast.LENGTH_SHORT
-//                        ).show()
-//                    }
-//                )
-//            },
 //            onSaveClicked = {
 //                viewModel.upsertDiary(
 //                    diary = it.apply { mood = Mood.values()[pageNumber].name },

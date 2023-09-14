@@ -18,4 +18,5 @@
     <string name="title">Title</string>
     <string name="save">Save</string>
     <string name="fields_cannot_be_empty">Fields cannot be empty.</string>
+    <string name="deleted">Deleted</string>
 </resources>

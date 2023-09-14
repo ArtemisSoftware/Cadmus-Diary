@@ -73,6 +73,10 @@ class WriteViewModel /*@Inject*/ constructor(
             is WriteEvents.UpdateDateTime -> {
                 updateDateTime(event.zonedDateTime)
             }
+
+            WriteEvents.DeleteDiary -> {
+                deleteDiary()
+            }
         }
     }
 
@@ -209,9 +213,7 @@ class WriteViewModel /*@Inject*/ constructor(
         viewModelScope.launch(Dispatchers.IO) {
             // TODO : InsertDiaryUseCase
 
-            val result = MongoDB.insertDiary(
-                diary = diary,
-            )
+            val result = MongoDB.insertDiary(diary = diary)
             if (result is RequestState.Success) {
 //            uploadImagesToFirebase()
                 withContext(Dispatchers.Main) {
@@ -227,15 +229,7 @@ class WriteViewModel /*@Inject*/ constructor(
 
     private fun updateDiary(diary: Diary) {
         viewModelScope.launch(Dispatchers.IO) {
-            val result = MongoDB.updateDiary(
-                diary = diary, /*.apply {
-                date = if (uiState.updatedDateTime != null) {
-                    uiState.updatedDateTime!!
-                } else {
-                    uiState.selectedDiary!!.date
-                }
-            }*/
-            )
+            val result = MongoDB.updateDiary(diary = diary)
             if (result is RequestState.Success) {
 //                uploadImagesToFirebase()
 //                deleteImagesFromFirebase()
@@ -250,29 +244,34 @@ class WriteViewModel /*@Inject*/ constructor(
         }
     }
 
-//    fun deleteDiary(
-//        onSuccess: () -> Unit,
-//        onError: (String) -> Unit
-//    ) {
-//        viewModelScope.launch(Dispatchers.IO) {
-//            if (uiState.selectedDiaryId != null) {
-//                val result = MongoDB.deleteDiary(id = ObjectId.invoke(uiState.selectedDiaryId!!))
-//                if (result is RequestState.Success) {
-//                    withContext(Dispatchers.Main) {
+    private fun deleteDiary() = with(_state.value) {
+        viewModelScope.launch(Dispatchers.IO) {
+            selectedDiaryId?.let {
+                // TODO: DeleteDiaryUseCase
+
+                val result = MongoDB.deleteDiary(id = ObjectId.invoke(it))
+
+                when (result) {
+                    is RequestState.Success -> {
+                        withContext(Dispatchers.Main) {
 //                        uiState.selectedDiary?.let {
 //                            deleteImagesFromFirebase(images = it.images)
 //                        }
-//                        onSuccess()
-//                    }
-//                } else if (result is RequestState.Error) {
-//                    withContext(Dispatchers.Main) {
-//                        onError(result.error.message.toString())
-//                    }
-//                }
-//            }
-//        }
-//    }
-//
+                            sendUiEvent(UiEvent.ShowToast(UiText.StringResource(R.string.deleted), Toast.LENGTH_SHORT))
+                            sendUiEvent(UiEvent.PopBackStack)
+                        }
+                    }
+                    is RequestState.Error -> {
+                        withContext(Dispatchers.Main) {
+                            sendUiEvent(UiEvent.ShowToast(UiText.DynamicString(result.error.message.toString()), Toast.LENGTH_SHORT))
+                        }
+                    }
+                    else -> Unit
+                }
+            }
+        }
+    }
+
 //    fun addImage(image: Uri, imageType: String) {
 //        val remoteImagePath = "images/${FirebaseAuth.getInstance().currentUser?.uid}/" +
 //                "${image.lastPathSegment}-${System.currentTimeMillis()}.$imageType"

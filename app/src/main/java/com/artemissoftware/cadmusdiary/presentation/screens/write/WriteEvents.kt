@@ -16,4 +16,6 @@ sealed class WriteEvents {
     object SaveDiary : WriteEvents()
 
     data class UpdateDateTime(val zonedDateTime: ZonedDateTime) : WriteEvents()
+
+    object DeleteDiary : WriteEvents()
 }
