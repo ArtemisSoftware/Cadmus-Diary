@@ -5,5 +5,6 @@ plugins {
     alias(libs.plugins.org.jetbrains.kotlin.android) apply false
     alias(libs.plugins.realm.kotlin) apply false
     alias(libs.plugins.kotlin.parcelize) apply false
+    alias(libs.plugins.gms.googleServices) apply false
 }
 true // Needed to make the Suppress annotation work for the plugins block

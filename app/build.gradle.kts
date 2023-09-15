@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.org.jetbrains.kotlin.android)
     alias(libs.plugins.realm.kotlin)
     alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.gms.googleServices)
 }
 
 android {
@@ -81,4 +82,8 @@ dependencies {
     implementation(libs.sheets.compose.dialogs.core)
     implementation(libs.sheets.compose.dialogs.calendar)
     implementation(libs.sheets.compose.dialogs.clock)
+
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.auth)
+    implementation(libs.firebase.storage)
 }

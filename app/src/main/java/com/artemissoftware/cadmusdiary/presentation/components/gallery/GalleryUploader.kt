@@ -45,8 +45,8 @@ fun GalleryUploader(
 ) {
     val multiplePhotoPicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickMultipleVisualMedia(maxItems = 8),
-        onResult = { images ->
-            images.forEach {
+        onResult = { imagesResult ->
+            imagesResult.forEach {
                 onImageSelect(it)
             }
         },

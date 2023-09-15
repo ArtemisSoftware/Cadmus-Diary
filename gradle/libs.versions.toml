@@ -15,6 +15,8 @@ one-tap-compose = "1.0.3"
 message-bar-compose = "1.0.5"
 realm-kotlin = "1.10.2"
 coil-compose = "2.4.0"
+firebase-bom = "32.3.0"
+gms-googleServices = "4.3.15"
 
 sheets-compose-dialogs-core = "1.0.2"
 sheets-compose-dialogs-calendar = "1.0.2"
@@ -43,8 +45,12 @@ material3 = { group = "androidx.compose.material3", name = "material3" }
 # Compose Navigation
 navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation-compose" }
 
-#
-#// Firebase
+
+# Firebase
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase-bom" }
+firebase-storage = { group = "com.google.firebase", name = "firebase-storage" }
+firebase-auth = { group = "com.google.firebase", name = "firebase-auth" }
+
 #implementation 'com.google.firebase:firebase-auth-ktx:22.1.0'
 #implementation 'com.google.firebase:firebase-storage-ktx:20.2.1'
 #
@@ -108,6 +114,7 @@ com-android-application = { id = "com.android.application", version.ref = "agp" 
 org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "org-jetbrains-kotlin-android" }
 realm-kotlin = { id = "io.realm.kotlin", version.ref = "realm-kotlin" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "org-jetbrains-kotlin-android" }
+gms-googleServices = { id = "com.google.gms.google-services", version.ref = "gms-googleServices"}
 
 [bundles]
 

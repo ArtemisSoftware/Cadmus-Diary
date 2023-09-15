@@ -180,7 +180,7 @@ fun WriteContent(
             Spacer(modifier = Modifier.height(12.dp))
             GalleryUploader(
                 images = galleryState.images,
-                onAddClicked = { /*focusManager.clearFocus()*/ },
+                onAddClicked = { focusManager.clearFocus() },
                 onImageSelect = {
                     // val type = context.contentResolver.getType(it)?.split("/")?.last() ?: "jpg"
                     // viewModel.addImage(image = it, imageType = type)
