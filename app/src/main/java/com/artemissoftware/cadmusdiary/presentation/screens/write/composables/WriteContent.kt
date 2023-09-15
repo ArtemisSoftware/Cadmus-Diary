@@ -41,7 +41,10 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.artemissoftware.cadmusdiary.R
+import com.artemissoftware.cadmusdiary.core.ui.gallery.GalleryImage
+import com.artemissoftware.cadmusdiary.core.ui.gallery.rememberGalleryState
 import com.artemissoftware.cadmusdiary.domain.model.Mood
+import com.artemissoftware.cadmusdiary.presentation.components.gallery.GalleryUploader
 import com.artemissoftware.cadmusdiary.presentation.screens.write.WriteState
 import kotlinx.coroutines.launch
 
@@ -61,6 +64,7 @@ fun WriteContent(
 ) {
     val pagerState = rememberPagerState { Mood.values().size }
     val scrollState = rememberScrollState()
+    val galleryState = rememberGalleryState()
     val scope = rememberCoroutineScope()
 //    val context = LocalContext.current
     val focusManager = LocalFocusManager.current
@@ -174,13 +178,19 @@ fun WriteContent(
 
         Column(verticalArrangement = Arrangement.Bottom) {
             Spacer(modifier = Modifier.height(12.dp))
-//            GalleryUploader(
-//                galleryState = galleryState,
-//                onAddClicked = { focusManager.clearFocus() },
-//                onImageSelect = onImageSelect,
-//                onImageClicked = onImageClicked
-//            )
-//            Spacer(modifier = Modifier.height(12.dp))
+            GalleryUploader(
+                images = galleryState.images,
+                onAddClicked = { /*focusManager.clearFocus()*/ },
+                onImageSelect = {
+                    // val type = context.contentResolver.getType(it)?.split("/")?.last() ?: "jpg"
+                    // viewModel.addImage(image = it, imageType = type)
+                    galleryState.addImage(
+                        GalleryImage(image = it),
+                    )
+                },
+                onImageClicked = { },
+            )
+            Spacer(modifier = Modifier.height(12.dp))
             Button(
                 modifier = Modifier
                     .fillMaxWidth()
