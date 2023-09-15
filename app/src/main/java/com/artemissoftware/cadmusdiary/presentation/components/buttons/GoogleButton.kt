@@ -1,4 +1,4 @@
-package com.artemissoftware.cadmusdiary.presentation.components
+package com.artemissoftware.cadmusdiary.presentation.components.buttons
 
 import androidx.annotation.StringRes
 import androidx.compose.animation.animateContentSize
