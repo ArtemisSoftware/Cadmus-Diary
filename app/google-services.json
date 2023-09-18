@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "695925948481",
+    "project_id": "cadmus-diary",
+    "storage_bucket": "cadmus-diary.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:695925948481:android:26a6a560f5a34bf53986c0",
+        "android_client_info": {
+          "package_name": "com.artemissoftware.cadmusdiary"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "695925948481-p484qp9ev995s0eb1lj6l7mqbov5igm5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDpabsp5JJrORSsQmSsAs6mLFSndHKDBY0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "695925948481-3ukg3sag7pa8r6cdd04sd9d57vl7ieaj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

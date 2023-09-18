@@ -22,6 +22,7 @@ class MainActivity : ComponentActivity() {
         }
         WindowCompat.setDecorFitsSystemWindows(window, false)
         MongoDB.configureTheRealm()
+        //--FirebaseApp.initializeApp(this)
 
         setContent {
             CadmusDiaryTheme {

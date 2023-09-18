@@ -2,14 +2,14 @@ package com.artemissoftware.cadmusdiary.presentation.screens.auth
 
 import androidx.lifecycle.viewModelScope
 import com.artemissoftware.cadmusdiary.R
+import com.artemissoftware.cadmusdiary.data.repository.AuthenticationRepositoryImpl
+import com.artemissoftware.cadmusdiary.domain.RequestState
+import com.artemissoftware.cadmusdiary.domain.usecases.SignInUseCase
 import com.artemissoftware.cadmusdiary.navigation.Screen
 import com.artemissoftware.cadmusdiary.presentation.components.events.MessageBarType
 import com.artemissoftware.cadmusdiary.presentation.components.events.UiEvent
 import com.artemissoftware.cadmusdiary.presentation.components.events.UiEventViewModel
-import com.artemissoftware.cadmusdiary.util.Constants.APP_ID
 import com.artemissoftware.cadmusdiary.util.UiText
-import io.realm.kotlin.mongodb.App
-import io.realm.kotlin.mongodb.Credentials
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -56,40 +56,39 @@ class AuthenticationViewModel(
 
     private fun signInWithMongoAtlas(tokenId: String) {
         viewModelScope.launch {
-            try {
-                // TODO : val result = signInWithMongoAtlasUseCase(tokenId = tokenId)
+            val repo = AuthenticationRepositoryImpl()
+            val result = SignInUseCase(repo).invoke(tokenId) // TODO injectar
 
-                val isLoggedIn = withContext(Dispatchers.IO) {
-                    App.create(APP_ID).login(
-                        Credentials.jwt(tokenId),
-                    ).loggedIn
-                }
-
-                withContext(Dispatchers.Main) {
-                    if (isLoggedIn) {
-                        sendUiEvent(
-                            UiEvent.ShowMessageBar(
-                                MessageBarType.Success(
-                                    UiText.StringResource(
-                                        R.string.successfully_authenticated,
+            withContext(Dispatchers.Main) {
+                when (result) {
+                    is RequestState.Success -> {
+                        if (result.data) {
+                            sendUiEvent(
+                                UiEvent.ShowMessageBar(
+                                    MessageBarType.Success(
+                                        UiText.StringResource(
+                                            R.string.successfully_authenticated,
+                                        ),
                                     ),
                                 ),
-                            ),
-                        )
-                        delay(600.milliseconds)
+                            )
+                            delay(600.milliseconds)
 
-                        sendUiEvent(UiEvent.NavigatePopCurrent(Screen.Home.route))
-                    } else {
-                        sendUiEvent(
-                            UiEvent.ShowMessageBar(MessageBarType.Error(Exception("User is not logged in."))),
-                        )
+                            sendUiEvent(UiEvent.NavigatePopCurrent(Screen.Home.route))
+                        } else {
+                            sendUiEvent(
+                                UiEvent.ShowMessageBar(MessageBarType.Error(Exception("User is not logged in."))),
+                            )
+                        }
+                        setAuthenticated(result.data)
                     }
-                    setAuthenticated(isLoggedIn)
-                }
-            } catch (e: Exception) {
-                withContext(Dispatchers.Main) {
-                    UiEvent.ShowMessageBar(MessageBarType.Error(e))
-                    setAuthenticated(false)
+
+                    is RequestState.Error -> {
+                        UiEvent.ShowMessageBar(MessageBarType.Error(result.error as Exception))
+                        setAuthenticated(false)
+                    }
+
+                    else -> Unit
                 }
             }
             setLoading(false)
