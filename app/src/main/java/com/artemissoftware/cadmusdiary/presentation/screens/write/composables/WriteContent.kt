@@ -185,7 +185,6 @@ fun WriteContent(
                     // Todo: adicionar isto ao viewmodel quando se injectar o contexto
                     val type = context.contentResolver.getType(it)?.split("/")?.last() ?: "jpg"
                     addImage(it, type)
-                    // viewModel.addImage(image = it, imageType = type)
                 },
                 onImageClicked = { },
             )

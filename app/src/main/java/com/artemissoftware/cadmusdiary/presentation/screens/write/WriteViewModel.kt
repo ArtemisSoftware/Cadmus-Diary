@@ -16,6 +16,8 @@ import com.artemissoftware.cadmusdiary.presentation.components.events.UiEventVie
 import com.artemissoftware.cadmusdiary.util.UiText
 import com.artemissoftware.cadmusdiary.util.extensions.toRealmInstant
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.storage.FirebaseStorage
+import io.realm.kotlin.ext.toRealmList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -30,7 +32,7 @@ import java.time.ZonedDateTime
 // @HiltViewModel
 class WriteViewModel /*@Inject*/ constructor(
     private val savedStateHandle: SavedStateHandle,
-    //private val application: Application
+    // private val application: Application
 //    private val imageToUploadDao: ImageToUploadDao,
 //    private val imageToDeleteDao: ImageToDeleteDao
 ) : UiEventViewModel() {
@@ -197,7 +199,7 @@ class WriteViewModel /*@Inject*/ constructor(
                 } else {
                     _state.value.selectedDiary?.let { this.date = it.date }
                 }
-                // this.images = galleryState.images.map { it.remoteImagePath }.toRealmList()
+                this.images = galleryState.images.map { it.remoteImagePath }.toRealmList()
             }
 
             selectedDiaryId?.let {
@@ -224,7 +226,7 @@ class WriteViewModel /*@Inject*/ constructor(
 
             val result = MongoDB.insertDiary(diary = diary)
             if (result is RequestState.Success) {
-//            uploadImagesToFirebase()
+                uploadImages()
                 withContext(Dispatchers.Main) {
                     sendUiEvent(UiEvent.PopBackStack)
                 }
@@ -240,7 +242,7 @@ class WriteViewModel /*@Inject*/ constructor(
         viewModelScope.launch(Dispatchers.IO) {
             val result = MongoDB.updateDiary(diary = diary)
             if (result is RequestState.Success) {
-//                uploadImagesToFirebase()
+                uploadImages()
 //                deleteImagesFromFirebase()
                 withContext(Dispatchers.Main) {
                     sendUiEvent(UiEvent.PopBackStack)
@@ -302,11 +304,11 @@ class WriteViewModel /*@Inject*/ constructor(
         }
     }
 
-//    private fun uploadImagesToFirebase() {
-//        val storage = FirebaseStorage.getInstance().reference
-//        galleryState.images.forEach { galleryImage ->
-//            val imagePath = storage.child(galleryImage.remoteImagePath)
-//            imagePath.putFile(galleryImage.image)
+    private fun uploadImages() = with(_state.value) {
+        val storage = FirebaseStorage.getInstance().reference
+        galleryState.images.forEach { galleryImage ->
+            val imagePath = storage.child(galleryImage.remoteImagePath)
+            imagePath.putFile(galleryImage.image)
 //                .addOnProgressListener {
 //                    val sessionUri = it.uploadSessionUri
 //                    if (sessionUri != null) {
@@ -321,9 +323,9 @@ class WriteViewModel /*@Inject*/ constructor(
 //                        }
 //                    }
 //                }
-//        }
-//    }
-//
+        }
+    }
+
 //    private fun deleteImagesFromFirebase(images: List<String>? = null) {
 //        val storage = FirebaseStorage.getInstance().reference
 //        if (images != null) {

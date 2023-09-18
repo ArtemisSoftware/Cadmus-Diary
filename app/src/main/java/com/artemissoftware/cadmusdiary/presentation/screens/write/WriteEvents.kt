@@ -21,4 +21,5 @@ sealed class WriteEvents {
     object DeleteDiary : WriteEvents()
 
     data class AddImage(val image: Uri, val remoteImagePath: String = "") : WriteEvents()
+
 }
