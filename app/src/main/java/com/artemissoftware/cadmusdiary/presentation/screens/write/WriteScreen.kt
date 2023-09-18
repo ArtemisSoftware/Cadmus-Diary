@@ -77,6 +77,9 @@ fun WriteScreenContent(
                 onSaveClicked = {
                     events.invoke(WriteEvents.SaveDiary)
                 },
+                addImage = { imageUri, path ->
+                    events.invoke(WriteEvents.AddImage(imageUri, path))
+                },
                 paddingValues = paddingValues,
 //                onSaveClicked = onSaveClicked,
 //                onImageSelect = onImageSelect,

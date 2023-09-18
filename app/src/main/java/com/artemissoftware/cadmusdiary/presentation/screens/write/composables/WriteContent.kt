@@ -1,5 +1,6 @@
 package com.artemissoftware.cadmusdiary.presentation.screens.write.composables
 
+import android.net.Uri
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -41,7 +42,6 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.artemissoftware.cadmusdiary.R
-import com.artemissoftware.cadmusdiary.core.ui.gallery.GalleryImage
 import com.artemissoftware.cadmusdiary.core.ui.gallery.rememberGalleryState
 import com.artemissoftware.cadmusdiary.domain.model.Mood
 import com.artemissoftware.cadmusdiary.presentation.components.gallery.GalleryUploader
@@ -59,14 +59,14 @@ fun WriteContent(
     paddingValues: PaddingValues,
     onMoodScroll: (Mood) -> Unit,
     onSaveClicked: () -> Unit,
+    addImage: (Uri, String) -> Unit,
 //    onImageSelect: (Uri) -> Unit,
 //    onImageClicked: (GalleryImage) -> Unit
 ) {
     val pagerState = rememberPagerState { Mood.values().size }
     val scrollState = rememberScrollState()
-    val galleryState = rememberGalleryState()
     val scope = rememberCoroutineScope()
-//    val context = LocalContext.current
+    val context = LocalContext.current
     val focusManager = LocalFocusManager.current
 
     LaunchedEffect(key1 = scrollState.maxValue) {
@@ -179,14 +179,13 @@ fun WriteContent(
         Column(verticalArrangement = Arrangement.Bottom) {
             Spacer(modifier = Modifier.height(12.dp))
             GalleryUploader(
-                images = galleryState.images,
+                images = state.galleryState.images,
                 onAddClicked = { focusManager.clearFocus() },
                 onImageSelect = {
-                    // val type = context.contentResolver.getType(it)?.split("/")?.last() ?: "jpg"
+                    // Todo: adicionar isto ao viewmodel quando se injectar o contexto
+                    val type = context.contentResolver.getType(it)?.split("/")?.last() ?: "jpg"
+                    addImage(it, type)
                     // viewModel.addImage(image = it, imageType = type)
-                    galleryState.addImage(
-                        GalleryImage(image = it),
-                    )
                 },
                 onImageClicked = { },
             )
@@ -217,6 +216,7 @@ private fun WriteContentPreview() {
         paddingValues = PaddingValues(16.dp),
         onMoodScroll = {},
         onSaveClicked = {},
+        addImage = { _, _ -> },
 //        events = {},
 //        state = HomeState(),
     )

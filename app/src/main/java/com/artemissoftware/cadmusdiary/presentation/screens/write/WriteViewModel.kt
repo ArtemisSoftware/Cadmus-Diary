@@ -1,9 +1,11 @@
 package com.artemissoftware.cadmusdiary.presentation.screens.write
 
+import android.net.Uri
 import android.widget.Toast
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.artemissoftware.cadmusdiary.R
+import com.artemissoftware.cadmusdiary.core.ui.gallery.GalleryImage
 import com.artemissoftware.cadmusdiary.data.repository.MongoDB
 import com.artemissoftware.cadmusdiary.domain.RequestState
 import com.artemissoftware.cadmusdiary.domain.model.Diary
@@ -13,6 +15,7 @@ import com.artemissoftware.cadmusdiary.presentation.components.events.UiEvent
 import com.artemissoftware.cadmusdiary.presentation.components.events.UiEventViewModel
 import com.artemissoftware.cadmusdiary.util.UiText
 import com.artemissoftware.cadmusdiary.util.extensions.toRealmInstant
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -27,6 +30,7 @@ import java.time.ZonedDateTime
 // @HiltViewModel
 class WriteViewModel /*@Inject*/ constructor(
     private val savedStateHandle: SavedStateHandle,
+    //private val application: Application
 //    private val imageToUploadDao: ImageToUploadDao,
 //    private val imageToDeleteDao: ImageToDeleteDao
 ) : UiEventViewModel() {
@@ -76,6 +80,10 @@ class WriteViewModel /*@Inject*/ constructor(
 
             WriteEvents.DeleteDiary -> {
                 deleteDiary()
+            }
+
+            is WriteEvents.AddImage -> {
+                addImage(image = event.image, imageType = event.remoteImagePath)
             }
         }
     }
@@ -273,17 +281,27 @@ class WriteViewModel /*@Inject*/ constructor(
         }
     }
 
-//    fun addImage(image: Uri, imageType: String) {
-//        val remoteImagePath = "images/${FirebaseAuth.getInstance().currentUser?.uid}/" +
-//                "${image.lastPathSegment}-${System.currentTimeMillis()}.$imageType"
-//        galleryState.addImage(
-//            GalleryImage(
-//                image = image,
-//                remoteImagePath = remoteImagePath
-//            )
-//        )
-//    }
-//
+    private fun addImage(image: Uri, imageType: String) = with(_state) {
+        val remoteImagePath = "images/${FirebaseAuth.getInstance().currentUser?.uid}/" +
+            "${image.lastPathSegment}-${System.currentTimeMillis()}.$imageType"
+
+        val imageList = value.galleryState.images.toMutableList()
+        imageList.add(
+            GalleryImage(
+                image = image,
+                remoteImagePath = remoteImagePath,
+            ),
+        )
+
+        update {
+            it.copy(
+                galleryState = it.galleryState.copy(
+                    images = imageList,
+                ),
+            )
+        }
+    }
+
 //    private fun uploadImagesToFirebase() {
 //        val storage = FirebaseStorage.getInstance().reference
 //        galleryState.images.forEach { galleryImage ->

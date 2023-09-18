@@ -1,5 +1,6 @@
 package com.artemissoftware.cadmusdiary.presentation.screens.write
 
+import com.artemissoftware.cadmusdiary.core.ui.gallery.GalleryState
 import com.artemissoftware.cadmusdiary.domain.model.Diary
 import com.artemissoftware.cadmusdiary.domain.model.Mood
 import com.artemissoftware.cadmusdiary.util.DateTimeConstants
@@ -15,7 +16,8 @@ data class WriteState(
     val title: String = "",
     val description: String = "",
     val mood: Mood = Mood.Neutral,
-    val updatedDateTime: RealmInstant? = null
+    val updatedDateTime: RealmInstant? = null,
+    val galleryState: ImageGalleryState = ImageGalleryState(),
 ) {
 
     fun getSelectedDiaryDateTime(): String {

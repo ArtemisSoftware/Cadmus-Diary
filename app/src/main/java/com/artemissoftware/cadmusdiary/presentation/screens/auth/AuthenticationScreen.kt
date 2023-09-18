@@ -14,6 +14,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import com.artemissoftware.cadmusdiary.navigation.Screen
+import com.artemissoftware.cadmusdiary.presentation.components.events.MessageBarType
 import com.artemissoftware.cadmusdiary.presentation.components.events.UIEventsManager
 import com.artemissoftware.cadmusdiary.presentation.screens.auth.composables.AuthenticationContent
 import com.artemissoftware.cadmusdiary.ui.theme.CadmusDiaryTheme
@@ -32,9 +33,6 @@ fun AuthenticationScreen(
     viewModel: AuthenticationViewModel,
     navController: NavHostController,
     onDataLoaded: () -> Unit,
-//    onSuccessfulFirebaseSignIn: (String) -> Unit,
-//    onFailedFirebaseSignIn: (Exception) -> Unit,
-//    onDialogDismissed: (String) -> Unit,
 ) {
     val context = LocalContext.current
     val state = viewModel.state.collectAsState().value
@@ -68,21 +66,10 @@ fun AuthenticationScreen(
         state = oneTapState,
         clientId = CLIENT_ID,
         onTokenIdReceived = { tokenId ->
-            Log.d("Auth", tokenId)
             viewModel.onTriggerEvent(AuthenticationEvents.SignInWithMongoAtlas(tokenId = tokenId))
-//            val credential = GoogleAuthProvider.getCredential(tokenId, null)
-//            FirebaseAuth.getInstance().signInWithCredential(credential)
-//                .addOnCompleteListener { task ->
-//                    if(task.isSuccessful) {
-//                        onSuccessfulFirebaseSignIn(tokenId)
-//                    } else {
-//                        task.exception?.let { it -> onFailedFirebaseSignIn(it) }
-//                    }
-//                }
         },
         onDialogDismissed = { message ->
-            Log.d("Auth", message)
-//            onDialogDismissed(message)
+            messageBarState.show(context = context, messageBarType = MessageBarType.Error(Exception(message)))
         },
     )
 
