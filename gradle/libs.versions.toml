@@ -22,6 +22,9 @@ sheets-compose-dialogs-core = "1.0.2"
 sheets-compose-dialogs-calendar = "1.0.2"
 sheets-compose-dialogs-clock = "1.0.2"
 
+room = "2.5.2"
+com-google-devtools-ksp = "1.8.20-1.0.11"
+
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -51,10 +54,11 @@ firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.r
 firebase-storage = { group = "com.google.firebase", name = "firebase-storage" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth" }
 
-#implementation 'com.google.firebase:firebase-auth-ktx:22.1.0'
-#implementation 'com.google.firebase:firebase-storage-ktx:20.2.1'
-#
-#// Room components
+
+# Room components
+room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 #implementation "androidx.room:room-runtime:2.5.2"
 #kapt "androidx.room:room-compiler:2.5.2"
 #implementation "androidx.room:room-ktx:2.5.2"
@@ -115,6 +119,7 @@ org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.re
 realm-kotlin = { id = "io.realm.kotlin", version.ref = "realm-kotlin" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "org-jetbrains-kotlin-android" }
 gms-googleServices = { id = "com.google.gms.google-services", version.ref = "gms-googleServices"}
+com-google-devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "com-google-devtools-ksp" }
 
 [bundles]
 

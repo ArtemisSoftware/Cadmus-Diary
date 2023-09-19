@@ -51,7 +51,7 @@ class ImageRepositoryImpl() : ImageRepository {
                                 urls.add(uri.toString())
 
                                 // onImageDownload(it)
-                                if (/*remoteImagePaths.lastIndexOf(remoteImagePaths.last()) == index*/remoteImagePaths.size == index + 1) {
+                                if (/*remoteImagePaths.lastIndexOf(remoteImagePaths.last()) == index*/remoteImagePaths.size == urls.size) {
                                     Log.d("DownloadURL", "Terminei com ${urls.size}")
                                     continuation.resume(urls)
                                 }

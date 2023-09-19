@@ -8,6 +8,7 @@ import kotlinx.coroutines.withContext
 
 class GetDiaryImagesUseCase(private val imageRepository: ImageRepository) {
 
+    // TODO: lógica para ober uma imagem de cada vez para ter um ui mais bonito
     suspend operator fun invoke(diaryId: String, remoteImagePaths: List<String>) = withContext(Dispatchers.IO) {
         try {
             val result = imageRepository.getImagesFromFirebase(remoteImagePaths)

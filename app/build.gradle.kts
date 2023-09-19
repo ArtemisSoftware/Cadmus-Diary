@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.realm.kotlin)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.gms.googleServices)
+    alias(libs.plugins.com.google.devtools.ksp)
 }
 
 android {
@@ -86,4 +87,9 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
     implementation(libs.firebase.storage)
+
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    annotationProcessor(libs.room.compiler)
+    ksp(libs.room.compiler)
 }
