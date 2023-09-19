@@ -24,6 +24,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -36,35 +37,45 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.artemissoftware.cadmusdiary.R
 import com.artemissoftware.cadmusdiary.domain.model.Diary
 import com.artemissoftware.cadmusdiary.domain.model.Mood
 import com.artemissoftware.cadmusdiary.ui.theme.Elevation
 import com.artemissoftware.cadmusdiary.util.DateTimeConstants
 import com.artemissoftware.cadmusdiary.util.extensions.toInstant
 import io.realm.kotlin.ext.realmListOf
+import org.mongodb.kbson.ObjectId
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 @Composable
-fun DiaryCard(diary: Diary, onClick: (String) -> Unit) {
+fun DiaryCard(
+    diary: Diary,
+    onClick: (String) -> Unit,
+    fetchImages: (ObjectId, List<String>) -> Unit,
+    galleryLoading: Boolean,
+    downloadedImages: List<Uri> = emptyList()
+) {
     val localDensity = LocalDensity.current
     val context = LocalContext.current
     var componentHeight by remember { mutableStateOf(0.dp) }
     var galleryOpened by remember { mutableStateOf(false) }
-    var galleryLoading by remember { mutableStateOf(false) }
-    val downloadedImages = remember { mutableStateListOf<Uri>() }
+    //--var galleryLoading by remember { mutableStateOf(false) }
+    //--val downloadedImages = remember { mutableStateListOf<Uri>() }
 
-//    LaunchedEffect(key1 = galleryOpened) {
-//        if (galleryOpened && downloadedImages.isEmpty()) {
-//            galleryLoading = true
-//            fetchImagesFromFirebase(
-//                remoteImagePaths = diary.images,
+    LaunchedEffect(key1 = galleryOpened) {
+        if (galleryOpened && downloadedImages.isEmpty()) {
+            //--galleryLoading = true
+            fetchImages(
+                diary._id,
+                diary.images,
 //                onImageDownload = { image ->
 //                    downloadedImages.add(image)
 //                },
@@ -82,9 +93,9 @@ fun DiaryCard(diary: Diary, onClick: (String) -> Unit) {
 //                    galleryLoading = false
 //                    galleryOpened = true
 //                },
-//            )
-//        }
-//    }
+            )
+        }
+    }
 
     Row(
         modifier = Modifier
@@ -138,7 +149,7 @@ fun DiaryCard(diary: Diary, onClick: (String) -> Unit) {
                     ),
                 ) {
                     Column(modifier = Modifier.padding(all = 14.dp)) {
-                        Gallery(images = /*downloadedImages*/diary.images)
+                        Gallery(images = downloadedImages)
                     }
                 }
             }
@@ -199,11 +210,13 @@ fun ShowGalleryButton(
 ) {
     TextButton(onClick = onClick) {
         Text(
-            text = if (galleryOpened) {
-                if (galleryLoading) "Loading" else "Hide Gallery"
-            } else {
-                "Show Gallery"
-            },
+            text = stringResource(
+                id = if (galleryOpened) {
+                    if (galleryLoading) R.string.loading else R.string.hide_loading
+                } else {
+                    R.string.show_loading
+                },
+            ),
             style = TextStyle(fontSize = MaterialTheme.typography.bodySmall.fontSize),
         )
     }
@@ -221,6 +234,8 @@ private fun DiaryCardPreview() {
             images = realmListOf("", "")
         },
         onClick = {},
+        fetchImages = {_,_ ->},
+        galleryLoading = true,
     )
 }
 
@@ -236,5 +251,7 @@ private fun DiaryCard_no_images_Preview() {
             images = realmListOf()
         },
         onClick = {},
+        fetchImages = {_,_ ->},
+        galleryLoading = true,
     )
 }

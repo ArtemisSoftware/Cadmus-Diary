@@ -1,5 +1,6 @@
 package com.artemissoftware.cadmusdiary.presentation.screens.home.composables
 
+import android.net.Uri
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -24,7 +25,7 @@ import kotlin.math.max
 @Composable
 fun Gallery(
     modifier: Modifier = Modifier,
-    images: List</*Uri*/String>,
+    images: List<Uri>,
     imageSize: Dp = 40.dp,
     spaceBetween: Dp = 12.dp,
     imageShape: CornerBasedShape = Shapes().small,

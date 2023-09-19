@@ -143,9 +143,13 @@ private fun HomeScreenContent(
                 is RequestState.Success -> {
                     HomeContent(
                         paddingValues = it,
+                        state = state,
                         diaryNotes = state.diaries.data,
                         onClick = { diaryId ->
                             events.invoke(HomeEvents.Navigate(Screen.Write.passDiaryId(diaryId = diaryId)))
+                        },
+                        fetchImages = { id, list ->
+                            events.invoke(HomeEvents.FetchImages(id, list))
                         },
                     )
                 }

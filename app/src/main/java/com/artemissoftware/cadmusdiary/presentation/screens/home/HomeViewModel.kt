@@ -1,8 +1,12 @@
 package com.artemissoftware.cadmusdiary.presentation.screens.home
 
+import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
 import com.artemissoftware.cadmusdiary.data.repository.Diaries
+import com.artemissoftware.cadmusdiary.data.repository.ImageRepositoryImpl
 import com.artemissoftware.cadmusdiary.data.repository.MongoDB
+import com.artemissoftware.cadmusdiary.domain.RequestState
+import com.artemissoftware.cadmusdiary.domain.usecases.GetDiaryImagesUseCase
 import com.artemissoftware.cadmusdiary.navigation.Screen
 import com.artemissoftware.cadmusdiary.presentation.components.events.UiEvent
 import com.artemissoftware.cadmusdiary.presentation.components.events.UiEventViewModel
@@ -15,6 +19,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.mongodb.kbson.ObjectId
 
 class HomeViewModel() : UiEventViewModel() {
 
@@ -40,6 +45,10 @@ class HomeViewModel() : UiEventViewModel() {
 
             is HomeEvents.Navigate -> {
                 navigate(event.route)
+            }
+
+            is HomeEvents.FetchImages -> {
+                getImages(diaryId = event.diaryId, list = event.list)
             }
         }
     }
@@ -97,6 +106,46 @@ class HomeViewModel() : UiEventViewModel() {
     private fun navigate(route: String) {
         viewModelScope.launch {
             sendUiEvent(UiEvent.Navigate(route))
+        }
+    }
+
+    private fun getImages(diaryId: ObjectId, list: List<String>) = with(_state) {
+        val images = value.diariesImages.toMutableList()
+        images.add(
+            DiariesImageState(
+                id = diaryId.toString(),
+                isLoading = true,
+            ),
+        )
+        update {
+            it.copy(diariesImages = images)
+        }
+
+        // TODO: GetDiaryImagesUseCase
+        val repo = ImageRepositoryImpl()
+        val usecase = GetDiaryImagesUseCase(repo)
+
+        viewModelScope.launch {
+            val result = usecase.invoke(diaryId.toString(), list)
+
+            when(result) {
+                is RequestState.Success -> {
+                    // TODO: Simplificar esta lógica
+                    val im = value.diariesImages.toMutableList()
+                    im.removeIf { it.id == result.data.id }
+                    im.add(
+                        DiariesImageState(
+                            id = diaryId.toString(),
+                            uris = result.data.images.map { it.toUri() },
+                        ),
+                    )
+
+                    update {
+                        it.copy(diariesImages = im)
+                    }
+                }
+                else -> Unit // TODO: caso de erro
+            }
         }
     }
 

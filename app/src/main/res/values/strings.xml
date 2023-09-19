@@ -20,4 +20,7 @@
     <string name="fields_cannot_be_empty">Fields cannot be empty.</string>
     <string name="deleted">Deleted</string>
     <string name="add_with_value">+%1$s</string>
+    <string name="loading">Loading</string>
+    <string name="hide_loading">Hide Gallery</string>
+    <string name="show_loading">Show Gallery</string>
 </resources>

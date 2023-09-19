@@ -1,5 +1,7 @@
 package com.artemissoftware.cadmusdiary.presentation.screens.home
 
+import org.mongodb.kbson.ObjectId
+
 sealed class HomeEvents {
 
     object OpenSignOutDialog : HomeEvents()
@@ -8,4 +10,6 @@ sealed class HomeEvents {
     object SignOutGoogleAccount : HomeEvents()
 
     data class Navigate(val route: String) : HomeEvents()
+
+    data class FetchImages(val diaryId: ObjectId, val list: List<String>) : HomeEvents()
 }

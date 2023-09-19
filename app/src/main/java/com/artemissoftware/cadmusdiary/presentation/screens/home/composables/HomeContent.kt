@@ -21,6 +21,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.artemissoftware.cadmusdiary.R
 import com.artemissoftware.cadmusdiary.domain.model.Diary
+import com.artemissoftware.cadmusdiary.presentation.screens.home.HomeState
+import org.mongodb.kbson.ObjectId
 import java.time.LocalDate
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -29,6 +31,8 @@ fun HomeContent(
     paddingValues: PaddingValues,
     diaryNotes: Map<LocalDate, List<Diary>>,
     onClick: (String) -> Unit,
+    fetchImages: (ObjectId, List<String>) -> Unit,
+    state: HomeState,
 ) {
     if (diaryNotes.isNotEmpty()) {
         LazyColumn(
@@ -46,7 +50,13 @@ fun HomeContent(
                     items = diaries,
                     key = { it._id.toString() },
                 ) {
-                    DiaryCard(diary = it, onClick = onClick)
+                    DiaryCard(
+                        diary = it,
+                        onClick = onClick,
+                        fetchImages = fetchImages,
+                        galleryLoading = state.isFetchingImages(it._id.toString()),
+                        downloadedImages = state.downloadedImages(it._id.toString()),
+                    )
                 }
             }
         }

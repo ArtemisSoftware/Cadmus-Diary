@@ -2,14 +2,17 @@ package com.artemissoftware.cadmusdiary.presentation.screens.write
 
 import android.net.Uri
 import android.widget.Toast
+import androidx.core.net.toUri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.artemissoftware.cadmusdiary.R
 import com.artemissoftware.cadmusdiary.core.ui.gallery.GalleryImage
+import com.artemissoftware.cadmusdiary.data.repository.ImageRepositoryImpl
 import com.artemissoftware.cadmusdiary.data.repository.MongoDB
 import com.artemissoftware.cadmusdiary.domain.RequestState
 import com.artemissoftware.cadmusdiary.domain.model.Diary
 import com.artemissoftware.cadmusdiary.domain.model.Mood
+import com.artemissoftware.cadmusdiary.domain.usecases.GetDiaryImagesUseCase
 import com.artemissoftware.cadmusdiary.navigation.Screen.Companion.WRITE_SCREEN_ARGUMENT_KEY
 import com.artemissoftware.cadmusdiary.presentation.components.events.UiEvent
 import com.artemissoftware.cadmusdiary.presentation.components.events.UiEventViewModel
@@ -126,6 +129,41 @@ class WriteViewModel /*@Inject*/ constructor(
         }
     }
 
+    private fun fetchImagesFromFB(diaryId: String, images: List<String>) = with(_state) {
+        viewModelScope.launch {
+            // TODO: GetDiaryImagesUseCase
+            val repo = ImageRepositoryImpl()
+            val usecase = GetDiaryImagesUseCase(repo)
+
+            val result = usecase.invoke(diaryId, images)
+
+            when (result) {
+                is RequestState.Success -> {
+                    // TODO: Simplificar esta lógica
+
+                    val resultGallery = result.data.images.map {
+                        GalleryImage(
+                            image = it.toUri(),
+                            remoteImagePath = extractImagePath(
+                                fullImageUrl = it,
+                            ),
+                        )
+                    }
+
+                    update {
+                        it.copy(
+                            galleryState = it.galleryState.copy(
+                                images = resultGallery,
+                            ),
+                        )
+                    }
+                }
+
+                else -> Unit // TODO: caso de erro
+            }
+        }
+    }
+
     private fun setSelectedDiary(diary: Diary) = with(_state) {
         update {
             it.copy(
@@ -135,6 +173,8 @@ class WriteViewModel /*@Inject*/ constructor(
                 mood = Mood.valueOf(diary.mood),
             )
         }
+
+        fetchImagesFromFB(diary._id.toString(), diary.images)
     }
 
 //    private fun setSelectedDiary(diary: Diary) = with(_state) {
@@ -352,10 +392,10 @@ class WriteViewModel /*@Inject*/ constructor(
 //            }
 //        }
 //    }
-//
-//    private fun extractImagePath(fullImageUrl: String): String {
-//        val chunks = fullImageUrl.split("%2F")
-//        val imageName = chunks[2].split("?").first()
-//        return "images/${Firebase.auth.currentUser?.uid}/$imageName"
-//    }
+
+    private fun extractImagePath(fullImageUrl: String): String {
+        val chunks = fullImageUrl.split("%2F")
+        val imageName = chunks[2].split("?").first()
+        return "images/${FirebaseAuth.getInstance().currentUser?.uid}/$imageName"
+    }
 }
