@@ -25,6 +25,10 @@ sheets-compose-dialogs-clock = "1.0.2"
 room = "2.5.2"
 com-google-devtools-ksp = "1.8.20-1.0.11"
 
+
+hilt = "2.46.1"
+hilt-navigation-compose = "1.1.0-alpha01"
+
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -59,10 +63,8 @@ firebase-auth = { group = "com.google.firebase", name = "firebase-auth" }
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
-#implementation "androidx.room:room-runtime:2.5.2"
-#kapt "androidx.room:room-compiler:2.5.2"
-#implementation "androidx.room:room-ktx:2.5.2"
-#
+
+
 #// Runtime Compose
 #implementation "androidx.lifecycle:lifecycle-runtime-compose:2.6.1"
 
@@ -74,10 +76,14 @@ core-splashscreen = { group = "androidx.core", name = "core-splashscreen", versi
 realm-kotlin = { group = "io.realm.kotlin", name = "library-sync", version.ref = "realm-kotlin" }
 
 
-#// Dagger Hilt
+# Dagger Hilt
 #implementation "com.google.dagger:hilt-android:2.44.2"
 #kapt "com.google.dagger:hilt-compiler:2.44.2"
 #implementation "androidx.hilt:hilt-navigation-compose:1.0.0"
+
+hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
+hilt-android-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
+hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hilt-navigation-compose"  }
 
 
 #Coil
@@ -120,6 +126,8 @@ realm-kotlin = { id = "io.realm.kotlin", version.ref = "realm-kotlin" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "org-jetbrains-kotlin-android" }
 gms-googleServices = { id = "com.google.gms.google-services", version.ref = "gms-googleServices"}
 com-google-devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "com-google-devtools-ksp" }
+
+com-google-dagger-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 
 [bundles]
 
