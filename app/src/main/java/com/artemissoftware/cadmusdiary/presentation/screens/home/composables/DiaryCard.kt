@@ -140,7 +140,7 @@ fun DiaryCard(
                     )
                 }
                 AnimatedVisibility(
-                    visible = galleryOpened /*&& !galleryLoading*/,
+                    visible = galleryOpened && !galleryLoading,
                     enter = fadeIn() + expandVertically(
                         animationSpec = spring(
                             dampingRatio = Spring.DampingRatioMediumBouncy,

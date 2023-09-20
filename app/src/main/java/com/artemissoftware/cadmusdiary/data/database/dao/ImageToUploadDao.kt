@@ -9,12 +9,15 @@ import com.artemissoftware.cadmusdiary.data.database.entity.ImageToUploadEntity
 @Dao
 interface ImageToUploadDao {
 
-    @Query("SELECT * FROM imagesToUpload ORDER BY id ASC")
+    @Query("SELECT * FROM imageToUpload ORDER BY id ASC")
     suspend fun getAllImages(): List<ImageToUploadEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addImageToUpload(imageToUpload: ImageToUploadEntity)
 
-    @Query("DELETE FROM imagesToUpload WHERE id=:imageId")
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addImageToUpload(imageToUpload: List<ImageToUploadEntity>)
+
+    @Query("DELETE FROM imageToUpload WHERE id=:imageId")
     suspend fun cleanupImage(imageId: Int)
 }

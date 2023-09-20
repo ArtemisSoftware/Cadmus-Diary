@@ -136,13 +136,12 @@ fun NavGraphBuilder.writeRoute(
             },
         ),
     ) {
-        val viewModel: WriteViewModel = viewModel() // hiltViewModel()
+
 //        val context = LocalContext.current
 //        val galleryState = viewModel.galleryState
 //        val pageNumber by remember { derivedStateOf { pagerState.currentPage } }
 //
         WriteScreen(
-            viewModel = viewModel,
             navController = navController,
 //            galleryState = galleryState,
 //            onSaveClicked = {

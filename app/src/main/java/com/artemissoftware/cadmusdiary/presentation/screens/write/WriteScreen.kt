@@ -4,6 +4,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.artemissoftware.cadmusdiary.presentation.components.events.UIEventsManager
 import com.artemissoftware.cadmusdiary.presentation.screens.write.composables.WriteContent
@@ -11,14 +13,10 @@ import com.artemissoftware.cadmusdiary.presentation.screens.write.composables.Wr
 
 @Composable
 fun WriteScreen(
-    viewModel: WriteViewModel,
+    viewModel: WriteViewModel = hiltViewModel(),
     navController: NavHostController,
 //    pagerState: PagerState,
 //    galleryState: GalleryState,
-//    moodName: () -> String,
-//    onTitleChanged: (String) -> Unit,
-//    onDescriptionChanged: (String) -> Unit,
-//    onBackPressed: () -> Unit,
 //    onSaveClicked: (Diary) -> Unit,
 //    onImageSelect: (Uri) -> Unit,
 //    onImageDeleteClicked: (GalleryImage) -> Unit

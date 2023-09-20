@@ -3,7 +3,7 @@ package com.artemissoftware.cadmusdiary.data.database.entity
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "imagesToUpload")
+@Entity(tableName = "imageToUpload")
 data class ImageToUploadEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,

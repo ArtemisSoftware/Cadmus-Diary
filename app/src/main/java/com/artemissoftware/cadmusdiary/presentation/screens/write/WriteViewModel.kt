@@ -7,19 +7,19 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.artemissoftware.cadmusdiary.R
 import com.artemissoftware.cadmusdiary.core.ui.gallery.GalleryImage
-import com.artemissoftware.cadmusdiary.data.repository.ImageRepositoryImpl
 import com.artemissoftware.cadmusdiary.data.repository.MongoDB
 import com.artemissoftware.cadmusdiary.domain.RequestState
 import com.artemissoftware.cadmusdiary.domain.model.Diary
 import com.artemissoftware.cadmusdiary.domain.model.Mood
 import com.artemissoftware.cadmusdiary.domain.usecases.GetDiaryImagesUseCase
+import com.artemissoftware.cadmusdiary.domain.usecases.UploadImagesUseCase
 import com.artemissoftware.cadmusdiary.navigation.Screen.Companion.WRITE_SCREEN_ARGUMENT_KEY
 import com.artemissoftware.cadmusdiary.presentation.components.events.UiEvent
 import com.artemissoftware.cadmusdiary.presentation.components.events.UiEventViewModel
 import com.artemissoftware.cadmusdiary.util.UiText
 import com.artemissoftware.cadmusdiary.util.extensions.toRealmInstant
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.storage.FirebaseStorage
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.realm.kotlin.ext.toRealmList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,10 +31,13 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.mongodb.kbson.ObjectId
 import java.time.ZonedDateTime
+import javax.inject.Inject
 
-// @HiltViewModel
-class WriteViewModel /*@Inject*/ constructor(
+@HiltViewModel
+class WriteViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
+    private val uploadImagesUseCase: UploadImagesUseCase,
+    private val getDiaryImagesUseCase: GetDiaryImagesUseCase,
     // private val application: Application
 //    private val imageToUploadDao: ImageToUploadDao,
 //    private val imageToDeleteDao: ImageToDeleteDao
@@ -131,11 +134,7 @@ class WriteViewModel /*@Inject*/ constructor(
 
     private fun fetchImagesFromFB(diaryId: String, images: List<String>) = with(_state) {
         viewModelScope.launch {
-            // TODO: GetDiaryImagesUseCase
-            val repo = ImageRepositoryImpl()
-            val usecase = GetDiaryImagesUseCase(repo)
-
-            val result = usecase.invoke(diaryId, images)
+            val result = getDiaryImagesUseCase.invoke(diaryId, images)
 
             when (result) {
                 is RequestState.Success -> {
@@ -345,24 +344,8 @@ class WriteViewModel /*@Inject*/ constructor(
     }
 
     private fun uploadImages() = with(_state.value) {
-        val storage = FirebaseStorage.getInstance().reference
-        galleryState.images.forEach { galleryImage ->
-            val imagePath = storage.child(galleryImage.remoteImagePath)
-            imagePath.putFile(galleryImage.image)
-//                .addOnProgressListener {
-//                    val sessionUri = it.uploadSessionUri
-//                    if (sessionUri != null) {
-//                        viewModelScope.launch(Dispatchers.IO) {
-//                            imageToUploadDao.addImageToUpload(
-//                                ImageToUpload(
-//                                    remoteImagePath = galleryImage.remoteImagePath,
-//                                    imageUri = galleryImage.image.toString(),
-//                                    sessionUri = sessionUri.toString()
-//                                )
-//                            )
-//                        }
-//                    }
-//                }
+        viewModelScope.launch {
+            val result = uploadImagesUseCase.invoke(galleryState.images)
         }
     }
 
