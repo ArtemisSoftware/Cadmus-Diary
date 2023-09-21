@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.realm.kotlin)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.gms.googleServices)
+    alias(libs.plugins.org.jetbrains.kotlin.kapt)
     alias(libs.plugins.com.google.devtools.ksp)
     alias(libs.plugins.com.google.dagger.hilt.android)
 }
@@ -95,6 +96,6 @@ dependencies {
     ksp(libs.room.compiler)
 
     implementation(libs.hilt.android)
-    ksp(libs.hilt.android.compiler)
+    kapt(libs.hilt.android.compiler)
     implementation(libs.hilt.navigation.compose)
 }
