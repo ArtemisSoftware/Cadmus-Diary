@@ -15,11 +15,13 @@ import com.artemissoftware.cadmusdiary.navigation.NavGraph
 import com.artemissoftware.cadmusdiary.ui.theme.CadmusDiaryTheme
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storageMetadata
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     @Inject

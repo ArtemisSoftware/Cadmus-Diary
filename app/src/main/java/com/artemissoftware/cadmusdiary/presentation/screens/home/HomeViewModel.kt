@@ -6,6 +6,7 @@ import com.artemissoftware.cadmusdiary.data.repository.Diaries
 import com.artemissoftware.cadmusdiary.data.repository.ImageRepositoryImpl
 import com.artemissoftware.cadmusdiary.data.repository.MongoDB
 import com.artemissoftware.cadmusdiary.domain.RequestState
+import com.artemissoftware.cadmusdiary.domain.repository.ImageRepository
 import com.artemissoftware.cadmusdiary.domain.usecases.GetDiaryImagesUseCase
 import com.artemissoftware.cadmusdiary.navigation.Screen
 import com.artemissoftware.cadmusdiary.presentation.components.events.UiEvent
@@ -122,8 +123,8 @@ class HomeViewModel() : UiEventViewModel() {
         }
 
         // TODO: GetDiaryImagesUseCase
-        val repo = ImageRepositoryImpl()
-        val usecase = GetDiaryImagesUseCase(repo)
+        val repo: ImageRepository? = null // TODO: Muito Errado!!!!!!!!!!!!!! Só para compilar. Mudar isto.
+        val usecase = GetDiaryImagesUseCase(repo!!)
 
         viewModelScope.launch {
             val result = usecase.invoke(diaryId.toString(), list)
