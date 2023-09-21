@@ -93,6 +93,14 @@ class WriteViewModel @Inject constructor(
             is WriteEvents.AddImage -> {
                 addImage(image = event.image, imageType = event.remoteImagePath)
             }
+
+            is WriteEvents.ZoomInImage -> {
+                setSelectedImage(event.image)
+            }
+
+            WriteEvents.ZoomOutImage -> {
+                setSelectedImage()
+            }
         }
     }
 
@@ -181,6 +189,12 @@ class WriteViewModel @Inject constructor(
 //            it.copy(selectedDiary = diary)
 //        }
 //    }
+
+    private fun setSelectedImage(image: GalleryImage? = null) = with(_state) {
+        update {
+            it.copy(selectedImage = image)
+        }
+    }
 
     private fun setTitle(title: String) = with(_state) {
         update {

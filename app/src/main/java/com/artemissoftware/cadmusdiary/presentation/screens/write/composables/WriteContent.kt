@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.artemissoftware.cadmusdiary.R
+import com.artemissoftware.cadmusdiary.core.ui.gallery.GalleryImage
 import com.artemissoftware.cadmusdiary.core.ui.gallery.rememberGalleryState
 import com.artemissoftware.cadmusdiary.domain.model.Mood
 import com.artemissoftware.cadmusdiary.presentation.components.gallery.GalleryUploader
@@ -61,7 +62,7 @@ fun WriteContent(
     onSaveClicked: () -> Unit,
     addImage: (Uri, String) -> Unit,
 //    onImageSelect: (Uri) -> Unit,
-//    onImageClicked: (GalleryImage) -> Unit
+    onImageClicked: (GalleryImage) -> Unit
 ) {
     val pagerState = rememberPagerState { Mood.values().size }
     val scrollState = rememberScrollState()
@@ -186,7 +187,7 @@ fun WriteContent(
                     val type = context.contentResolver.getType(it)?.split("/")?.last() ?: "jpg"
                     addImage(it, type)
                 },
-                onImageClicked = { },
+                onImageClicked = onImageClicked,
             )
             Spacer(modifier = Modifier.height(12.dp))
             Button(
@@ -216,6 +217,7 @@ private fun WriteContentPreview() {
         onMoodScroll = {},
         onSaveClicked = {},
         addImage = { _, _ -> },
+        onImageClicked = {},
 //        events = {},
 //        state = HomeState(),
     )

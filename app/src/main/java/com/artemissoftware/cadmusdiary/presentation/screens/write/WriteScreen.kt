@@ -1,13 +1,15 @@
 package com.artemissoftware.cadmusdiary.presentation.screens.write
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.artemissoftware.cadmusdiary.presentation.components.events.UIEventsManager
+import com.artemissoftware.cadmusdiary.presentation.components.image.ZoomableImage
 import com.artemissoftware.cadmusdiary.presentation.screens.write.composables.WriteContent
 import com.artemissoftware.cadmusdiary.presentation.screens.write.composables.WriteTopBar
 
@@ -79,26 +81,35 @@ fun WriteScreenContent(
                     events.invoke(WriteEvents.AddImage(imageUri, path))
                 },
                 paddingValues = paddingValues,
-//                onSaveClicked = onSaveClicked,
 //                onImageSelect = onImageSelect,
-//                onImageClicked = { selectedGalleryImage = it }
+                onImageClicked = {
+                    events.invoke(WriteEvents.ZoomInImage(image = it))
+                }
             )
-//            AnimatedVisibility(visible = selectedGalleryImage != null) {
-//                Dialog(onDismissRequest = { selectedGalleryImage = null }) {
-//                    if (selectedGalleryImage != null) {
-//                        ZoomableImage(
-//                            selectedGalleryImage = selectedGalleryImage!!,
-//                            onCloseClicked = { selectedGalleryImage = null },
-//                            onDeleteClicked = {
-//                                if (selectedGalleryImage != null) {
-//                                    onImageDeleteClicked(selectedGalleryImage!!)
-//                                    selectedGalleryImage = null
-//                                }
-//                            }
-//                        )
-//                    }
-//                }
-//            }
+
+            AnimatedVisibility(visible = state.selectedImage != null) {
+                Dialog(
+                    onDismissRequest = {
+                        events.invoke(WriteEvents.ZoomOutImage)
+                    },
+                    content = {
+                        state.selectedImage?.let { selectedImage ->
+                            ZoomableImage(
+                                selectedGalleryImage = selectedImage,
+                                onCloseClicked = {
+                                    events.invoke(WriteEvents.ZoomOutImage)
+                                },
+                                onDeleteClicked = {
+
+//                                    onImageDeleteClicked(selectedImage)
+                                    events.invoke(WriteEvents.ZoomOutImage)
+
+                                }
+                            )
+                        }
+                    }
+                )
+            }
         },
     )
 }
