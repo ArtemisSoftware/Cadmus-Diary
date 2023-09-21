@@ -11,6 +11,7 @@ import com.artemissoftware.cadmusdiary.data.repository.MongoDB
 import com.artemissoftware.cadmusdiary.domain.RequestState
 import com.artemissoftware.cadmusdiary.domain.model.Diary
 import com.artemissoftware.cadmusdiary.domain.model.Mood
+import com.artemissoftware.cadmusdiary.domain.usecases.DeleteDiaryUseCase
 import com.artemissoftware.cadmusdiary.domain.usecases.GetDiaryImagesUseCase
 import com.artemissoftware.cadmusdiary.domain.usecases.UploadImagesUseCase
 import com.artemissoftware.cadmusdiary.navigation.Screen.Companion.WRITE_SCREEN_ARGUMENT_KEY
@@ -38,6 +39,7 @@ class WriteViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val uploadImagesUseCase: UploadImagesUseCase,
     private val getDiaryImagesUseCase: GetDiaryImagesUseCase,
+    private val deleteDiaryUseCase: DeleteDiaryUseCase,
     // private val application: Application
 //    private val imageToUploadDao: ImageToUploadDao,
 //    private val imageToDeleteDao: ImageToDeleteDao
@@ -309,26 +311,17 @@ class WriteViewModel @Inject constructor(
     }
 
     private fun deleteDiary() = with(_state.value) {
-        viewModelScope.launch(Dispatchers.IO) {
-            selectedDiaryId?.let {
-                // TODO: DeleteDiaryUseCase
-
-                val result = MongoDB.deleteDiary(id = ObjectId.invoke(it))
+        viewModelScope.launch {
+            selectedDiaryId?.let { diaryId ->
+                val result = deleteDiaryUseCase.invoke(diaryId, images = selectedDiary?.images)
 
                 when (result) {
                     is RequestState.Success -> {
-                        withContext(Dispatchers.Main) {
-//                        uiState.selectedDiary?.let {
-//                            deleteImagesFromFirebase(images = it.images)
-//                        }
-                            sendUiEvent(UiEvent.ShowToast(UiText.StringResource(R.string.deleted), Toast.LENGTH_SHORT))
-                            sendUiEvent(UiEvent.PopBackStack)
-                        }
+                        sendUiEvent(UiEvent.ShowToast(UiText.StringResource(R.string.deleted), Toast.LENGTH_SHORT))
+                        sendUiEvent(UiEvent.PopBackStack)
                     }
                     is RequestState.Error -> {
-                        withContext(Dispatchers.Main) {
-                            sendUiEvent(UiEvent.ShowToast(UiText.DynamicString(result.error.message.toString()), Toast.LENGTH_SHORT))
-                        }
+                        sendUiEvent(UiEvent.ShowToast(UiText.DynamicString(result.error.message.toString()), Toast.LENGTH_SHORT))
                     }
                     else -> Unit
                 }

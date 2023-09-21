@@ -68,4 +68,32 @@ class ImageRepositoryImpl(
             }
         }
     }
+
+    override suspend fun deleteImagesFromFirebase(images: List<String>?) {
+        val storage = FirebaseStorage.getInstance().reference
+
+        if (images != null) {
+            images.forEach { remotePath ->
+                storage.child(remotePath).delete()
+//                    .addOnFailureListener {
+//                        viewModelScope.launch(Dispatchers.IO) {
+//                            imageToDeleteDao.addImageToDelete(
+//                                ImageToDelete(remoteImagePath = remotePath)
+//                            )
+//                        }
+//                    }
+            }
+        } else {
+//            galleryState.imagesToBeDeleted.map { it.remoteImagePath }.forEach { remotePath ->
+//                storage.child(remotePath).delete()
+//                    .addOnFailureListener {
+//                        viewModelScope.launch(Dispatchers.IO) {
+//                            imageToDeleteDao.addImageToDelete(
+//                                ImageToDelete(remoteImagePath = remotePath)
+//                            )
+//                        }
+//                    }
+//            }
+        }
+    }
 }
