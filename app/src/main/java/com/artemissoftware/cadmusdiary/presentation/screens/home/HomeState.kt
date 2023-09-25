@@ -13,6 +13,10 @@ data class HomeState(
         return diariesImages.find { it.id == id }?.isLoading ?: false
     }
 
+    fun isGalleryOpen(id: String): Boolean {
+        return diariesImages.find { it.id == id }?.isOpened ?: false
+    }
+
     fun downloadedImages(id: String): List<Uri> {
         return diariesImages.find { it.id == id }?.uris ?: emptyList()
     }

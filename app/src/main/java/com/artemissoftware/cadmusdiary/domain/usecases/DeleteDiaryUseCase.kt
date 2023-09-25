@@ -18,7 +18,7 @@ class DeleteDiaryUseCase @Inject constructor(private val imageRepository: ImageR
         val result = MongoDB.deleteDiary(id = ObjectId.invoke(diaryId))
 
         if(result is RequestState.Success) {
-            imageRepository.deleteImagesFromFirebase(images)
+            images?.let { imageRepository.deleteImagesFromFirebase(it) }
         }
 
         result

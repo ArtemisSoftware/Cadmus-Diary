@@ -1,6 +1,5 @@
 package com.artemissoftware.cadmusdiary.data.repository
 
-import android.net.Uri
 import android.util.Log
 import androidx.core.net.toUri
 import com.artemissoftware.cadmusdiary.data.database.dao.ImageToUploadDao
@@ -13,26 +12,31 @@ import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 class ImageRepositoryImpl(
-    private val imageToUploadDao: ImageToUploadDao
+    private val imageToUploadDao: ImageToUploadDao,
 ) : ImageRepository {
-    override suspend fun uploadImagesToFirebase(pictures: List<Picture>): String? {
-        return suspendCoroutine { continuation ->
 
-            val storage = FirebaseStorage.getInstance().reference
-            pictures.forEach { picture ->
+    override suspend fun uploadImagesToFirebase(pictures: List<Picture>): HashMap<String, Picture> {
+        val storage = FirebaseStorage.getInstance().reference
+        val map = HashMap<String, Picture>()
+
+        return suspendCoroutine { continuation ->
+            pictures.forEachIndexed { index, picture ->
                 val imagePath = storage.child(picture.remotePath)
                 imagePath.putFile(picture.image.toUri())
-                    .addOnProgressListener {
-                        val sessionUri = it.uploadSessionUri
-                        continuation.resume(sessionUri?.toString())
+                    .addOnCompleteListener {
+                        map[it.result.uploadSessionUri.toString()] = picture
+
+                        if(map.size == pictures.size) {
+                            continuation.resume(map)
+                        }
                     }
             }
         }
     }
 
-    override suspend fun insertImages(sessionUri: String, pictures: List<Picture>){
+    override suspend fun insertImage(sessionUri: String, picture: Picture) {
         val session = sessionUri.toUri()
-        val entities = pictures.map { picture -> picture.toEntity(sessionUri = session) }
+        val entities = picture.toEntity(sessionUri = session)
         imageToUploadDao.addImageToUpload(imageToUpload = entities)
     }
 
@@ -43,6 +47,8 @@ class ImageRepositoryImpl(
 //        onReadyToDisplay: () -> Unit = {}
     ): List<String> {
         var urls = mutableListOf<String>()
+        var numberOfFailedDownloads = 0
+        var downloadsFinished = 0
         val firebaseStorage = FirebaseStorage.getInstance()
 
         return suspendCoroutine { continuation ->
@@ -55,13 +61,31 @@ class ImageRepositoryImpl(
                                 urls.add(uri.toString())
 
                                 // onImageDownload(it)
-                                if (/*remoteImagePaths.lastIndexOf(remoteImagePaths.last()) == index*/remoteImagePaths.size == urls.size) {
-                                    Log.d("DownloadURL", "Terminei com ${urls.size}")
-                                    continuation.resume(urls)
-                                }
+//                                if (/*remoteImagePaths.lastIndexOf(remoteImagePaths.last()) == index*/remoteImagePaths.size == urls.size) {
+//                                    Log.d("DownloadURL", "Terminei com ${urls.size}")
+//                                    continuation.resume(urls)
+//                                }
                             }.addOnFailureListener {
-                                continuation.resumeWithException(it)
+                                ++numberOfFailedDownloads
 //                            onImageDownloadFailed(it)
+                            }
+                            .addOnCompleteListener {
+                                ++downloadsFinished
+                                if (downloadsFinished == remoteImagePaths.size) {
+                                    when {
+                                        (numberOfFailedDownloads == remoteImagePaths.size) -> {
+                                            continuation.resumeWithException(Exception("Failed loading images"))
+                                        }
+
+                                        (urls.size + numberOfFailedDownloads == remoteImagePaths.size) -> {
+                                            continuation.resume(urls)
+                                        }
+
+                                        ((urls.size + numberOfFailedDownloads) == remoteImagePaths.size) -> {
+                                            continuation.resume(urls)
+                                        }
+                                    }
+                                }
                             }
                     }
                 }
@@ -69,12 +93,11 @@ class ImageRepositoryImpl(
         }
     }
 
-    override suspend fun deleteImagesFromFirebase(images: List<String>?) {
+    override suspend fun deleteImagesFromFirebase(images: List<String>) {
         val storage = FirebaseStorage.getInstance().reference
 
-        if (images != null) {
-            images.forEach { remotePath ->
-                storage.child(remotePath).delete()
+        images.forEach { remotePath ->
+            storage.child(remotePath).delete()
 //                    .addOnFailureListener {
 //                        viewModelScope.launch(Dispatchers.IO) {
 //                            imageToDeleteDao.addImageToDelete(
@@ -82,18 +105,6 @@ class ImageRepositoryImpl(
 //                            )
 //                        }
 //                    }
-            }
-        } else {
-//            galleryState.imagesToBeDeleted.map { it.remoteImagePath }.forEach { remotePath ->
-//                storage.child(remotePath).delete()
-//                    .addOnFailureListener {
-//                        viewModelScope.launch(Dispatchers.IO) {
-//                            imageToDeleteDao.addImageToDelete(
-//                                ImageToDelete(remoteImagePath = remotePath)
-//                            )
-//                        }
-//                    }
-//            }
         }
     }
 }

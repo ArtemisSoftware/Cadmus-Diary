@@ -31,6 +31,7 @@ fun HomeContent(
     paddingValues: PaddingValues,
     diaryNotes: Map<LocalDate, List<Diary>>,
     onClick: (String) -> Unit,
+    openGallery: (ObjectId) -> Unit,
     fetchImages: (ObjectId, List<String>) -> Unit,
     state: HomeState,
 ) {
@@ -53,7 +54,9 @@ fun HomeContent(
                     DiaryCard(
                         diary = it,
                         onClick = onClick,
+                        openGallery = openGallery,
                         fetchImages = fetchImages,
+                        galleryOpened = state.isGalleryOpen(it._id.toString()),
                         galleryLoading = state.isFetchingImages(it._id.toString()),
                         downloadedImages = state.downloadedImages(it._id.toString()),
                     )

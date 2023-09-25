@@ -12,7 +12,9 @@ import com.artemissoftware.cadmusdiary.domain.RequestState
 import com.artemissoftware.cadmusdiary.domain.model.Diary
 import com.artemissoftware.cadmusdiary.domain.model.Mood
 import com.artemissoftware.cadmusdiary.domain.usecases.DeleteDiaryUseCase
+import com.artemissoftware.cadmusdiary.domain.usecases.DeleteImagesUseCase
 import com.artemissoftware.cadmusdiary.domain.usecases.GetDiaryImagesUseCase
+import com.artemissoftware.cadmusdiary.domain.usecases.InsertDiaryUseCase
 import com.artemissoftware.cadmusdiary.domain.usecases.UploadImagesUseCase
 import com.artemissoftware.cadmusdiary.navigation.Screen.Companion.WRITE_SCREEN_ARGUMENT_KEY
 import com.artemissoftware.cadmusdiary.presentation.components.events.UiEvent
@@ -37,9 +39,11 @@ import javax.inject.Inject
 @HiltViewModel
 class WriteViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
-    private val uploadImagesUseCase: UploadImagesUseCase,
     private val getDiaryImagesUseCase: GetDiaryImagesUseCase,
     private val deleteDiaryUseCase: DeleteDiaryUseCase,
+    private val insertDiaryUseCase: InsertDiaryUseCase,
+    private val uploadImagesUseCase: UploadImagesUseCase,
+    private val deleteImagesUseCase: DeleteImagesUseCase,
     // private val application: Application
 //    private val imageToUploadDao: ImageToUploadDao,
 //    private val imageToDeleteDao: ImageToDeleteDao
@@ -102,6 +106,10 @@ class WriteViewModel @Inject constructor(
 
             WriteEvents.ZoomOutImage -> {
                 setSelectedImage()
+            }
+
+            is WriteEvents.DeleteImage -> {
+                deleteImage(event.image)
             }
         }
     }
@@ -167,7 +175,9 @@ class WriteViewModel @Inject constructor(
                         )
                     }
                 }
-
+                is RequestState.Error -> {
+                    sendUiEvent(UiEvent.ShowToast(UiText.DynamicString("Images not uploaded yet." + "Wait a little bit, or try uploading again."), Toast.LENGTH_SHORT))
+                }
                 else -> Unit // TODO: caso de erro
             }
         }
@@ -273,22 +283,19 @@ class WriteViewModel @Inject constructor(
         }
     }
 
-    private fun insertDiary(
-        diary: Diary,
-    ) {
-        viewModelScope.launch(Dispatchers.IO) {
-            // TODO : InsertDiaryUseCase
+    private fun insertDiary(diary: Diary) {
+        viewModelScope.launch {
+            val result = insertDiaryUseCase(diary = diary)
 
-            val result = MongoDB.insertDiary(diary = diary)
-            if (result is RequestState.Success) {
-                uploadImages()
-                withContext(Dispatchers.Main) {
+            when(result) {
+                is RequestState.Success -> {
+                    uploadImages()
                     sendUiEvent(UiEvent.PopBackStack)
                 }
-            } else if (result is RequestState.Error) {
-                withContext(Dispatchers.Main) {
+                is RequestState.Error -> {
                     sendUiEvent(UiEvent.ShowToast(UiText.DynamicString(result.error.message.toString()), Toast.LENGTH_SHORT))
                 }
+                else -> Unit
             }
         }
     }
@@ -297,8 +304,7 @@ class WriteViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             val result = MongoDB.updateDiary(diary = diary)
             if (result is RequestState.Success) {
-                uploadImages()
-//                deleteImagesFromFirebase()
+                updateImages()
                 withContext(Dispatchers.Main) {
                     sendUiEvent(UiEvent.PopBackStack)
                 }
@@ -330,7 +336,7 @@ class WriteViewModel @Inject constructor(
     }
 
     private fun addImage(image: Uri, imageType: String) = with(_state) {
-        val remoteImagePath = "images/${FirebaseAuth.getInstance().currentUser?.uid}/" +
+        val remoteImagePath = "images/${FirebaseAuth.getInstance().currentUser?.uid}/" + // TODO: mudar isto para um metodo
             "${image.lastPathSegment}-${System.currentTimeMillis()}.$imageType"
 
         val imageList = value.galleryState.images.toMutableList()
@@ -350,9 +356,43 @@ class WriteViewModel @Inject constructor(
         }
     }
 
+    private fun updateImages(images: List<String>? = null) = with(_state.value) {
+        val imagesToBeDeleted = images ?: galleryState.imagesToBeDeleted.map { it.remoteImagePath }
+
+        viewModelScope.launch {
+            uploadImagesUseCase.invoke(galleryState.images)
+            deleteImagesUseCase.invoke(imagesToBeDeleted)
+        }
+    }
+
     private fun uploadImages() = with(_state.value) {
         viewModelScope.launch {
-            val result = uploadImagesUseCase.invoke(galleryState.images)
+            uploadImagesUseCase.invoke(galleryState.images)
+        }
+    }
+
+    private fun deleteImage(image: GalleryImage) = with(_state) {
+        val imageList = value.galleryState.images.toMutableList()
+        imageList.removeIf { it.image == image.image }
+
+        val imagesToBeDeleted = value.galleryState.imagesToBeDeleted.toMutableList()
+        imagesToBeDeleted.add(image)
+
+        update {
+            it.copy(
+                galleryState = it.galleryState.copy(
+                    images = imageList,
+                    imagesToBeDeleted = imagesToBeDeleted,
+                ),
+            )
+        }
+    }
+
+    private fun deleteImages(images: List<String>? = null) = with(_state.value) {
+        val imagesToBeDeleted = images ?: galleryState.imagesToBeDeleted.map { it.remoteImagePath }
+
+        viewModelScope.launch {
+            uploadImagesUseCase.invoke(galleryState.images)
         }
     }
 

@@ -6,7 +6,6 @@ import androidx.activity.compose.setContent
 import androidx.core.net.toUri
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.rememberNavController
 import com.artemissoftware.cadmusdiary.data.database.dao.ImageToUploadDao
 import com.artemissoftware.cadmusdiary.data.database.entity.ImageToUploadEntity
@@ -53,11 +52,11 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-        cleanupCheck(
-            scope = lifecycleScope,
-            imageToUploadDao = imageToUploadDao,
-//            imageToDeleteDao = imageToDeleteDao
-        )
+//        cleanupCheck(
+//            scope = lifecycleScope,
+//            imageToUploadDao = imageToUploadDao,
+// //            imageToDeleteDao = imageToDeleteDao
+//        )
     }
 
     private fun cleanupCheck(

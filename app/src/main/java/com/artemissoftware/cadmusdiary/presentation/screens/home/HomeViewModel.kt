@@ -1,17 +1,18 @@
 package com.artemissoftware.cadmusdiary.presentation.screens.home
 
+import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
 import com.artemissoftware.cadmusdiary.data.repository.Diaries
-import com.artemissoftware.cadmusdiary.data.repository.ImageRepositoryImpl
 import com.artemissoftware.cadmusdiary.data.repository.MongoDB
 import com.artemissoftware.cadmusdiary.domain.RequestState
-import com.artemissoftware.cadmusdiary.domain.repository.ImageRepository
 import com.artemissoftware.cadmusdiary.domain.usecases.GetDiaryImagesUseCase
 import com.artemissoftware.cadmusdiary.navigation.Screen
 import com.artemissoftware.cadmusdiary.presentation.components.events.UiEvent
 import com.artemissoftware.cadmusdiary.presentation.components.events.UiEventViewModel
 import com.artemissoftware.cadmusdiary.util.Constants.APP_ID
+import com.artemissoftware.cadmusdiary.util.UiText
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.realm.kotlin.mongodb.App
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,8 +22,12 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.mongodb.kbson.ObjectId
+import javax.inject.Inject
 
-class HomeViewModel() : UiEventViewModel() {
+@HiltViewModel
+class HomeViewModel @Inject constructor(
+    private val getDiaryImagesUseCase: GetDiaryImagesUseCase,
+) : UiEventViewModel() {
 
     private val _state = MutableStateFlow(HomeState())
     val state: StateFlow<HomeState> = _state.asStateFlow()
@@ -50,6 +55,10 @@ class HomeViewModel() : UiEventViewModel() {
 
             is HomeEvents.FetchImages -> {
                 getImages(diaryId = event.diaryId, list = event.list)
+            }
+
+            is HomeEvents.OpenDiaryGallery -> {
+                openDiaryGallery(event.diaryId)
             }
         }
     }
@@ -87,6 +96,33 @@ class HomeViewModel() : UiEventViewModel() {
         }
     }
 
+    private fun openDiaryGallery(diaryId: ObjectId) = with(_state) {
+        val images = value.diariesImages.toMutableList()
+        val ll = images.find { it.id == diaryId.toString() }
+        ll?.let {
+            images.removeIf { it.id == diaryId.toString() }
+            images.add(
+                DiariesImageState(
+                    id = diaryId.toString(),
+                    uris = it.uris,
+                    isOpened = !ll.isOpened,
+                ),
+            )
+        } ?: run {
+            images.add(
+                DiariesImageState(
+                    id = diaryId.toString(),
+                    isLoading = true,
+                    isOpened = true,
+                ),
+            )
+        }
+
+        update {
+            it.copy(diariesImages = images)
+        }
+    }
+
     private fun signOut() {
         viewModelScope.launch {
             // TODO: chamar o SignOutUseCase
@@ -111,23 +147,8 @@ class HomeViewModel() : UiEventViewModel() {
     }
 
     private fun getImages(diaryId: ObjectId, list: List<String>) = with(_state) {
-        val images = value.diariesImages.toMutableList()
-        images.add(
-            DiariesImageState(
-                id = diaryId.toString(),
-                isLoading = true,
-            ),
-        )
-        update {
-            it.copy(diariesImages = images)
-        }
-
-        // TODO: GetDiaryImagesUseCase
-        val repo: ImageRepository? = null // TODO: Muito Errado!!!!!!!!!!!!!! Só para compilar. Mudar isto.
-        val usecase = GetDiaryImagesUseCase(repo!!)
-
         viewModelScope.launch {
-            val result = usecase.invoke(diaryId.toString(), list)
+            val result = getDiaryImagesUseCase.invoke(diaryId.toString(), list)
 
             when(result) {
                 is RequestState.Success -> {
@@ -137,6 +158,7 @@ class HomeViewModel() : UiEventViewModel() {
                     im.add(
                         DiariesImageState(
                             id = diaryId.toString(),
+                            isOpened = true,
                             uris = result.data.images.map { it.toUri() },
                         ),
                     )
@@ -144,6 +166,21 @@ class HomeViewModel() : UiEventViewModel() {
                     update {
                         it.copy(diariesImages = im)
                     }
+                }
+                is RequestState.Error -> {
+                    val im = value.diariesImages.toMutableList()
+                    im.removeIf { it.id == diaryId.toString() }
+                    im.add(
+                        DiariesImageState(
+                            id = diaryId.toString(),
+                            isLoading = false,
+                        ),
+                    )
+
+                    update {
+                        it.copy(diariesImages = im)
+                    }
+                    sendUiEvent(UiEvent.ShowToast(UiText.DynamicString("Images not uploaded yet." + "Wait a little bit, or try uploading again."), Toast.LENGTH_SHORT))
                 }
                 else -> Unit // TODO: caso de erro
             }

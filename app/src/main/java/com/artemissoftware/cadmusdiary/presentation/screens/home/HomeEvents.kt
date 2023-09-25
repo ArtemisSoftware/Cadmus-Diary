@@ -12,4 +12,5 @@ sealed class HomeEvents {
     data class Navigate(val route: String) : HomeEvents()
 
     data class FetchImages(val diaryId: ObjectId, val list: List<String>) : HomeEvents()
+    data class OpenDiaryGallery(val diaryId: ObjectId) : HomeEvents()
 }

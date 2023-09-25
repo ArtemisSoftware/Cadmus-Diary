@@ -59,14 +59,16 @@ import java.util.Locale
 fun DiaryCard(
     diary: Diary,
     onClick: (String) -> Unit,
+    openGallery: (ObjectId) -> Unit,
     fetchImages: (ObjectId, List<String>) -> Unit,
+    galleryOpened: Boolean,
     galleryLoading: Boolean,
     downloadedImages: List<Uri> = emptyList()
 ) {
     val localDensity = LocalDensity.current
     val context = LocalContext.current
     var componentHeight by remember { mutableStateOf(0.dp) }
-    var galleryOpened by remember { mutableStateOf(false) }
+    //--var galleryOpened by remember { mutableStateOf(false) }
     //--var galleryLoading by remember { mutableStateOf(false) }
     //--val downloadedImages = remember { mutableStateListOf<Uri>() }
 
@@ -135,7 +137,7 @@ fun DiaryCard(
                         galleryOpened = galleryOpened,
                         galleryLoading = galleryLoading,
                         onClick = {
-                            galleryOpened = !galleryOpened
+                            openGallery.invoke(diary._id)
                         },
                     )
                 }
@@ -234,8 +236,10 @@ private fun DiaryCardPreview() {
             images = realmListOf("", "")
         },
         onClick = {},
+        openGallery = {},
         fetchImages = {_,_ ->},
         galleryLoading = true,
+        galleryOpened = true,
     )
 }
 
@@ -251,7 +255,9 @@ private fun DiaryCard_no_images_Preview() {
             images = realmListOf()
         },
         onClick = {},
+        openGallery = {},
         fetchImages = {_,_ ->},
         galleryLoading = true,
+        galleryOpened = true,
     )
 }

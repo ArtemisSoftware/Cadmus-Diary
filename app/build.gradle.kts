@@ -88,6 +88,7 @@ dependencies {
 
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
+    implementation(libs.firebase.storage)
     implementation(libs.firebase.storage.ktx)
 
     implementation(libs.room.runtime)

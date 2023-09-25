@@ -4,11 +4,11 @@ import com.artemissoftware.cadmusdiary.domain.model.Picture
 
 interface ImageRepository {
 
-    suspend fun uploadImagesToFirebase(pictures: List<Picture>): String?
+    suspend fun uploadImagesToFirebase(pictures: List<Picture>): HashMap<String, Picture>
 
     suspend fun getImagesFromFirebase(remoteImagePaths: List<String>): List<String>
 
-    suspend fun insertImages(sessionUri: String, pictures: List<Picture>)
+    suspend fun insertImage(sessionUri: String, picture: Picture)
 
-    suspend fun deleteImagesFromFirebase(images: List<String>? = null)
+    suspend fun deleteImagesFromFirebase(images: List<String>)
 }

@@ -30,6 +30,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.artemissoftware.cadmusdiary.R
 import com.artemissoftware.cadmusdiary.domain.RequestState
@@ -44,7 +45,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun HomeScreen(
-    viewModel: HomeViewModel,
+    viewModel: HomeViewModel = hiltViewModel(),
     navController: NavHostController,
     onDataLoaded: () -> Unit,
 ) {
@@ -147,6 +148,9 @@ private fun HomeScreenContent(
                         diaryNotes = state.diaries.data,
                         onClick = { diaryId ->
                             events.invoke(HomeEvents.Navigate(Screen.Write.passDiaryId(diaryId = diaryId)))
+                        },
+                        openGallery = {
+                            events.invoke(HomeEvents.OpenDiaryGallery(it))
                         },
                         fetchImages = { id, list ->
                             events.invoke(HomeEvents.FetchImages(id, list))

@@ -67,8 +67,7 @@ fun NavGraphBuilder.homeRoute(
 
 ) {
     composable(route = Screen.Home.route) {
-//        val viewModel: HomeViewModel = hiltViewModel()
-        val viewModel: HomeViewModel = viewModel()
+
 
 //        val context = LocalContext.current
 //        var signOutDialogOpened by remember { mutableStateOf(false) }
@@ -77,7 +76,6 @@ fun NavGraphBuilder.homeRoute(
 
 //
         HomeScreen(
-            viewModel = viewModel,
             navController = navController,
             onDataLoaded = onDataLoaded,
 //            dateIsSelected = viewModel.dateIsSelected,

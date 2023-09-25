@@ -84,7 +84,7 @@ fun WriteScreenContent(
 //                onImageSelect = onImageSelect,
                 onImageClicked = {
                     events.invoke(WriteEvents.ZoomInImage(image = it))
-                }
+                },
             )
 
             AnimatedVisibility(visible = state.selectedImage != null) {
@@ -100,14 +100,12 @@ fun WriteScreenContent(
                                     events.invoke(WriteEvents.ZoomOutImage)
                                 },
                                 onDeleteClicked = {
-
-//                                    onImageDeleteClicked(selectedImage)
+                                    events.invoke(WriteEvents.DeleteImage(selectedImage))
                                     events.invoke(WriteEvents.ZoomOutImage)
-
-                                }
+                                },
                             )
                         }
-                    }
+                    },
                 )
             }
         },

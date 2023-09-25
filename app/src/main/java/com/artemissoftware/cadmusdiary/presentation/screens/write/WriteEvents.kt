@@ -26,4 +26,6 @@ sealed class WriteEvents {
     data class ZoomInImage(val image: GalleryImage) : WriteEvents()
 
     object ZoomOutImage : WriteEvents()
+
+    data class DeleteImage(val image: GalleryImage) : WriteEvents()
 }
