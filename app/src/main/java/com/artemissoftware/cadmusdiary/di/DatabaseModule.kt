@@ -34,9 +34,5 @@ object DatabaseModule {
 //    @Provides
 //    fun provideSecondDao(database: ImagesDatabase) = database.imageToDeleteDao()
 
-//    @Singleton
-//    @Provides
-//    fun provideNetworkConnectivityObserver(
-//        @ApplicationContext context: Context
-//    ) = NetworkConnectivityObserver(context = context)
+
 }
