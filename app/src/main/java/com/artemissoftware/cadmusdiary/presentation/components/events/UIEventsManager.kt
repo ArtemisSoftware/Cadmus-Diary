@@ -15,6 +15,7 @@ fun UIEventsManager(
     navController: NavHostController,
     context: Context = LocalContext.current,
     showMessageBar: (MessageBarType) -> Unit = {},
+    closeNavigationDrawer: () -> Unit = {},
 //    onNavigateAndPopCurrent: (UiEvent.NavigateAndPopCurrent) -> Unit = {},
 //    onPopBackStackWithArguments: (UiEvent.PopBackStackWithArguments<*>) -> Unit = {},
 //    onShowSnackBar: (TaskySnackBarType) -> Unit = {},
@@ -44,6 +45,8 @@ fun UIEventsManager(
                     navController.navigate(event.route)
                     // navController.popBackStack(route = event.route, inclusive = true)
                 }
+
+                UiEvent.CloseNavigationDrawer -> closeNavigationDrawer.invoke()
             }
         }
     }

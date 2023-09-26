@@ -6,6 +6,7 @@ import com.artemissoftware.cadmusdiary.data.database.dao.ImageToUploadDao
 import com.artemissoftware.cadmusdiary.data.mappers.toEntity
 import com.artemissoftware.cadmusdiary.domain.model.Picture
 import com.artemissoftware.cadmusdiary.domain.repository.ImageRepository
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -98,6 +99,7 @@ class ImageRepositoryImpl(
 
         images.forEach { remotePath ->
             storage.child(remotePath).delete()
+            // TODO: completar
 //                    .addOnFailureListener {
 //                        viewModelScope.launch(Dispatchers.IO) {
 //                            imageToDeleteDao.addImageToDelete(
@@ -105,6 +107,41 @@ class ImageRepositoryImpl(
 //                            )
 //                        }
 //                    }
+        }
+    }
+
+    override suspend fun deleteAllImagesFromFirebase(): List<String> {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
+        val imagesDirectory = "images/$userId"
+        val storage = FirebaseStorage.getInstance().reference
+        val toDelete = mutableListOf<String>()
+        var numberOfSuccess = 0
+        var deletesFinished = 0
+        return suspendCoroutine { continuation ->
+            storage.child(imagesDirectory)
+                .listAll()
+                .addOnSuccessListener { directoryList ->
+                    directoryList.items.forEach { ref ->
+                        val imagePath = "images/$userId/${ref.name}"
+                        storage
+                            .child(imagePath)
+                            .delete()
+                            .addOnFailureListener {
+                                toDelete.add(imagePath)
+                            }
+                            .addOnSuccessListener {
+                                ++numberOfSuccess
+                            }
+                            .addOnCompleteListener {
+                                ++deletesFinished
+
+                                if (deletesFinished == directoryList.items.size) {
+                                    continuation.resume(toDelete)
+                                }
+                            }
+                    }
+                }
+                .addOnFailureListener { continuation.resumeWithException(it) }
         }
     }
 }

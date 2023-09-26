@@ -3,9 +3,13 @@ package com.artemissoftware.cadmusdiary.presentation.screens.home
 import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
+import com.artemissoftware.cadmusdiary.R
+import com.artemissoftware.cadmusdiary.core.ui.connectivity.ConnectivityObserver
+import com.artemissoftware.cadmusdiary.core.ui.connectivity.NetworkConnectivityObserver
 import com.artemissoftware.cadmusdiary.data.repository.Diaries
 import com.artemissoftware.cadmusdiary.data.repository.MongoDB
 import com.artemissoftware.cadmusdiary.domain.RequestState
+import com.artemissoftware.cadmusdiary.domain.usecases.DeleteAllDiariesUseCase
 import com.artemissoftware.cadmusdiary.domain.usecases.GetDiaryImagesUseCase
 import com.artemissoftware.cadmusdiary.navigation.Screen
 import com.artemissoftware.cadmusdiary.presentation.components.events.UiEvent
@@ -26,7 +30,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
+    private val connectivity: NetworkConnectivityObserver,
     private val getDiaryImagesUseCase: GetDiaryImagesUseCase,
+    private val deleteAllDiariesUseCase: DeleteAllDiariesUseCase,
 ) : UiEventViewModel() {
 
     private val _state = MutableStateFlow(HomeState())
@@ -34,6 +40,7 @@ class HomeViewModel @Inject constructor(
 
     init {
         getDiaries()
+        checkConnectivity()
     }
 
     fun onTriggerEvent(event: HomeEvents) {
@@ -59,6 +66,17 @@ class HomeViewModel @Inject constructor(
 
             is HomeEvents.OpenDiaryGallery -> {
                 openDiaryGallery(event.diaryId)
+            }
+
+            HomeEvents.CloseDeleteAllDialog -> {
+                updateDeleteAllDialog(open = false)
+            }
+            HomeEvents.OpenDeleteAllDialog -> {
+                updateDeleteAllDialog(open = true)
+            }
+
+            HomeEvents.DeleteAllDiaries -> {
+                deleteAllDiaries()
             }
         }
     }
@@ -90,9 +108,25 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    private fun updateDeleteAllDialog(open: Boolean) = with(_state) {
+        update {
+            it.copy(deleteAllDialogOpened = open)
+        }
+    }
+
     private fun updateDiaries(diaries: Diaries) = with(_state) {
         update {
             it.copy(diaries = diaries)
+        }
+    }
+
+    private fun checkConnectivity() = with(_state) {
+        viewModelScope.launch {
+            connectivity.observe().collect { status ->
+                update {
+                    it.copy(network = status)
+                }
+            }
         }
     }
 
@@ -184,6 +218,29 @@ class HomeViewModel @Inject constructor(
                 }
                 else -> Unit // TODO: caso de erro
             }
+        }
+    }
+
+    private fun deleteAllDiaries() {
+        viewModelScope.launch {
+            if (_state.value.network == ConnectivityObserver.Status.Available) {
+                val result = deleteAllDiariesUseCase()
+
+                when(result) {
+                    is RequestState.Success -> {
+                        sendUiEvent(UiEvent.ShowToast(UiText.StringResource(R.string.all_diaries_deleted), Toast.LENGTH_SHORT))
+                    }
+                    is RequestState.Error -> {
+                        sendUiEvent(UiEvent.ShowToast(UiText.DynamicString(result.error.message.toString()), Toast.LENGTH_SHORT))
+                    }
+                    else -> Unit
+                }
+            }
+            else {
+                sendUiEvent(UiEvent.ShowToast(UiText.StringResource(R.string.internet_connection_necessary_for_this_operation), Toast.LENGTH_SHORT))
+            }
+
+            sendUiEvent(UiEvent.CloseNavigationDrawer)
         }
     }
 

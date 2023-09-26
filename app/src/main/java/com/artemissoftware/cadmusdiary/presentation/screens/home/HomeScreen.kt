@@ -58,7 +58,9 @@ fun HomeScreen(
         onSignOutClicked = {
             viewModel.onTriggerEvent(HomeEvents.OpenSignOutDialog)
         },
-        onDeleteAllClicked = {},
+        onDeleteAllClicked = {
+            viewModel.onTriggerEvent(HomeEvents.OpenDeleteAllDialog)
+        },
     ) {
         HomeScreenContent(
             state = state,
@@ -74,6 +76,11 @@ fun HomeScreen(
     UIEventsManager(
         uiEvent = viewModel.uiEvent,
         navController = navController,
+        closeNavigationDrawer = {
+            scope.launch {
+                drawerState.close()
+            }
+        },
     )
 
     DisplayAlertDialog(
@@ -85,6 +92,44 @@ fun HomeScreen(
         },
         onYesClicked = {
             viewModel.onTriggerEvent(HomeEvents.SignOutGoogleAccount)
+        },
+    )
+
+    DisplayAlertDialog(
+        title = stringResource(R.string.delete_all_diaries),
+        message = stringResource(R.string.are_you_sure_you_want_to_permanently_delete_all_your_diaries),
+        dialogOpened = state.deleteAllDialogOpened,
+        onDialogClosed = {
+            viewModel.onTriggerEvent(HomeEvents.CloseDeleteAllDialog)
+        },
+        onYesClicked = {
+            viewModel.onTriggerEvent(HomeEvents.DeleteAllDiaries)
+//            viewModel.deleteAllDiaries(
+//                onSuccess = {
+//                    Toast.makeText(
+//                        context,
+//                        "All Diaries Deleted.",
+//                        Toast.LENGTH_SHORT,
+//                    ).show()
+//                    scope.launch {
+//                        drawerState.close()
+//                    }
+//                },
+//                onError = {
+//                    Toast.makeText(
+//                        context,
+//                        if (it.message == "No Internet Connection.") {
+//                            "We need an Internet Connection for this operation."
+//                        } else {
+//                            it.message
+//                        },
+//                        Toast.LENGTH_SHORT,
+//                    ).show()
+//                    scope.launch {
+//                        drawerState.close()
+//                    }
+//                },
+//            )
         },
     )
 

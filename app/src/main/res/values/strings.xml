@@ -24,4 +24,8 @@
     <string name="hide_loading">Hide Gallery</string>
     <string name="show_loading">Show Gallery</string>
     <string name="close">Close</string>
+    <string name="delete_all_diaries">Delete All Diaries</string>
+    <string name="are_you_sure_you_want_to_permanently_delete_all_your_diaries">Are you sure you want to permanently delete all your diaries?</string>
+    <string name="all_diaries_deleted">All diaries deleted</string>
+    <string name="internet_connection_necessary_for_this_operation">Internet connection is necessary for this operation</string>
 </resources>

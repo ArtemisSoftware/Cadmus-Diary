@@ -13,4 +13,9 @@ sealed class HomeEvents {
 
     data class FetchImages(val diaryId: ObjectId, val list: List<String>) : HomeEvents()
     data class OpenDiaryGallery(val diaryId: ObjectId) : HomeEvents()
+
+    object OpenDeleteAllDialog : HomeEvents()
+    object CloseDeleteAllDialog : HomeEvents()
+
+    object DeleteAllDiaries : HomeEvents()
 }

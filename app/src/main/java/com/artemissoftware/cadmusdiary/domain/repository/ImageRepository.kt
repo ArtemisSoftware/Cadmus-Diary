@@ -11,4 +11,6 @@ interface ImageRepository {
     suspend fun insertImage(sessionUri: String, picture: Picture)
 
     suspend fun deleteImagesFromFirebase(images: List<String>)
+
+    suspend fun deleteAllImagesFromFirebase(): List<String>
 }

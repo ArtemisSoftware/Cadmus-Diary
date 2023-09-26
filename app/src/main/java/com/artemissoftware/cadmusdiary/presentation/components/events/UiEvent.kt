@@ -8,6 +8,8 @@ sealed class UiEvent {
 
     object PopBackStack : UiEvent()
 
+    object CloseNavigationDrawer : UiEvent()
+
     data class Navigate(val route: String) : UiEvent()
 
     data class NavigatePopCurrent(val route: String) : UiEvent()
