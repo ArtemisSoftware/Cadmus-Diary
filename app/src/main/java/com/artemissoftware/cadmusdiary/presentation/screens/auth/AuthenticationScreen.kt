@@ -2,7 +2,6 @@ package com.artemissoftware.cadmusdiary.presentation.screens.auth
 
 import android.annotation.SuppressLint
 import android.content.res.Configuration
-import android.util.Log
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -13,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
-import com.artemissoftware.cadmusdiary.navigation.Screen
 import com.artemissoftware.cadmusdiary.presentation.components.events.MessageBarType
 import com.artemissoftware.cadmusdiary.presentation.components.events.UIEventsManager
 import com.artemissoftware.cadmusdiary.presentation.screens.auth.composables.AuthenticationContent
@@ -66,7 +64,7 @@ fun AuthenticationScreen(
         state = oneTapState,
         clientId = CLIENT_ID,
         onTokenIdReceived = { tokenId ->
-            viewModel.onTriggerEvent(AuthenticationEvents.SignInWithMongoAtlas(tokenId = tokenId))
+            viewModel.onTriggerEvent(AuthenticationEvents.SignIn(tokenId = tokenId))
         },
         onDialogDismissed = { message ->
             messageBarState.show(context = context, messageBarType = MessageBarType.Error(Exception(message)))

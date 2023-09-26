@@ -2,7 +2,6 @@ package com.artemissoftware.cadmusdiary.presentation.screens.auth
 
 import androidx.lifecycle.viewModelScope
 import com.artemissoftware.cadmusdiary.R
-import com.artemissoftware.cadmusdiary.data.repository.AuthenticationRepositoryImpl
 import com.artemissoftware.cadmusdiary.domain.RequestState
 import com.artemissoftware.cadmusdiary.domain.usecases.SignInUseCase
 import com.artemissoftware.cadmusdiary.navigation.Screen
@@ -10,18 +9,19 @@ import com.artemissoftware.cadmusdiary.presentation.components.events.MessageBar
 import com.artemissoftware.cadmusdiary.presentation.components.events.UiEvent
 import com.artemissoftware.cadmusdiary.presentation.components.events.UiEventViewModel
 import com.artemissoftware.cadmusdiary.util.UiText
-import kotlinx.coroutines.Dispatchers
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import javax.inject.Inject
 import kotlin.time.Duration.Companion.milliseconds
 
-class AuthenticationViewModel(
-    // private val signInWithMongoAtlasUseCase: SignInWithMongoAtlasUseCase,
+@HiltViewModel
+class AuthenticationViewModel @Inject constructor(
+    private val signInUseCase: SignInUseCase,
 ) : UiEventViewModel() {
 
     private val _state = MutableStateFlow(AuthenticationState())
@@ -32,8 +32,8 @@ class AuthenticationViewModel(
             is AuthenticationEvents.SetLoading -> {
                 setLoading(loading = event.loading)
             }
-            is AuthenticationEvents.SignInWithMongoAtlas -> {
-                signInWithMongoAtlas(tokenId = event.tokenId)
+            is AuthenticationEvents.SignIn -> {
+                signIn(tokenId = event.tokenId)
             }
         }
     }
@@ -50,48 +50,44 @@ class AuthenticationViewModel(
         update {
             it.copy(
                 authenticated = authenticated,
+                isLoading = false,
             )
         }
     }
 
-    private fun signInWithMongoAtlas(tokenId: String) {
+    private fun signIn(tokenId: String) {
         viewModelScope.launch {
-            val repo = AuthenticationRepositoryImpl()
-            val result = SignInUseCase(repo).invoke(tokenId) // TODO injectar
+            val result = signInUseCase(tokenId)
 
-            withContext(Dispatchers.Main) {
-                when (result) {
-                    is RequestState.Success -> {
-                        if (result.data) {
-                            sendUiEvent(
-                                UiEvent.ShowMessageBar(
-                                    MessageBarType.Success(
-                                        UiText.StringResource(
-                                            R.string.successfully_authenticated,
-                                        ),
+            when (result) {
+                is RequestState.Success -> {
+                    if (result.data) {
+                        sendUiEvent(
+                            UiEvent.ShowMessageBar(
+                                MessageBarType.Success(
+                                    UiText.StringResource(
+                                        R.string.successfully_authenticated,
                                     ),
                                 ),
-                            )
-                            delay(600.milliseconds)
+                            ),
+                        )
+                        delay(600.milliseconds)
 
-                            sendUiEvent(UiEvent.NavigatePopCurrent(Screen.Home.route))
-                        } else {
-                            sendUiEvent(
-                                UiEvent.ShowMessageBar(MessageBarType.Error(Exception("User is not logged in."))),
-                            )
-                        }
-                        setAuthenticated(result.data)
+                        sendUiEvent(UiEvent.NavigatePopCurrent(Screen.Home.route))
+                    } else {
+                        sendUiEvent(
+                            UiEvent.ShowMessageBar(MessageBarType.Error(Exception("User is not logged in."))),
+                        )
                     }
-
-                    is RequestState.Error -> {
-                        UiEvent.ShowMessageBar(MessageBarType.Error(result.error as Exception))
-                        setAuthenticated(false)
-                    }
-
-                    else -> Unit
+                    setAuthenticated(result.data)
                 }
+
+                is RequestState.Error -> {
+                    UiEvent.ShowMessageBar(MessageBarType.Error(result.error as Exception))
+                    setAuthenticated(false)
+                }
+                else -> Unit
             }
-            setLoading(false)
         }
     }
 }

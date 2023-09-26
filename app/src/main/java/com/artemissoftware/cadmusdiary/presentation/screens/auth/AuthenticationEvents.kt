@@ -4,5 +4,5 @@ sealed class AuthenticationEvents {
 
     data class SetLoading(val loading: Boolean) : AuthenticationEvents()
 
-    data class SignInWithMongoAtlas(val tokenId: String) : AuthenticationEvents()
+    data class SignIn(val tokenId: String) : AuthenticationEvents()
 }
