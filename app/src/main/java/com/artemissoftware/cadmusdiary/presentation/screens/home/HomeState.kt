@@ -11,6 +11,7 @@ data class HomeState(
     val diaries: Diaries = RequestState.Idle,
     val network: ConnectivityObserver.Status = ConnectivityObserver.Status.Unavailable,
     val diariesImages: List<DiariesImageState> = emptyList(),
+    val dateIsSelected: Boolean = false,
 ) {
     fun isFetchingImages(id: String): Boolean {
         return diariesImages.find { it.id == id }?.isLoading ?: false

@@ -19,6 +19,8 @@ import com.artemissoftware.cadmusdiary.util.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.realm.kotlin.mongodb.App
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -26,6 +28,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.mongodb.kbson.ObjectId
+import java.time.ZonedDateTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -37,6 +40,9 @@ class HomeViewModel @Inject constructor(
 
     private val _state = MutableStateFlow(HomeState())
     val state: StateFlow<HomeState> = _state.asStateFlow()
+
+    private var allDiariesJob: Job? = null
+    private var filteredDiariesJob: Job? = null
 
     init {
         getDiaries()
@@ -78,26 +84,46 @@ class HomeViewModel @Inject constructor(
             HomeEvents.DeleteAllDiaries -> {
                 deleteAllDiaries()
             }
+
+            is HomeEvents.GetDiaries -> {
+                getDiaries(event.zonedDateTime)
+            }
         }
     }
 
-    fun getDiaries(/*zonedDateTime: ZonedDateTime? = null*/) {
-//        dateIsSelected = zonedDateTime != null
-//        diaries.value = RequestState.Loading
-//        if (dateIsSelected && zonedDateTime != null) {
-//            observeFilteredDiaries(zonedDateTime = zonedDateTime)
-//        } else {
-        observeAllDiaries()
-//        }
+    private fun getDiaries(zonedDateTime: ZonedDateTime? = null) = with(_state) {
+        update {
+            it.copy(
+                dateIsSelected = zonedDateTime != null,
+                diaries = RequestState.Loading,
+            )
+        }
+
+        if (value.dateIsSelected && zonedDateTime != null) {
+            observeFilteredDiaries(zonedDateTime = zonedDateTime)
+        } else {
+            observeAllDiaries()
+        }
     }
 
     private fun observeAllDiaries() {
-        /*allDiariesJob = */viewModelScope.launch {
-//            if (::filteredDiariesJob.isInitialized) {
-//                filteredDiariesJob.cancelAndJoin()
-//            }
+        allDiariesJob = viewModelScope.launch {
+            filteredDiariesJob?.cancelAndJoin()
             MongoDB.getAllDiaries().collect { result ->
                 updateDiaries(result)
+            }
+        }
+    }
+
+    private fun observeFilteredDiaries(zonedDateTime: ZonedDateTime) = with(_state) {
+        filteredDiariesJob = viewModelScope.launch {
+            allDiariesJob?.cancelAndJoin()
+            MongoDB.getFilteredDiaries(zonedDateTime = zonedDateTime).collect { result ->
+                update {
+                    it.copy(
+                        diaries = result,
+                    )
+                }
             }
         }
     }
@@ -243,77 +269,4 @@ class HomeViewModel @Inject constructor(
             sendUiEvent(UiEvent.CloseNavigationDrawer)
         }
     }
-
-    // ----------------------
-
-//
-//    private lateinit var allDiariesJob: Job
-//    private lateinit var filteredDiariesJob: Job
-//
-
-//    private var network by mutableStateOf(ConnectivityObserver.Status.Unavailable)
-//    var dateIsSelected by mutableStateOf(false)
-//        private set
-//
-//    init {
-//        getDiaries()
-//        viewModelScope.launch {
-//            connectivity.observe().collect { network = it }
-//        }
-//    }
-
-//
-//    private fun observeFilteredDiaries(zonedDateTime: ZonedDateTime) {
-//        filteredDiariesJob = viewModelScope.launch {
-//            if (::allDiariesJob.isInitialized) {
-//                allDiariesJob.cancelAndJoin()
-//            }
-//            MongoDB.getFilteredDiaries(zonedDateTime = zonedDateTime).collect { result ->
-//                diaries.value = result
-//            }
-//        }
-//    }
-//
-//    fun deleteAllDiaries(
-//        onSuccess: () -> Unit,
-//        onError: (Throwable) -> Unit
-//    ) {
-//        if (network == ConnectivityObserver.Status.Available) {
-//            val userId = FirebaseAuth.getInstance().currentUser?.uid
-//            val imagesDirectory = "images/${userId}"
-//            val storage = FirebaseStorage.getInstance().reference
-//            storage.child(imagesDirectory)
-//                .listAll()
-//                .addOnSuccessListener {
-//                    it.items.forEach { ref ->
-//                        val imagePath = "images/${userId}/${ref.name}"
-//                        storage.child(imagePath).delete()
-//                            .addOnFailureListener {
-//                                viewModelScope.launch(Dispatchers.IO) {
-//                                    imageToDeleteDao.addImageToDelete(
-//                                        ImageToDelete(
-//                                            remoteImagePath = imagePath
-//                                        )
-//                                    )
-//                                }
-//                            }
-//                    }
-//                    viewModelScope.launch(Dispatchers.IO) {
-//                        val result = MongoDB.deleteAllDiaries()
-//                        if (result is RequestState.Success) {
-//                            withContext(Dispatchers.Main) {
-//                                onSuccess()
-//                            }
-//                        } else if (result is RequestState.Error) {
-//                            withContext(Dispatchers.Main) {
-//                                onError(result.error)
-//                            }
-//                        }
-//                    }
-//                }
-//                .addOnFailureListener { onError(it) }
-//        } else {
-//            onError(Exception("No Internet Connection."))
-//        }
-//    }
 }

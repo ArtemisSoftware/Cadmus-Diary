@@ -104,32 +104,6 @@ fun HomeScreen(
         },
         onYesClicked = {
             viewModel.onTriggerEvent(HomeEvents.DeleteAllDiaries)
-//            viewModel.deleteAllDiaries(
-//                onSuccess = {
-//                    Toast.makeText(
-//                        context,
-//                        "All Diaries Deleted.",
-//                        Toast.LENGTH_SHORT,
-//                    ).show()
-//                    scope.launch {
-//                        drawerState.close()
-//                    }
-//                },
-//                onError = {
-//                    Toast.makeText(
-//                        context,
-//                        if (it.message == "No Internet Connection.") {
-//                            "We need an Internet Connection for this operation."
-//                        } else {
-//                            it.message
-//                        },
-//                        Toast.LENGTH_SHORT,
-//                    ).show()
-//                    scope.launch {
-//                        drawerState.close()
-//                    }
-//                },
-//            )
         },
     )
 
@@ -163,9 +137,13 @@ private fun HomeScreenContent(
             HomeTopBar(
                 scrollBehavior = scrollBehavior,
                 onMenuClicked = onMenuClicked,
-//                    dateIsSelected = dateIsSelected,
-//                    onDateSelected = onDateSelected,
-//                    onDateReset = onDateReset
+                dateIsSelected = state.dateIsSelected,
+                onDateSelected = {
+                    events.invoke(HomeEvents.GetDiaries(it))
+                },
+                onDateReset = {
+                    events.invoke(HomeEvents.GetDiaries())
+                },
             )
         },
         floatingActionButton = {
