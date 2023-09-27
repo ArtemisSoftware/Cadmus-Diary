@@ -118,7 +118,6 @@ fun HomeScreen(
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 private fun HomeScreenContent(
-//    diaries: Diaries,
     onMenuClicked: () -> Unit,
     state: HomeState,
     events: (HomeEvents) -> Unit,
@@ -172,11 +171,11 @@ private fun HomeScreenContent(
                         onClick = { diaryId ->
                             events.invoke(HomeEvents.Navigate(Screen.Write.passDiaryId(diaryId = diaryId)))
                         },
-                        openGallery = {
-                            events.invoke(HomeEvents.OpenDiaryGallery(it))
+                        openGallery = { diaryId ->
+                            events.invoke(HomeEvents.OpenDiaryGallery(diaryId = diaryId))
                         },
                         fetchImages = { id, list ->
-                            events.invoke(HomeEvents.FetchImages(id, list))
+                            events.invoke(HomeEvents.FetchImages(diaryId = id, list))
                         },
                     )
                 }
@@ -194,7 +193,7 @@ private fun HomeScreenContent(
                         CircularProgressIndicator()
                     }
                 }
-                else -> {}
+                else -> Unit
             }
         },
     )

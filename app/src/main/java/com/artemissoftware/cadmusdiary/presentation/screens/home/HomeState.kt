@@ -13,15 +13,15 @@ data class HomeState(
     val diariesImages: List<DiariesImageState> = emptyList(),
     val dateIsSelected: Boolean = false,
 ) {
-    fun isFetchingImages(id: String): Boolean {
-        return diariesImages.find { it.id == id }?.isLoading ?: false
+    fun isFetchingImages(id: String): Boolean = with(diariesImages) {
+        return find { it.id == id }?.isLoading ?: false
     }
 
-    fun isGalleryOpen(id: String): Boolean {
-        return diariesImages.find { it.id == id }?.isOpened ?: false
+    fun isGalleryOpen(id: String): Boolean = with(diariesImages) {
+        return find { it.id == id }?.isOpened ?: false
     }
 
-    fun downloadedImages(id: String): List<Uri> {
-        return diariesImages.find { it.id == id }?.uris ?: emptyList()
+    fun downloadedImages(id: String): List<Uri> = with(diariesImages) {
+        return find { it.id == id }?.uris ?: emptyList()
     }
 }

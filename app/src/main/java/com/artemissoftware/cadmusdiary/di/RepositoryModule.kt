@@ -5,11 +5,12 @@ import com.artemissoftware.cadmusdiary.data.repository.AuthenticationRepositoryI
 import com.artemissoftware.cadmusdiary.data.repository.ImageRepositoryImpl
 import com.artemissoftware.cadmusdiary.domain.repository.AuthenticationRepository
 import com.artemissoftware.cadmusdiary.domain.repository.ImageRepository
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
+
 @Module
 @InstallIn(SingletonComponent::class)
 object RepositoryModule {

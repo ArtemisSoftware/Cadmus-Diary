@@ -1,7 +1,6 @@
 package com.artemissoftware.cadmusdiary.presentation.screens.home.composables
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -78,10 +77,6 @@ fun NavigationDrawer(
                         selected = false,
                         onClick = onDeleteAllClicked,
                     )
-//                    NavigationDrawerContent(
-//                        onSignOutClicked = { /*TODO*/ },
-//                        onDeleteAllClicked = {},
-//                    )
                 },
             )
         },

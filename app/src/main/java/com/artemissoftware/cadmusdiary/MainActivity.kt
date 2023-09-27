@@ -52,6 +52,7 @@ class MainActivity : ComponentActivity() {
             }
         }
 
+        // TODO: meter isto num work manager
 //        cleanupCheck(
 //            scope = lifecycleScope,
 //            imageToUploadDao = imageToUploadDao,

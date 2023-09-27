@@ -16,9 +16,6 @@ fun UIEventsManager(
     context: Context = LocalContext.current,
     showMessageBar: (MessageBarType) -> Unit = {},
     closeNavigationDrawer: () -> Unit = {},
-//    onNavigateAndPopCurrent: (UiEvent.NavigateAndPopCurrent) -> Unit = {},
-//    onPopBackStackWithArguments: (UiEvent.PopBackStackWithArguments<*>) -> Unit = {},
-//    onShowSnackBar: (TaskySnackBarType) -> Unit = {},
 ) {
     LaunchedEffect(key1 = Unit) {
         uiEvent.collectLatest { event ->
@@ -27,23 +24,15 @@ fun UIEventsManager(
                     showMessageBar.invoke(event.messageBarType)
                 }
                 is UiEvent.PopBackStack -> { navController.popBackStack() }
-//                is UiEvent.PopBackStackWithArguments<*> -> { onPopBackStackWithArguments(event) }
                 is UiEvent.Navigate -> {
                     navController.navigate(event.route)
                 }
                 is UiEvent.ShowToast -> {
                     Toast.makeText(context, event.uiText.asString(context), event.duration).show()
                 }
-//                is UiEvent.NavigateAndPopCurrent -> {
-//                    onNavigateAndPopCurrent(event)
-//                }
-//                is UiEvent.ShowSnackBar -> {
-//                    onShowSnackBar.invoke(event.snackBarType)
-//                }
                 is UiEvent.NavigatePopCurrent -> {
                     navController.popBackStack()
                     navController.navigate(event.route)
-                    // navController.popBackStack(route = event.route, inclusive = true)
                 }
 
                 UiEvent.CloseNavigationDrawer -> closeNavigationDrawer.invoke()

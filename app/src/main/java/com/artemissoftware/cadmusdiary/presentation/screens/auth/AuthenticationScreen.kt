@@ -11,6 +11,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.artemissoftware.cadmusdiary.presentation.components.events.MessageBarType
 import com.artemissoftware.cadmusdiary.presentation.components.events.UIEventsManager
@@ -28,7 +29,7 @@ import com.stevdzasan.onetap.rememberOneTapSignInState
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun AuthenticationScreen(
-    viewModel: AuthenticationViewModel,
+    viewModel: AuthenticationViewModel = hiltViewModel(),
     navController: NavHostController,
     onDataLoaded: () -> Unit,
 ) {

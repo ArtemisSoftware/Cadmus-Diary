@@ -11,14 +11,12 @@ import com.artemissoftware.cadmusdiary.data.repository.MongoDB
 import com.artemissoftware.cadmusdiary.domain.RequestState
 import com.artemissoftware.cadmusdiary.domain.usecases.DeleteAllDiariesUseCase
 import com.artemissoftware.cadmusdiary.domain.usecases.GetDiaryImagesUseCase
+import com.artemissoftware.cadmusdiary.domain.usecases.SignOutUseCase
 import com.artemissoftware.cadmusdiary.navigation.Screen
 import com.artemissoftware.cadmusdiary.presentation.components.events.UiEvent
 import com.artemissoftware.cadmusdiary.presentation.components.events.UiEventViewModel
-import com.artemissoftware.cadmusdiary.util.Constants.APP_ID
 import com.artemissoftware.cadmusdiary.util.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.realm.kotlin.mongodb.App
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,7 +24,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.mongodb.kbson.ObjectId
 import java.time.ZonedDateTime
 import javax.inject.Inject
@@ -36,6 +33,7 @@ class HomeViewModel @Inject constructor(
     private val connectivity: NetworkConnectivityObserver,
     private val getDiaryImagesUseCase: GetDiaryImagesUseCase,
     private val deleteAllDiariesUseCase: DeleteAllDiariesUseCase,
+    private val signOutUseCase: SignOutUseCase,
 ) : UiEventViewModel() {
 
     private val _state = MutableStateFlow(HomeState())
@@ -91,6 +89,65 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    private fun updateSignOutDialog(open: Boolean) = with(_state) {
+        update {
+            it.copy(signOutDialogOpened = open)
+        }
+    }
+
+    private fun updateDeleteAllDialog(open: Boolean) = with(_state) {
+        update {
+            it.copy(deleteAllDialogOpened = open)
+        }
+    }
+
+    private fun updateDiaries(diaries: Diaries) = with(_state) {
+        update {
+            it.copy(diaries = diaries)
+        }
+    }
+
+    private fun updateDiariesImages(diaryId: String, urls: List<String> = emptyList()) = with(_state) {
+        val diariesImages = value.diariesImages.toMutableList()
+        diariesImages.removeIf { it.id == diaryId }
+        diariesImages.add(
+            DiariesImageState(
+                id = diaryId,
+                isOpened = urls.isNotEmpty(),
+                uris = urls.map { it.toUri() },
+            ),
+        )
+
+        update {
+            it.copy(diariesImages = diariesImages)
+        }
+    }
+
+    private fun updateDiariesImages(diaryId: String, diariesImages: DiariesImageState?) = with(_state) {
+        val images = value.diariesImages.toMutableList()
+
+        DiariesImageState(
+            id = diaryId,
+            uris = diariesImages?.uris ?: emptyList(),
+            isLoading = diariesImages?.uris?.isEmpty() ?: true,
+            isOpened = diariesImages?.isOpened ?: true,
+        )
+
+        diariesImages?.let { item ->
+            images.removeIf { it.id == diaryId }
+        }
+
+        update {
+            it.copy(diariesImages = images)
+        }
+    }
+
+    private fun navigate(route: String) {
+        viewModelScope.launch {
+            sendUiEvent(UiEvent.Navigate(route))
+        }
+    }
+
     private fun getDiaries(zonedDateTime: ZonedDateTime? = null) = with(_state) {
         update {
             it.copy(
@@ -128,24 +185,6 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun updateSignOutDialog(open: Boolean) = with(_state) {
-        update {
-            it.copy(signOutDialogOpened = open)
-        }
-    }
-
-    private fun updateDeleteAllDialog(open: Boolean) = with(_state) {
-        update {
-            it.copy(deleteAllDialogOpened = open)
-        }
-    }
-
-    private fun updateDiaries(diaries: Diaries) = with(_state) {
-        update {
-            it.copy(diaries = diaries)
-        }
-    }
-
     private fun checkConnectivity() = with(_state) {
         viewModelScope.launch {
             connectivity.observe().collect { status ->
@@ -156,93 +195,35 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun openDiaryGallery(diaryId: ObjectId) = with(_state) {
-        val images = value.diariesImages.toMutableList()
-        val ll = images.find { it.id == diaryId.toString() }
-        ll?.let {
-            images.removeIf { it.id == diaryId.toString() }
-            images.add(
-                DiariesImageState(
-                    id = diaryId.toString(),
-                    uris = it.uris,
-                    isOpened = !ll.isOpened,
-                ),
-            )
-        } ?: run {
-            images.add(
-                DiariesImageState(
-                    id = diaryId.toString(),
-                    isLoading = true,
-                    isOpened = true,
-                ),
-            )
-        }
-
-        update {
-            it.copy(diariesImages = images)
-        }
+    private fun openDiaryGallery(diaryId: ObjectId) = with(_state.value) {
+        val diariesImages = this.diariesImages.toMutableList()
+        val diaryImages = diariesImages.find { it.id == diaryId.toString() }
+        updateDiariesImages(diaryId = diaryId.toString(), diariesImages = diaryImages)
     }
 
     private fun signOut() {
         viewModelScope.launch {
-            // TODO: chamar o SignOutUseCase
+            val isLoggedOut = signOutUseCase.invoke()
 
-            withContext(Dispatchers.IO) {
-                val user = App.create(APP_ID).currentUser
-                if (user != null) {
-                    user.logOut()
-
-                    withContext(Dispatchers.Main) {
-                        sendUiEvent(UiEvent.NavigatePopCurrent(Screen.Authentication.route))
-                    }
-                }
+            if(isLoggedOut) {
+                sendUiEvent(UiEvent.NavigatePopCurrent(Screen.Authentication.route))
             }
         }
     }
 
-    private fun navigate(route: String) {
+    private fun getImages(diaryId: ObjectId, list: List<String>) {
         viewModelScope.launch {
-            sendUiEvent(UiEvent.Navigate(route))
-        }
-    }
-
-    private fun getImages(diaryId: ObjectId, list: List<String>) = with(_state) {
-        viewModelScope.launch {
-            val result = getDiaryImagesUseCase.invoke(diaryId.toString(), list)
-
-            when(result) {
-                is RequestState.Success -> {
-                    // TODO: Simplificar esta lógica
-                    val im = value.diariesImages.toMutableList()
-                    im.removeIf { it.id == result.data.id }
-                    im.add(
-                        DiariesImageState(
-                            id = diaryId.toString(),
-                            isOpened = true,
-                            uris = result.data.images.map { it.toUri() },
-                        ),
-                    )
-
-                    update {
-                        it.copy(diariesImages = im)
+            getDiaryImagesUseCase.invoke(diaryId.toString(), list).collect { result ->
+                when(result) {
+                    is RequestState.Success -> {
+                        updateDiariesImages(diaryId = result.data.id, urls = result.data.images)
                     }
-                }
-                is RequestState.Error -> {
-                    val im = value.diariesImages.toMutableList()
-                    im.removeIf { it.id == diaryId.toString() }
-                    im.add(
-                        DiariesImageState(
-                            id = diaryId.toString(),
-                            isLoading = false,
-                        ),
-                    )
-
-                    update {
-                        it.copy(diariesImages = im)
+                    is RequestState.Error -> {
+                        updateDiariesImages(diaryId = diaryId.toString())
+                        sendUiEvent(UiEvent.ShowToast(UiText.StringResource(R.string.images_not_uploaded_yet_wait_a_little_bit_or_try_uploading_again), Toast.LENGTH_SHORT))
                     }
-                    sendUiEvent(UiEvent.ShowToast(UiText.DynamicString("Images not uploaded yet." + "Wait a little bit, or try uploading again."), Toast.LENGTH_SHORT))
+                    else -> Unit
                 }
-                else -> Unit // TODO: caso de erro
             }
         }
     }

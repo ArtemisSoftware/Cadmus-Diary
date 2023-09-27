@@ -26,7 +26,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -63,39 +62,15 @@ fun DiaryCard(
     fetchImages: (ObjectId, List<String>) -> Unit,
     galleryOpened: Boolean,
     galleryLoading: Boolean,
-    downloadedImages: List<Uri> = emptyList()
+    downloadedImages: List<Uri> = emptyList(),
 ) {
     val localDensity = LocalDensity.current
     val context = LocalContext.current
     var componentHeight by remember { mutableStateOf(0.dp) }
-    //--var galleryOpened by remember { mutableStateOf(false) }
-    //--var galleryLoading by remember { mutableStateOf(false) }
-    //--val downloadedImages = remember { mutableStateListOf<Uri>() }
 
     LaunchedEffect(key1 = galleryOpened) {
         if (galleryOpened && downloadedImages.isEmpty()) {
-            //--galleryLoading = true
-            fetchImages(
-                diary._id,
-                diary.images,
-//                onImageDownload = { image ->
-//                    downloadedImages.add(image)
-//                },
-//                onImageDownloadFailed = {
-//                    Toast.makeText(
-//                        context,
-//                        "Images not uploaded yet." +
-//                            "Wait a little bit, or try uploading again.",
-//                        Toast.LENGTH_SHORT,
-//                    ).show()
-//                    galleryLoading = false
-//                    galleryOpened = false
-//                },
-//                onReadyToDisplay = {
-//                    galleryLoading = false
-//                    galleryOpened = true
-//                },
-            )
+            fetchImages(diary._id, diary.images)
         }
     }
 
@@ -237,7 +212,7 @@ private fun DiaryCardPreview() {
         },
         onClick = {},
         openGallery = {},
-        fetchImages = {_,_ ->},
+        fetchImages = { _, _ -> },
         galleryLoading = true,
         galleryOpened = true,
     )
@@ -256,7 +231,7 @@ private fun DiaryCard_no_images_Preview() {
         },
         onClick = {},
         openGallery = {},
-        fetchImages = {_,_ ->},
+        fetchImages = { _, _ -> },
         galleryLoading = true,
         galleryOpened = true,
     )
