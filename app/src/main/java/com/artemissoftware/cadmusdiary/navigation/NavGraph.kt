@@ -75,31 +75,8 @@ fun NavGraphBuilder.writeRoute(
             },
         ),
     ) {
-//        val context = LocalContext.current
-//        val galleryState = viewModel.galleryState
-//        val pageNumber by remember { derivedStateOf { pagerState.currentPage } }
-//
         WriteScreen(
             navController = navController,
-//            galleryState = galleryState,
-//            onSaveClicked = {
-//                viewModel.upsertDiary(
-//                    diary = it.apply { mood = Mood.values()[pageNumber].name },
-//                    onSuccess = navigateBack,
-//                    onError = { message ->
-//                        Toast.makeText(
-//                            context,
-//                            message,
-//                            Toast.LENGTH_SHORT
-//                        ).show()
-//                    }
-//                )
-//            },
-//            onImageSelect = {
-//                val type = context.contentResolver.getType(it)?.split("/")?.last() ?: "jpg"
-//                viewModel.addImage(image = it, imageType = type)
-//            },
-//            onImageDeleteClicked = { galleryState.removeImage(it) }
         )
     }
 }

@@ -10,7 +10,7 @@ import javax.inject.Inject
 class UploadImagesUseCase @Inject constructor(private val imageRepository: ImageRepository) {
 
     suspend operator fun invoke(images: List<GalleryImage>) = withContext(Dispatchers.IO) {
-        val pictures = images.map { image ->
+        val pictures = images.map { image -> // TODO: resolver a incoerencia entre GalleryImage e pictures
             Picture(
                 image = image.image.toString(),
                 remotePath = image.remoteImagePath,

@@ -17,11 +17,6 @@ import com.artemissoftware.cadmusdiary.presentation.screens.write.composables.Wr
 fun WriteScreen(
     viewModel: WriteViewModel = hiltViewModel(),
     navController: NavHostController,
-//    pagerState: PagerState,
-//    galleryState: GalleryState,
-//    onSaveClicked: (Diary) -> Unit,
-//    onImageSelect: (Uri) -> Unit,
-//    onImageDeleteClicked: (GalleryImage) -> Unit
 ) {
 //    var selectedGalleryImage by remember { mutableStateOf<GalleryImage?>(null) }
 //    // Update the Mood when selecting an existing Diary
@@ -63,8 +58,6 @@ fun WriteScreenContent(
         content = { paddingValues ->
             WriteContent(
                 state = state,
-//                pagerState = pagerState,
-//                galleryState = galleryState,
                 onTitleChanged = {
                     events.invoke(WriteEvents.SetTitle(title = it))
                 },
@@ -118,6 +111,5 @@ private fun WriteScreenContentPreview() {
     WriteScreenContent(
         events = {},
         state = WriteState(),
-//        state = HomeState(),
     )
 }
