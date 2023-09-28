@@ -70,13 +70,12 @@ fun WriteScreenContent(
                 onSaveClicked = {
                     events.invoke(WriteEvents.SaveDiary)
                 },
-                addImage = { imageUri, path ->
-                    events.invoke(WriteEvents.AddImage(imageUri, path))
+                onImageSelect = { imageUri ->
+                    events.invoke(WriteEvents.AddImage(imageUri))
                 },
                 paddingValues = paddingValues,
-//                onImageSelect = onImageSelect,
-                onImageClicked = {
-                    events.invoke(WriteEvents.ZoomInImage(image = it))
+                onImageClicked = { index ->
+                    events.invoke(WriteEvents.ZoomInImage(image = state.galleryState.images[index]))
                 },
             )
 
@@ -88,7 +87,7 @@ fun WriteScreenContent(
                     content = {
                         state.selectedImage?.let { selectedImage ->
                             ZoomableImage(
-                                selectedGalleryImage = selectedImage,
+                                imagePath = selectedImage.image.toString(),
                                 onCloseClicked = {
                                     events.invoke(WriteEvents.ZoomOutImage)
                                 },

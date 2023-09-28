@@ -182,6 +182,5 @@ private fun WriteTopBarPreview() {
         onBackPressed = {},
         onDeleteConfirmed = {},
         onDateTimeUpdated = {},
-//        state = HomeState(),
     )
 }

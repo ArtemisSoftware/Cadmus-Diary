@@ -1,5 +1,6 @@
 package com.artemissoftware.cadmusdiary.presentation.screens.write
 
+import android.app.Application
 import android.net.Uri
 import android.widget.Toast
 import androidx.core.net.toUri
@@ -20,6 +21,7 @@ import com.artemissoftware.cadmusdiary.domain.usecases.UploadImagesUseCase
 import com.artemissoftware.cadmusdiary.navigation.Screen.Companion.WRITE_SCREEN_ARGUMENT_KEY
 import com.artemissoftware.cadmusdiary.presentation.components.events.UiEvent
 import com.artemissoftware.cadmusdiary.presentation.components.events.UiEventViewModel
+import com.artemissoftware.cadmusdiary.presentation.screens.write.mappers.toPictures
 import com.artemissoftware.cadmusdiary.util.UiText
 import com.artemissoftware.cadmusdiary.util.extensions.toRealmInstant
 import com.google.firebase.auth.FirebaseAuth
@@ -36,6 +38,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class WriteViewModel @Inject constructor(
+    private val application: Application,
     private val savedStateHandle: SavedStateHandle,
     private val getDiaryUseCase: GetDiaryUseCase,
     private val getDiaryImagesUseCase: GetDiaryImagesUseCase,
@@ -48,7 +51,6 @@ class WriteViewModel @Inject constructor(
 
     private val _state = MutableStateFlow(WriteState())
     val state: StateFlow<WriteState> = _state.asStateFlow()
-//    val galleryState = GalleryState()
 
     init {
         getDiaryIdArgument()
@@ -94,7 +96,7 @@ class WriteViewModel @Inject constructor(
             }
 
             is WriteEvents.AddImage -> {
-                addImage(image = event.image, imageType = event.remoteImagePath)
+                addImage(image = event.image, imageType = getImagePath(event.image))
             }
 
             is WriteEvents.ZoomInImage -> {
@@ -327,12 +329,10 @@ class WriteViewModel @Inject constructor(
         val imagesToBeDeleted = images ?: galleryState.imagesToBeDeleted.map { it.remoteImagePath }
 
         viewModelScope.launch {
-            uploadImagesUseCase.invoke(galleryState.images)
+            uploadImagesUseCase.invoke(galleryState.images.toPictures())
             deleteImagesUseCase.invoke(imagesToBeDeleted)
         }
     }
-
-
 
     private fun deleteDiary() = with(_state.value) {
         viewModelScope.launch {
@@ -353,11 +353,9 @@ class WriteViewModel @Inject constructor(
         }
     }
 
-
-
     private fun uploadImages() = with(_state.value) {
         viewModelScope.launch {
-            uploadImagesUseCase.invoke(galleryState.images)
+            uploadImagesUseCase.invoke(galleryState.images.toPictures())
         }
     }
 
@@ -378,13 +376,13 @@ class WriteViewModel @Inject constructor(
         }
     }
 
-    private fun deleteImages(images: List<String>? = null) = with(_state.value) {
-        val imagesToBeDeleted = images ?: galleryState.imagesToBeDeleted.map { it.remoteImagePath }
-
-        viewModelScope.launch {
-            uploadImagesUseCase.invoke(galleryState.images)
-        }
-    }
+//    private fun deleteImages(images: List<String>? = null) = with(_state.value) {
+//        val imagesToBeDeleted = images ?: galleryState.imagesToBeDeleted.map { it.remoteImagePath }
+//
+//        viewModelScope.launch {
+//            uploadImagesUseCase.invoke(galleryState.images)
+//        }
+//    }
 
 //    private fun deleteImagesFromFirebase(images: List<String>? = null) {
 //        val storage = FirebaseStorage.getInstance().reference
@@ -422,5 +420,9 @@ class WriteViewModel @Inject constructor(
     private fun getRemoteImagePath(image: Uri, imageType: String): String {
         return "images/${FirebaseAuth.getInstance().currentUser?.uid}/" +
             "${image.lastPathSegment}-${System.currentTimeMillis()}.$imageType"
+    }
+
+    private fun getImagePath(image: Uri): String {
+        return application.contentResolver.getType(image)?.split("/")?.last() ?: "jpg"
     }
 }

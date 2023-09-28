@@ -1,5 +1,6 @@
 package com.artemissoftware.cadmusdiary.presentation.screens.write
 
+import android.net.Uri
 import com.artemissoftware.cadmusdiary.core.ui.gallery.GalleryImage
 import com.artemissoftware.cadmusdiary.domain.model.Diary
 import com.artemissoftware.cadmusdiary.domain.model.Mood
@@ -30,4 +31,6 @@ data class WriteState(
             "Unknown"
         }
     }
+
+    fun getImagesUri() = galleryState.images.map { it.image }
 }

@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.artemissoftware.cadmusdiary.core.ui.gallery.GalleryImage
 import com.artemissoftware.cadmusdiary.presentation.components.PlusValueIcon
 import com.artemissoftware.cadmusdiary.presentation.components.buttons.AddImageButton
 import kotlin.math.max
@@ -34,14 +33,13 @@ import kotlin.math.max
 @Composable
 fun GalleryUploader(
     modifier: Modifier = Modifier,
-    images: List<GalleryImage>,
-//    galleryState: GalleryState,
+    images: List<Uri>,
     imageSize: Dp = 60.dp,
     imageShape: CornerBasedShape = Shapes().medium,
     spaceBetween: Dp = 12.dp,
     onAddClicked: () -> Unit,
     onImageSelect: (Uri) -> Unit,
-    onImageClicked: (GalleryImage) -> Unit,
+    onImageClicked: (Int) -> Unit,
 ) {
     val multiplePhotoPicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickMultipleVisualMedia(maxItems = 8),
@@ -82,14 +80,14 @@ fun GalleryUploader(
                 },
             )
             Spacer(modifier = Modifier.width(spaceBetween))
-            images.take(numberOfVisibleImages.value).forEach { galleryImage ->
+            images.take(numberOfVisibleImages.value).forEachIndexed { index, imageUri ->
                 AsyncImage(
                     modifier = Modifier
                         .clip(imageShape)
                         .size(imageSize)
-                        .clickable { onImageClicked(galleryImage) },
+                        .clickable { onImageClicked(index) },
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data(galleryImage.image)
+                        .data(imageUri)
                         .crossfade(true)
                         .build(),
                     contentScale = ContentScale.Crop,
@@ -112,9 +110,8 @@ fun GalleryUploader(
 @Preview
 private fun GalleryUploaderPreview() {
     GalleryUploader(
-        images = listOf(GalleryImage(Uri.EMPTY, "")),
+        images = listOf(Uri.EMPTY, Uri.EMPTY),
         onAddClicked = {},
         onImageSelect = {},
-        onImageClicked = {},
-    )
+    ) {}
 }

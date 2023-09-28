@@ -43,7 +43,6 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.artemissoftware.cadmusdiary.R
 import com.artemissoftware.cadmusdiary.core.ui.gallery.GalleryImage
-import com.artemissoftware.cadmusdiary.core.ui.gallery.rememberGalleryState
 import com.artemissoftware.cadmusdiary.domain.model.Mood
 import com.artemissoftware.cadmusdiary.presentation.components.gallery.GalleryUploader
 import com.artemissoftware.cadmusdiary.presentation.screens.write.WriteState
@@ -53,16 +52,13 @@ import kotlinx.coroutines.launch
 @Composable
 fun WriteContent(
     state: WriteState,
-//    pagerState: PagerState,
-//    galleryState: GalleryState,
     onTitleChanged: (String) -> Unit,
     onDescriptionChanged: (String) -> Unit,
     paddingValues: PaddingValues,
     onMoodScroll: (Mood) -> Unit,
     onSaveClicked: () -> Unit,
-    addImage: (Uri, String) -> Unit,
-//    onImageSelect: (Uri) -> Unit,
-    onImageClicked: (GalleryImage) -> Unit
+    onImageSelect: (Uri) -> Unit,
+    onImageClicked: (Int) -> Unit
 ) {
     val pagerState = rememberPagerState { Mood.values().size }
     val scrollState = rememberScrollState()
@@ -180,13 +176,9 @@ fun WriteContent(
         Column(verticalArrangement = Arrangement.Bottom) {
             Spacer(modifier = Modifier.height(12.dp))
             GalleryUploader(
-                images = state.galleryState.images,
+                images = state.getImagesUri(),
                 onAddClicked = { focusManager.clearFocus() },
-                onImageSelect = {
-                    // Todo: adicionar isto ao viewmodel quando se injectar o contexto
-                    val type = context.contentResolver.getType(it)?.split("/")?.last() ?: "jpg"
-                    addImage(it, type)
-                },
+                onImageSelect = onImageSelect,
                 onImageClicked = onImageClicked,
             )
             Spacer(modifier = Modifier.height(12.dp))
@@ -216,9 +208,7 @@ private fun WriteContentPreview() {
         paddingValues = PaddingValues(16.dp),
         onMoodScroll = {},
         onSaveClicked = {},
-        addImage = { _, _ -> },
+        onImageSelect = {},
         onImageClicked = {},
-//        events = {},
-//        state = HomeState(),
     )
 }

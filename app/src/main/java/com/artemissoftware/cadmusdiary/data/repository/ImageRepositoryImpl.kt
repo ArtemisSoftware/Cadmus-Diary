@@ -1,6 +1,5 @@
 package com.artemissoftware.cadmusdiary.data.repository
 
-import android.util.Log
 import androidx.core.net.toUri
 import com.artemissoftware.cadmusdiary.core.domain.models.ImageResult
 import com.artemissoftware.cadmusdiary.data.database.dao.ImageToUploadDao
@@ -52,7 +51,8 @@ class ImageRepositoryImpl(
             if (remoteImagePaths.isNotEmpty()) {
                 remoteImagePaths.forEach { remoteImagePath ->
                     if (remoteImagePath.trim().isNotEmpty()) {
-                        firebaseStorage.reference
+                        firebaseStorage
+                            .reference
                             .child(remoteImagePath.trim())
                             .downloadUrl
                             .addOnSuccessListener { uri ->
@@ -63,7 +63,6 @@ class ImageRepositoryImpl(
                             .addOnCompleteListener {
                                 ++downloadsFinished
                                 if (downloadsFinished == remoteImagePaths.size) {
-
                                     continuation.resume(ImageResult(urls = urls, numberOfErrors = numberOfFailedDownloads))
                                 }
                             }
@@ -73,26 +72,31 @@ class ImageRepositoryImpl(
         }
     }
 
-    override suspend fun deleteImagesFromFirebase(images: List<String>) {
+    override suspend fun deleteImagesFromFirebase(images: List<String>): List<String> {
         val storage = FirebaseStorage.getInstance().reference
+        val toDelete = mutableListOf<String>()
+        var deletesFinished = 0
+        return suspendCoroutine { continuation ->
+            images.forEach { remotePath ->
+                storage.child(remotePath).delete()
+                    .addOnFailureListener {
+                        toDelete.add(remotePath)
+                    }
+                    .addOnCompleteListener {
+                        ++deletesFinished
 
-        images.forEach { remotePath ->
-            storage.child(remotePath).delete()
-            // TODO: completar
-//                    .addOnFailureListener {
-//                        viewModelScope.launch(Dispatchers.IO) {
-//                            imageToDeleteDao.addImageToDelete(
-//                                ImageToDelete(remoteImagePath = remotePath)
-//                            )
-//                        }
-//                    }
+                        if (deletesFinished == images.size) {
+                            continuation.resume(toDelete)
+                        }
+                    }
+            }
         }
     }
 
     override suspend fun deleteAllImagesFromFirebase(): List<String> {
         val userId = FirebaseAuth.getInstance().currentUser?.uid
-        val imagesDirectory = "images/$userId"
         val storage = FirebaseStorage.getInstance().reference
+        val imagesDirectory = "images/$userId"
         val toDelete = mutableListOf<String>()
         var numberOfSuccess = 0
         var deletesFinished = 0

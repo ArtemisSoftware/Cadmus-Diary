@@ -8,8 +8,9 @@ import io.realm.kotlin.mongodb.App
 import io.realm.kotlin.mongodb.Credentials
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class SignInUseCase(private val authenticationRepository: AuthenticationRepository) {
+class SignInUseCase @Inject constructor(private val authenticationRepository: AuthenticationRepository) {
 
     suspend operator fun invoke(tokenId: String) = withContext(Dispatchers.IO) {
         val credential = GoogleAuthProvider.getCredential(tokenId, null)

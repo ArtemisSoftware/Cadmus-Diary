@@ -8,11 +8,10 @@ import javax.inject.Inject
 class DeleteImagesUseCase @Inject constructor(private val imageRepository: ImageRepository) {
 
     suspend operator fun invoke(imagesRemotePaths: List<String>) = withContext(Dispatchers.IO) {
-        imageRepository.deleteImagesFromFirebase(imagesRemotePaths)
+        val imagesToDelete = imageRepository.deleteImagesFromFirebase(imagesRemotePaths)
         // TODO: terminar
-//        val sessions = imageRepository.uploadImagesToFirebase(pictures)
-//        for ((session, picture) in sessions) {
-//            imageRepository.insertImage(sessionUri = session, picture = picture)
-//        }
+//                            imageToDeleteDao.addImageToDelete(
+//                                ImageToDelete(remoteImagePath = remotePath)
+//                            )
     }
 }
