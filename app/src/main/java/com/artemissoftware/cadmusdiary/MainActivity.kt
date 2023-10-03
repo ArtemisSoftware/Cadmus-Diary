@@ -7,9 +7,9 @@ import androidx.core.net.toUri
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.navigation.compose.rememberNavController
-import com.artemissoftware.cadmusdiary.data.database.dao.ImageToUploadDao
-import com.artemissoftware.cadmusdiary.data.database.entity.ImageToUploadEntity
-import com.artemissoftware.cadmusdiary.data.repository.MongoDB
+import com.artemissoftware.cadmusdiary.core.data.database.dao.ImageToUploadDao
+import com.artemissoftware.cadmusdiary.core.data.database.entity.ImageToUploadEntity
+import com.artemissoftware.cadmusdiary.core.data.repository.MongoDB
 import com.artemissoftware.cadmusdiary.navigation.NavGraph
 import com.artemissoftware.cadmusdiary.ui.theme.CadmusDiaryTheme
 import com.google.firebase.storage.FirebaseStorage

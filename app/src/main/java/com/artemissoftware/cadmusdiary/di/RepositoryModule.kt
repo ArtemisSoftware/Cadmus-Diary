@@ -1,10 +1,10 @@
 package com.artemissoftware.cadmusdiary.di
 
-import com.artemissoftware.cadmusdiary.data.database.dao.ImageToUploadDao
-import com.artemissoftware.cadmusdiary.data.repository.AuthenticationRepositoryImpl
-import com.artemissoftware.cadmusdiary.data.repository.ImageRepositoryImpl
-import com.artemissoftware.cadmusdiary.domain.repository.AuthenticationRepository
-import com.artemissoftware.cadmusdiary.domain.repository.ImageRepository
+import com.artemissoftware.cadmusdiary.core.data.database.dao.ImageToUploadDao
+import com.artemissoftware.cadmusdiary.authentication.data.repository.AuthenticationRepositoryImpl
+import com.artemissoftware.cadmusdiary.core.data.repository.ImageRepositoryImpl
+import com.artemissoftware.cadmusdiary.authentication.domain.repository.AuthenticationRepository
+import com.artemissoftware.cadmusdiary.core.domain.repository.ImageRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

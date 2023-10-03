@@ -2,7 +2,7 @@ package com.artemissoftware.cadmusdiary.di
 
 import android.content.Context
 import androidx.room.Room
-import com.artemissoftware.cadmusdiary.data.database.ImagesDatabase
+import com.artemissoftware.cadmusdiary.core.data.database.ImagesDatabase
 import com.artemissoftware.cadmusdiary.util.Constants.IMAGES_DATABASE
 import dagger.Module
 import dagger.Provides
