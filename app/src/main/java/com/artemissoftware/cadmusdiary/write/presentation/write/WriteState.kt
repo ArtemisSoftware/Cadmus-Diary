@@ -1,8 +1,8 @@
 package com.artemissoftware.cadmusdiary.write.presentation.write
 
+import com.artemissoftware.cadmusdiary.core.domain.models.Diary
 import com.artemissoftware.cadmusdiary.core.ui.gallery.GalleryImage
 import com.artemissoftware.cadmusdiary.core.ui.mood.MoodUI
-import com.artemissoftware.cadmusdiary.domain.model.Diary
 import com.artemissoftware.cadmusdiary.util.DateTimeConstants
 import com.artemissoftware.cadmusdiary.util.extensions.toInstant
 import io.realm.kotlin.types.RealmInstant

@@ -1,4 +1,4 @@
-package com.artemissoftware.cadmusdiary.domain.model
+package com.artemissoftware.cadmusdiary.core.domain.models
 
 data class DiaryImages(
     val id: String,

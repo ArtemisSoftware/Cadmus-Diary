@@ -1,4 +1,4 @@
-package com.artemissoftware.cadmusdiary.domain.model
+package com.artemissoftware.cadmusdiary.core.domain.models
 
 import com.artemissoftware.cadmusdiary.util.extensions.toRealmInstant
 import io.realm.kotlin.ext.realmListOf

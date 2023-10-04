@@ -1,9 +1,11 @@
 package com.artemissoftware.cadmusdiary.di
 
-import com.artemissoftware.cadmusdiary.core.data.database.dao.ImageToUploadDao
 import com.artemissoftware.cadmusdiary.authentication.data.repository.AuthenticationRepositoryImpl
-import com.artemissoftware.cadmusdiary.core.data.repository.ImageRepositoryImpl
 import com.artemissoftware.cadmusdiary.authentication.domain.repository.AuthenticationRepository
+import com.artemissoftware.cadmusdiary.core.data.database.dao.ImageToUploadDao
+import com.artemissoftware.cadmusdiary.core.data.repository.ImageRepositoryImpl
+import com.artemissoftware.cadmusdiary.core.data.repository.MongoDB
+import com.artemissoftware.cadmusdiary.core.data.repository.MongoRepository
 import com.artemissoftware.cadmusdiary.core.domain.repository.ImageRepository
 import dagger.Module
 import dagger.Provides
@@ -25,5 +27,11 @@ object RepositoryModule {
     @Singleton
     fun provideImageRepository(imageToUploadDao: ImageToUploadDao): ImageRepository {
         return ImageRepositoryImpl(imageToUploadDao = imageToUploadDao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideMongoRepository(): MongoRepository {
+        return MongoDB
     }
 }

@@ -44,7 +44,6 @@ import coil.request.ImageRequest
 import com.artemissoftware.cadmusdiary.R
 import com.artemissoftware.cadmusdiary.core.ui.components.gallery.GalleryUploader
 import com.artemissoftware.cadmusdiary.core.ui.mood.MoodUI
-import com.artemissoftware.cadmusdiary.domain.model.Mood
 import com.artemissoftware.cadmusdiary.write.presentation.write.WriteState
 import kotlinx.coroutines.launch
 
@@ -63,7 +62,6 @@ fun WriteContent(
     val pagerState = rememberPagerState { MoodUI.values().size }
     val scrollState = rememberScrollState()
     val scope = rememberCoroutineScope()
-    val context = LocalContext.current
     val focusManager = LocalFocusManager.current
 
     LaunchedEffect(key1 = scrollState.maxValue) {
@@ -112,7 +110,7 @@ fun WriteContent(
                     AsyncImage(
                         modifier = Modifier.size(120.dp),
                         model = ImageRequest.Builder(LocalContext.current)
-                            .data(Mood.values()[page].icon)
+                            .data(MoodUI.values()[page].icon)
                             .crossfade(true)
                             .build(),
                         contentDescription = "Mood Image",

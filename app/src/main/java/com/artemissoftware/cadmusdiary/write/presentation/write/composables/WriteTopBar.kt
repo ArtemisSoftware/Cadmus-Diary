@@ -23,7 +23,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.artemissoftware.cadmusdiary.core.ui.mood.MoodUI
-import com.artemissoftware.cadmusdiary.domain.model.Mood
 import com.artemissoftware.cadmusdiary.write.presentation.write.WriteState
 import com.artemissoftware.cadmusdiary.util.DateTimeConstants
 import com.maxkeppeker.sheets.core.models.base.rememberSheetState

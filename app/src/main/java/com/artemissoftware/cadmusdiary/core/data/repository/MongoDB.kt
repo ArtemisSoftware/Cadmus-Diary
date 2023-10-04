@@ -2,7 +2,7 @@ package com.artemissoftware.cadmusdiary.core.data.repository
 
 import com.artemissoftware.cadmusdiary.core.data.exceptions.UserNotAuthenticatedException
 import com.artemissoftware.cadmusdiary.core.domain.RequestState
-import com.artemissoftware.cadmusdiary.domain.model.Diary
+import com.artemissoftware.cadmusdiary.core.domain.models.Diary
 import com.artemissoftware.cadmusdiary.util.Constants.APP_ID
 import com.artemissoftware.cadmusdiary.util.extensions.toInstant
 import io.realm.kotlin.Realm

@@ -2,7 +2,7 @@ package com.artemissoftware.cadmusdiary.core.domain.usecases
 
 import com.artemissoftware.cadmusdiary.core.domain.repository.ImageRepository
 import com.artemissoftware.cadmusdiary.core.domain.RequestState
-import com.artemissoftware.cadmusdiary.domain.model.DiaryImages
+import com.artemissoftware.cadmusdiary.core.domain.models.DiaryImages
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn

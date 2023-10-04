@@ -5,16 +5,17 @@ import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
 import com.artemissoftware.cadmusdiary.R
 import com.artemissoftware.cadmusdiary.core.data.repository.Diaries
-import com.artemissoftware.cadmusdiary.core.data.repository.MongoDB
+import com.artemissoftware.cadmusdiary.core.domain.RequestState
 import com.artemissoftware.cadmusdiary.core.domain.usecases.GetDiaryImagesUseCase
 import com.artemissoftware.cadmusdiary.core.ui.connectivity.ConnectivityObserver
 import com.artemissoftware.cadmusdiary.core.ui.connectivity.NetworkConnectivityObserver
 import com.artemissoftware.cadmusdiary.core.ui.util.UiText
 import com.artemissoftware.cadmusdiary.core.ui.util.uievents.UiEvent
 import com.artemissoftware.cadmusdiary.core.ui.util.uievents.UiEventViewModel
-import com.artemissoftware.cadmusdiary.core.domain.RequestState
-import com.artemissoftware.cadmusdiary.home.domain.usecases.SignOutUseCase
 import com.artemissoftware.cadmusdiary.home.domain.usecases.DeleteAllDiariesUseCase
+import com.artemissoftware.cadmusdiary.home.domain.usecases.GetAllDiariesUseCase
+import com.artemissoftware.cadmusdiary.home.domain.usecases.GetFilteredDiariesUseCase
+import com.artemissoftware.cadmusdiary.home.domain.usecases.SignOutUseCase
 import com.artemissoftware.cadmusdiary.navigation.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -34,6 +35,8 @@ class HomeViewModel @Inject constructor(
     private val getDiaryImagesUseCase: GetDiaryImagesUseCase,
     private val deleteAllDiariesUseCase: DeleteAllDiariesUseCase,
     private val signOutUseCase: SignOutUseCase,
+    private val getAllDiariesUseCase: GetAllDiariesUseCase,
+    private val getFilteredDiariesUseCase: GetFilteredDiariesUseCase,
 ) : UiEventViewModel() {
 
     private val _state = MutableStateFlow(HomeState())
@@ -133,7 +136,7 @@ class HomeViewModel @Inject constructor(
             isOpened = diariesImages?.isOpened ?: true,
         )
 
-        diariesImages?.let { item ->
+        diariesImages?.let { _ ->
             images.removeIf { it.id == diaryId }
         }
 
@@ -166,7 +169,7 @@ class HomeViewModel @Inject constructor(
     private fun observeAllDiaries() {
         allDiariesJob = viewModelScope.launch {
             filteredDiariesJob?.cancelAndJoin()
-            MongoDB.getAllDiaries().collect { result ->
+            getAllDiariesUseCase().collect { result ->
                 updateDiaries(result)
             }
         }
@@ -175,7 +178,7 @@ class HomeViewModel @Inject constructor(
     private fun observeFilteredDiaries(zonedDateTime: ZonedDateTime) = with(_state) {
         filteredDiariesJob = viewModelScope.launch {
             allDiariesJob?.cancelAndJoin()
-            MongoDB.getFilteredDiaries(zonedDateTime = zonedDateTime).collect { result ->
+            getFilteredDiariesUseCase(zonedDateTime = zonedDateTime).collect { result ->
                 update {
                     it.copy(
                         diaries = result,

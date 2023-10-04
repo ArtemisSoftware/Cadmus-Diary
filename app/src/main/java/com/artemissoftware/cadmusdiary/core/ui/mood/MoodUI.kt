@@ -2,7 +2,6 @@ package com.artemissoftware.cadmusdiary.core.ui.mood
 
 import androidx.compose.ui.graphics.Color
 import com.artemissoftware.cadmusdiary.R
-import com.artemissoftware.cadmusdiary.domain.model.Mood
 import com.artemissoftware.cadmusdiary.ui.theme.AngryColor
 import com.artemissoftware.cadmusdiary.ui.theme.AwfulColor
 import com.artemissoftware.cadmusdiary.ui.theme.BoredColor

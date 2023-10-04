@@ -1,7 +1,7 @@
 package com.artemissoftware.cadmusdiary.core.data.repository
 
 import com.artemissoftware.cadmusdiary.core.domain.RequestState
-import com.artemissoftware.cadmusdiary.domain.model.Diary
+import com.artemissoftware.cadmusdiary.core.domain.models.Diary
 import kotlinx.coroutines.flow.Flow
 import org.mongodb.kbson.ObjectId
 import java.time.LocalDate

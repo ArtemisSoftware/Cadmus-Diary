@@ -15,7 +15,7 @@ import com.artemissoftware.cadmusdiary.core.ui.mood.toMoodUi
 import com.artemissoftware.cadmusdiary.core.ui.util.UiText
 import com.artemissoftware.cadmusdiary.core.ui.util.uievents.UiEvent
 import com.artemissoftware.cadmusdiary.core.ui.util.uievents.UiEventViewModel
-import com.artemissoftware.cadmusdiary.domain.model.Diary
+import com.artemissoftware.cadmusdiary.core.domain.models.Diary
 import com.artemissoftware.cadmusdiary.navigation.Screen.Companion.WRITE_SCREEN_ARGUMENT_KEY
 import com.artemissoftware.cadmusdiary.util.extensions.toRealmInstant
 import com.artemissoftware.cadmusdiary.write.domain.usecases.DeleteDiaryUseCase

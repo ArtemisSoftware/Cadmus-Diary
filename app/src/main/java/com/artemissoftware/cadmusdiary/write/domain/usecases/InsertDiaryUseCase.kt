@@ -1,16 +1,17 @@
 package com.artemissoftware.cadmusdiary.write.domain.usecases
 
-import com.artemissoftware.cadmusdiary.core.data.repository.MongoDB
-import com.artemissoftware.cadmusdiary.domain.model.Diary
+import com.artemissoftware.cadmusdiary.core.data.repository.MongoRepository
+import com.artemissoftware.cadmusdiary.core.domain.models.Diary
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class InsertDiaryUseCase @Inject constructor() {
+class InsertDiaryUseCase @Inject constructor(
+    private val mongoRepository: MongoRepository,
+) {
 
     suspend operator fun invoke(diary: Diary) = withContext(Dispatchers.IO) {
-        val result = MongoDB.insertDiary(diary = diary)
+        val result = mongoRepository.insertDiary(diary = diary)
         result
     }
 }
-
