@@ -9,6 +9,7 @@ import io.realm.kotlin.Realm
 import io.realm.kotlin.ext.query
 import io.realm.kotlin.log.LogLevel
 import io.realm.kotlin.mongodb.App
+import io.realm.kotlin.mongodb.Credentials
 import io.realm.kotlin.mongodb.sync.SyncConfiguration
 import io.realm.kotlin.query.Sort
 import io.realm.kotlin.types.RealmInstant
@@ -191,5 +192,12 @@ object MongoDB : MongoRepository {
         } else {
             RequestState.Error(UserNotAuthenticatedException())
         }
+    }
+
+    override suspend fun login(tokenId: String): Boolean {
+        return App.create(APP_ID).login(
+            Credentials.jwt(tokenId),
+            // Credentials.google(tokenId, GoogleAuthType.ID_TOKEN), // needs fix from google to be able to see name, email, picture.....
+        ).loggedIn
     }
 }
