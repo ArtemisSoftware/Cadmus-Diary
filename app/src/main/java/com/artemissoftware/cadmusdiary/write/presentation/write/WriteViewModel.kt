@@ -120,7 +120,7 @@ class WriteViewModel @Inject constructor(
                 selectedDiary = diary,
                 title = diary.title,
                 description = diary.description,
-                mood = diary.mood.toMoodUi() /*Mood.valueOf(diary.mood)*/,
+                mood = diary.mood.toMoodUi(),
             )
         }
     }
@@ -255,26 +255,6 @@ class WriteViewModel @Inject constructor(
             }
         }
     }
-
-//    private fun setSelectedDiary(diary: Diary) = with(_state) {
-//        update {
-//            it.copy(selectedDiary = diary)
-//        }
-//    }
-
-//    fun upsertDiary(
-//        diary: Diary,
-//        onSuccess: () -> Unit,
-//        onError: (String) -> Unit
-//    ) {
-//        viewModelScope.launch(Dispatchers.IO) {
-//            if (uiState.selectedDiaryId != null) {
-//                updateDiary(diary = diary, onSuccess = onSuccess, onError = onError)
-//            } else {
-//                insertDiary(diary = diary, onSuccess = onSuccess, onError = onError)
-//            }
-//        }
-//    }
 
     private fun save() = with(_state.value) {
         if (title.isNotEmpty() && description.isNotEmpty()) {

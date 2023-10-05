@@ -1,6 +1,5 @@
 package com.artemissoftware.cadmusdiary.home.presentation.home
 
-import org.mongodb.kbson.ObjectId
 import java.time.ZonedDateTime
 
 sealed class HomeEvents {
@@ -12,8 +11,9 @@ sealed class HomeEvents {
 
     data class Navigate(val route: String) : HomeEvents()
 
-    data class FetchImages(val diaryId: ObjectId, val list: List<String>) : HomeEvents()
-    data class OpenDiaryGallery(val diaryId: ObjectId) : HomeEvents()
+    data class FetchImages(val diaryId: String, val list: List<String>) : HomeEvents()
+    data class OpenDiaryGallery(val diaryId: String) : HomeEvents()
+    data class CloseDiaryGallery(val diaryId: String) : HomeEvents()
 
     object OpenDeleteAllDialog : HomeEvents()
     object CloseDeleteAllDialog : HomeEvents()

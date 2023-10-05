@@ -1,9 +1,9 @@
 package com.artemissoftware.cadmusdiary.core.data.repository
 
 import androidx.core.net.toUri
-import com.artemissoftware.cadmusdiary.core.domain.models.ImageResult
 import com.artemissoftware.cadmusdiary.core.data.database.dao.ImageToUploadDao
 import com.artemissoftware.cadmusdiary.core.data.mappers.toEntity
+import com.artemissoftware.cadmusdiary.core.domain.models.ImageResult
 import com.artemissoftware.cadmusdiary.core.domain.models.Picture
 import com.artemissoftware.cadmusdiary.core.domain.repository.ImageRepository
 import com.google.firebase.auth.FirebaseAuth
@@ -19,15 +19,19 @@ class ImageRepositoryImpl(
     override suspend fun uploadImagesToFirebase(pictures: List<Picture>): HashMap<String, Picture> {
         val storage = FirebaseStorage.getInstance().reference
         val map = HashMap<String, Picture>()
+        var uploadsFinished = 0
 
         return suspendCoroutine { continuation ->
             pictures.forEachIndexed { index, picture ->
                 val imagePath = storage.child(picture.remotePath)
                 imagePath.putFile(picture.image.toUri())
+                    .addOnSuccessListener {
+                        map[it.uploadSessionUri.toString()] = picture
+                    }
                     .addOnCompleteListener {
-                        map[it.result.uploadSessionUri.toString()] = picture
+                        ++uploadsFinished
 
-                        if(map.size == pictures.size) {
+                        if(uploadsFinished == pictures.size) {
                             continuation.resume(map)
                         }
                     }

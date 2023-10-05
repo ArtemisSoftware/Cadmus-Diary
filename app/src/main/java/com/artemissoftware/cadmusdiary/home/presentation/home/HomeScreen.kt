@@ -172,10 +172,10 @@ private fun HomeScreenContent(
                             events.invoke(HomeEvents.Navigate(Screen.Write.passDiaryId(diaryId = diaryId)))
                         },
                         openGallery = { diaryId ->
-                            events.invoke(HomeEvents.OpenDiaryGallery(diaryId = diaryId))
+                            events.invoke(HomeEvents.OpenDiaryGallery(diaryId = diaryId.toString()))
                         },
                         fetchImages = { id, list ->
-                            events.invoke(HomeEvents.FetchImages(diaryId = id, list))
+                            events.invoke(HomeEvents.FetchImages(diaryId = id.toString(), list))
                         },
                     )
                 }

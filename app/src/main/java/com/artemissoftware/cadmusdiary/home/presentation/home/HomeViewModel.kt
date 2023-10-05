@@ -18,6 +18,7 @@ import com.artemissoftware.cadmusdiary.home.domain.usecases.GetFilteredDiariesUs
 import com.artemissoftware.cadmusdiary.home.domain.usecases.SignOutUseCase
 import com.artemissoftware.cadmusdiary.navigation.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.realm.kotlin.ext.copyFromRealm
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,7 +26,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.mongodb.kbson.ObjectId
 import java.time.ZonedDateTime
 import javax.inject.Inject
 
@@ -75,6 +75,10 @@ class HomeViewModel @Inject constructor(
                 openDiaryGallery(event.diaryId)
             }
 
+            is HomeEvents.CloseDiaryGallery -> {
+                closeDiaryGallery(event.diaryId)
+            }
+
             HomeEvents.CloseDeleteAllDialog -> {
                 updateDeleteAllDialog(open = false)
             }
@@ -108,6 +112,7 @@ class HomeViewModel @Inject constructor(
         update {
             it.copy(diaries = diaries)
         }
+        updateImagesOnOpenedGalleries(diaries)
     }
 
     private fun updateDiariesImages(diaryId: String, urls: List<String> = emptyList()) = with(_state) {
@@ -129,16 +134,18 @@ class HomeViewModel @Inject constructor(
     private fun updateDiariesImages(diaryId: String, diariesImages: DiariesImageState?) = with(_state) {
         val images = value.diariesImages.toMutableList()
 
-        DiariesImageState(
-            id = diaryId,
-            uris = diariesImages?.uris ?: emptyList(),
-            isLoading = diariesImages?.uris?.isEmpty() ?: true,
-            isOpened = diariesImages?.isOpened ?: true,
-        )
-
         diariesImages?.let { _ ->
             images.removeIf { it.id == diaryId }
         }
+
+        images.add(
+            DiariesImageState(
+                id = diaryId,
+                uris = diariesImages?.uris ?: emptyList(),
+                isLoading = diariesImages?.uris?.isEmpty() ?: true,
+                isOpened = diariesImages?.isOpened ?: true,
+            ),
+        )
 
         update {
             it.copy(diariesImages = images)
@@ -179,11 +186,7 @@ class HomeViewModel @Inject constructor(
         filteredDiariesJob = viewModelScope.launch {
             allDiariesJob?.cancelAndJoin()
             getFilteredDiariesUseCase(zonedDateTime = zonedDateTime).collect { result ->
-                update {
-                    it.copy(
-                        diaries = result,
-                    )
-                }
+                updateDiaries(result)
             }
         }
     }
@@ -198,10 +201,45 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun openDiaryGallery(diaryId: ObjectId) = with(_state.value) {
-        val diariesImages = this.diariesImages.toMutableList()
-        val diaryImages = diariesImages.find { it.id == diaryId.toString() }
-        updateDiariesImages(diaryId = diaryId.toString(), diariesImages = diaryImages)
+    private fun openDiaryGallery(diaryId: String) = with(_state) {
+        if(value.diariesImages.none { it.id == diaryId }) {
+            updateDiariesImages(diaryId, null)
+            return@with
+        }
+
+        val images = value.diariesImages.toMutableList()
+        images.find { it.id == diaryId }?.let { diariesImages ->
+            val image = diariesImages.copy(isOpened = !diariesImages.isOpened)
+            images.removeIf { it.id == diaryId }
+            images.add(image)
+            update {
+                it.copy(diariesImages = images)
+            }
+        }
+    }
+
+    private fun closeDiaryGallery(diaryId: String) = with(_state) {
+        val images = value.diariesImages.toMutableList()
+        images.find { it.id.contains(diaryId) }?.let { diariesImages ->
+            val image = diariesImages.copy(isOpened = false)
+            images.removeIf { it.id.contains(diaryId) }
+            images.add(image)
+            update {
+                it.copy(diariesImages = images)
+            }
+        }
+    }
+
+    private fun updateImagesOnOpenedGalleries(diaries: Diaries) {
+        val openedGalleries = _state.value.diariesImages.filter { it.isOpened }.map { it.id }
+        if(openedGalleries.isNotEmpty()) {
+            val dd = (diaries as RequestState.Success).data.values.flatten().map { it.copyFromRealm() }
+
+            dd.filter { openedGalleries.contains(it._id.toString()) }.forEach {
+                updateDiariesImages(it._id.toString(), null)
+                getImages(diaryId = it._id.toString(), list = it.images)
+            }
+        }
     }
 
     private fun signOut() {
@@ -214,15 +252,15 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun getImages(diaryId: ObjectId, list: List<String>) {
+    private fun getImages(diaryId: String, list: List<String>) {
         viewModelScope.launch {
-            getDiaryImagesUseCase.invoke(diaryId.toString(), list).collect { result ->
+            getDiaryImagesUseCase.invoke(diaryId, list).collect { result ->
                 when(result) {
                     is RequestState.Success -> {
                         updateDiariesImages(diaryId = result.data.id, urls = result.data.images)
                     }
                     is RequestState.Error -> {
-                        updateDiariesImages(diaryId = diaryId.toString())
+                        updateDiariesImages(diaryId = diaryId)
                         sendUiEvent(UiEvent.ShowToast(UiText.StringResource(R.string.images_not_uploaded_yet_wait_a_little_bit_or_try_uploading_again), Toast.LENGTH_SHORT))
                     }
                     else -> Unit
