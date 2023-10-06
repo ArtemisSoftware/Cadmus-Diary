@@ -174,11 +174,19 @@ fun WriteContent(
         Column(verticalArrangement = Arrangement.Bottom) {
             Spacer(modifier = Modifier.height(12.dp))
             GalleryUploader(
+                modifier = Modifier.fillMaxWidth(),
                 images = state.getImagesUri(),
                 onAddClicked = { focusManager.clearFocus() },
                 onImageSelect = onImageSelect,
                 onImageClicked = onImageClicked,
             )
+//            Lolo(
+//                modifier = Modifier.fillMaxWidth(),
+//                imagesL = state.getImagesUri(),
+//                onAddClicked = { focusManager.clearFocus() },
+//                onImageSelect = onImageSelect,
+//                onImageClicked = onImageClicked,
+//            )
             Spacer(modifier = Modifier.height(12.dp))
             Button(
                 modifier = Modifier

@@ -73,12 +73,6 @@ fun DiaryCard(
         }
     }
 
-//    LaunchedEffect(key1 = downloadedImages) {
-//        if (galleryOpened && downloadedImages.isNotEmpty()) {
-//            fetchImages(diary._id, /*diary.images*/downloadedImages.map{it.toString()})
-//        }
-//    }
-
     Row(
         modifier = Modifier
             .clickable(
@@ -131,7 +125,7 @@ fun DiaryCard(
                     ),
                 ) {
                     Column(modifier = Modifier.padding(all = 14.dp)) {
-                        Gallery(images = downloadedImages)
+                        Gallery(images = downloadedImages, modifier = Modifier.fillMaxWidth())
                     }
                 }
             }

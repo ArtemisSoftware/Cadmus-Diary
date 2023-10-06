@@ -202,8 +202,17 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun openDiaryGallery(diaryId: String) = with(_state) {
+        val allDiaries = (_state.value.diaries as RequestState.Success).data.values.flatten().map { it.copyFromRealm() }
+        val currentDiary = allDiaries.find { it._id.toString() == diaryId }
+        val currentNumberOfImages = allDiaries.find { it._id.toString() == diaryId }?.images?.size ?: 0
+        val numberOfImages = value.diariesImages.find { it.id == diaryId }?.uris?.size ?: 0
+
         if(value.diariesImages.none { it.id == diaryId }) {
             updateDiariesImages(diaryId, null)
+            return@with
+        }
+        else if(currentNumberOfImages != numberOfImages) {
+            getImages(currentDiary?._id.toString(), currentDiary?.images ?: emptyList())
             return@with
         }
 
@@ -230,14 +239,28 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    private fun clearGallery(diaryId: String) = with(_state) {
+        val images = value.diariesImages.toMutableList()
+        images.removeIf { it.id.contains(diaryId) }
+        update {
+            it.copy(diariesImages = images)
+        }
+    }
+
     private fun updateImagesOnOpenedGalleries(diaries: Diaries) {
         val openedGalleries = _state.value.diariesImages.filter { it.isOpened }.map { it.id }
         if(openedGalleries.isNotEmpty()) {
-            val dd = (diaries as RequestState.Success).data.values.flatten().map { it.copyFromRealm() }
+            val allDiaries = (diaries as RequestState.Success).data.values.flatten().map { it.copyFromRealm() }
 
-            dd.filter { openedGalleries.contains(it._id.toString()) }.forEach {
+            allDiaries.filter { openedGalleries.contains(it._id.toString()) }.forEach {
                 updateDiariesImages(it._id.toString(), null)
-                getImages(diaryId = it._id.toString(), list = it.images)
+                if(it.images.isNotEmpty()) {
+                    getImages(diaryId = it._id.toString(), list = it.images)
+                }
+                else {
+                    clearGallery(it._id.toString())
+                    closeDiaryGallery(it._id.toString())
+                }
             }
         }
     }
