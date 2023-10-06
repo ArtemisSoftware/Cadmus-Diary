@@ -28,6 +28,8 @@ com-google-devtools-ksp = "1.8.20-1.0.11"
 
 hilt = "2.48"
 hilt-navigation-compose = "1.1.0-beta01"
+appcompat = "1.6.1"
+material = "1.8.0"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -101,6 +103,8 @@ message-bar-compose = { group = "com.github.stevdza-san", name = "MessageBarComp
 
 # One-Tap Compose
 one-tap-compose = { group = "com.github.stevdza-san", name = "OneTapCompose", version.ref = "one-tap-compose" }
+appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 #// Desugar JDK
 #coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.0'
@@ -118,6 +122,7 @@ com-google-devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "com-g
 org-jetbrains-kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "org-jetbrains-kotlin-android" }
 
 com-google-dagger-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+com-android-library = { id = "com.android.library", version.ref = "agp" }
 
 [bundles]
 

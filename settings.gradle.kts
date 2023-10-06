@@ -16,3 +16,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "CadmusDiary"
 include(":app")
+include(":core:ui")
