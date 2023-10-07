@@ -1,9 +1,9 @@
-package com.artemissoftware.cadmusdiary.core.data.database
+package com.core.data.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.artemissoftware.cadmusdiary.core.data.database.dao.ImageToUploadDao
-import com.artemissoftware.cadmusdiary.core.data.database.entity.ImageToUploadEntity
+import com.core.data.database.dao.ImageToUploadDao
+import com.core.data.database.entity.ImageToUploadEntity
 
 @Database(
     entities = [

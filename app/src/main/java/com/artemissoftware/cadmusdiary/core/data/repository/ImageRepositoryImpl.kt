@@ -1,7 +1,7 @@
 package com.artemissoftware.cadmusdiary.core.data.repository
 
 import androidx.core.net.toUri
-import com.artemissoftware.cadmusdiary.core.data.database.dao.ImageToUploadDao
+import com.core.data.database.dao.ImageToUploadDao
 import com.artemissoftware.cadmusdiary.core.data.mappers.toEntity
 import com.artemissoftware.cadmusdiary.core.domain.models.ImageResult
 import com.artemissoftware.cadmusdiary.core.domain.models.Picture
@@ -13,7 +13,7 @@ import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 class ImageRepositoryImpl(
-    private val imageToUploadDao: ImageToUploadDao,
+    private val imageToUploadDao: com.core.data.database.dao.ImageToUploadDao,
 ) : ImageRepository {
 
     override suspend fun uploadImagesToFirebase(pictures: List<Picture>): HashMap<String, Picture> {

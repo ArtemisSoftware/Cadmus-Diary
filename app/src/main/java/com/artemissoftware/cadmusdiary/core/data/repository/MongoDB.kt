@@ -1,6 +1,6 @@
 package com.artemissoftware.cadmusdiary.core.data.repository
 
-import com.artemissoftware.cadmusdiary.core.data.exceptions.UserNotAuthenticatedException
+import com.core.data.exceptions.UserNotAuthenticatedException
 import com.artemissoftware.cadmusdiary.core.domain.RequestState
 import com.artemissoftware.cadmusdiary.core.domain.models.Diary
 import com.artemissoftware.cadmusdiary.util.Constants.APP_ID
@@ -65,7 +65,7 @@ object MongoDB : MongoRepository {
                 flow { emit(RequestState.Error(e)) }
             }
         } else {
-            flow { emit(RequestState.Error(UserNotAuthenticatedException())) }
+            flow { emit(RequestState.Error(com.core.data.exceptions.UserNotAuthenticatedException())) }
         }
     }
 
@@ -102,7 +102,7 @@ object MongoDB : MongoRepository {
                 flow { emit(RequestState.Error(e)) }
             }
         } else {
-            flow { emit(RequestState.Error(UserNotAuthenticatedException())) }
+            flow { emit(RequestState.Error(com.core.data.exceptions.UserNotAuthenticatedException())) }
         }
     }
 
@@ -116,7 +116,7 @@ object MongoDB : MongoRepository {
                 flow { emit(RequestState.Error(e)) }
             }
         } else {
-            flow { emit(RequestState.Error(UserNotAuthenticatedException())) }
+            flow { emit(RequestState.Error(com.core.data.exceptions.UserNotAuthenticatedException())) }
         }
     }
 
@@ -131,7 +131,7 @@ object MongoDB : MongoRepository {
                 }
             }
         } else {
-            RequestState.Error(UserNotAuthenticatedException())
+            RequestState.Error(com.core.data.exceptions.UserNotAuthenticatedException())
         }
     }
 
@@ -151,7 +151,7 @@ object MongoDB : MongoRepository {
                 }
             }
         } else {
-            RequestState.Error(UserNotAuthenticatedException())
+            RequestState.Error(com.core.data.exceptions.UserNotAuthenticatedException())
         }
     }
 
@@ -174,7 +174,7 @@ object MongoDB : MongoRepository {
                 }
             }
         } else {
-            RequestState.Error(UserNotAuthenticatedException())
+            RequestState.Error(com.core.data.exceptions.UserNotAuthenticatedException())
         }
     }
 
@@ -190,7 +190,7 @@ object MongoDB : MongoRepository {
                 }
             }
         } else {
-            RequestState.Error(UserNotAuthenticatedException())
+            RequestState.Error(com.core.data.exceptions.UserNotAuthenticatedException())
         }
     }
 

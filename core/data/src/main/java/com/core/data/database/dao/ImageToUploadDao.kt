@@ -1,10 +1,10 @@
-package com.artemissoftware.cadmusdiary.core.data.database.dao
+package com.core.data.database.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.artemissoftware.cadmusdiary.core.data.database.entity.ImageToUploadEntity
+import com.core.data.database.entity.ImageToUploadEntity
 
 @Dao
 interface ImageToUploadDao {

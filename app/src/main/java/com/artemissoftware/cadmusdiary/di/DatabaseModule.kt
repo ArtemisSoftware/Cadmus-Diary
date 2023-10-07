@@ -2,7 +2,7 @@ package com.artemissoftware.cadmusdiary.di
 
 import android.content.Context
 import androidx.room.Room
-import com.artemissoftware.cadmusdiary.core.data.database.ImagesDatabase
+import com.core.data.database.ImagesDatabase
 import com.artemissoftware.cadmusdiary.util.Constants.IMAGES_DATABASE
 import dagger.Module
 import dagger.Provides
@@ -18,17 +18,17 @@ object DatabaseModule {
     @Singleton
     fun provideDatabase(
         @ApplicationContext context: Context,
-    ): ImagesDatabase {
+    ): com.core.data.database.ImagesDatabase {
         return Room.databaseBuilder(
             context = context,
-            klass = ImagesDatabase::class.java,
+            klass = com.core.data.database.ImagesDatabase::class.java,
             name = IMAGES_DATABASE,
         ).build()
     }
 
     @Singleton
     @Provides
-    fun provideImageToUploadDao(database: ImagesDatabase) = database.imageToUploadDao()
+    fun provideImageToUploadDao(database: com.core.data.database.ImagesDatabase) = database.imageToUploadDao()
 
 //    @Singleton
 //    @Provides
