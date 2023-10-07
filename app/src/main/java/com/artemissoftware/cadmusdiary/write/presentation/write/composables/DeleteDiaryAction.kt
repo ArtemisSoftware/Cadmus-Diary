@@ -17,7 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.artemissoftware.cadmusdiary.R
 import com.artemissoftware.cadmusdiary.core.domain.models.Diary
-import com.artemissoftware.cadmusdiary.core.ui.components.dialog.DisplayAlertDialog
+import com.core.ui.components.dialog.DisplayAlertDialog
 
 @Composable
 fun DeleteDiaryAction(

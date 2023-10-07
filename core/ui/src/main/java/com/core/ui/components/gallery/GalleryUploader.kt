@@ -1,4 +1,4 @@
-package com.artemissoftware.cadmusdiary.core.ui.components.gallery
+package com.core.ui.components.gallery
 
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -29,8 +29,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.artemissoftware.cadmusdiary.core.ui.components.PlusValueIcon
-import com.artemissoftware.cadmusdiary.core.ui.components.buttons.AddImageButton
+import com.core.ui.components.PlusValueIcon
+import com.core.ui.components.buttons.AddImageButton
 import kotlin.math.max
 
 @OptIn(ExperimentalMaterial3Api::class)

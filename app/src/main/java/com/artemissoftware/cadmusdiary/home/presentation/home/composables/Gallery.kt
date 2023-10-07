@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.artemissoftware.cadmusdiary.core.ui.components.PlusValueIcon
+import com.core.ui.components.PlusValueIcon
 import kotlin.math.max
 
 @Composable

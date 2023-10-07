@@ -1,4 +1,4 @@
-package com.artemissoftware.cadmusdiary.core.ui.components.buttons
+package com.core.ui.components.buttons
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,7 +17,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.artemissoftware.cadmusdiary.ui.theme.Elevation
+import com.core.ui.theme.Elevation
 
 @ExperimentalMaterial3Api
 @Composable

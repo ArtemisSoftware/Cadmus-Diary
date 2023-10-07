@@ -1,4 +1,4 @@
-package com.artemissoftware.cadmusdiary.core.ui.components.buttons
+package com.core.ui.components.buttons
 
 import androidx.annotation.StringRes
 import androidx.compose.animation.animateContentSize
@@ -35,7 +35,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.artemissoftware.cadmusdiary.R
+import com.core.ui.R
 
 @Composable
 fun GoogleButton(

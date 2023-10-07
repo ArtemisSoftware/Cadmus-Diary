@@ -18,7 +18,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.artemissoftware.cadmusdiary.R
-import com.artemissoftware.cadmusdiary.core.ui.components.buttons.GoogleButton
+import com.core.ui.components.buttons.GoogleButton
+import com.core.ui.R as CoreUiR
 
 @Composable
 fun AuthenticationContent(
@@ -44,7 +45,7 @@ fun AuthenticationContent(
             ) {
                 Image(
                     modifier = Modifier.size(120.dp),
-                    painter = painterResource(id = R.drawable.google_logo),
+                    painter = painterResource(id = CoreUiR.drawable.google_logo),
                     contentDescription = "Google Logo",
                 )
                 Spacer(modifier = Modifier.height(20.dp))

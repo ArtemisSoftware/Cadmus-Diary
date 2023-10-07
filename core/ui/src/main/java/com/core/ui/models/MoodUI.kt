@@ -1,25 +1,24 @@
-package com.artemissoftware.cadmusdiary.core.ui.mood
+package com.core.ui.models
 
 import androidx.compose.ui.graphics.Color
-import com.artemissoftware.cadmusdiary.R
-import com.artemissoftware.cadmusdiary.ui.theme.AngryColor
-import com.artemissoftware.cadmusdiary.ui.theme.AwfulColor
-import com.artemissoftware.cadmusdiary.ui.theme.BoredColor
-import com.artemissoftware.cadmusdiary.ui.theme.CalmColor
-import com.artemissoftware.cadmusdiary.ui.theme.DepressedColor
-import com.artemissoftware.cadmusdiary.ui.theme.DisappointedColor
-import com.artemissoftware.cadmusdiary.ui.theme.HappyColor
-import com.artemissoftware.cadmusdiary.ui.theme.HumorousColor
-import com.artemissoftware.cadmusdiary.ui.theme.LonelyColor
-import com.artemissoftware.cadmusdiary.ui.theme.MysteriousColor
-import com.artemissoftware.cadmusdiary.ui.theme.NeutralColor
-import com.artemissoftware.cadmusdiary.ui.theme.RomanticColor
-import com.artemissoftware.cadmusdiary.ui.theme.ShamefulColor
-import com.artemissoftware.cadmusdiary.ui.theme.SurprisedColor
-import com.artemissoftware.cadmusdiary.ui.theme.SuspiciousColor
-import com.artemissoftware.cadmusdiary.ui.theme.TenseColor
+import com.core.ui.R
+import com.core.ui.theme.AngryColor
+import com.core.ui.theme.AwfulColor
+import com.core.ui.theme.BoredColor
+import com.core.ui.theme.CalmColor
+import com.core.ui.theme.DepressedColor
+import com.core.ui.theme.DisappointedColor
+import com.core.ui.theme.HappyColor
+import com.core.ui.theme.HumorousColor
+import com.core.ui.theme.LonelyColor
+import com.core.ui.theme.MysteriousColor
+import com.core.ui.theme.NeutralColor
+import com.core.ui.theme.RomanticColor
+import com.core.ui.theme.ShamefulColor
+import com.core.ui.theme.SurprisedColor
+import com.core.ui.theme.SuspiciousColor
+import com.core.ui.theme.TenseColor
 
-// TODO: isto é uma classe de UI. No multi module mudar isto para o package correto
 enum class MoodUI(
     val icon: Int,
     val contentColor: Color,
@@ -107,6 +106,6 @@ enum class MoodUI(
     ),
 }
 
-fun String.toMoodUi(): MoodUI{
+fun String.toMoodUi(): MoodUI {
     return MoodUI.values().find { it.name == this } ?: MoodUI.Neutral
 }

@@ -1,4 +1,4 @@
-package com.artemissoftware.cadmusdiary.core.ui.gallery
+package com.core.ui.models
 
 import android.net.Uri
 

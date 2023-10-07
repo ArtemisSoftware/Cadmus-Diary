@@ -9,9 +9,9 @@ import androidx.lifecycle.viewModelScope
 import com.artemissoftware.cadmusdiary.R
 import com.artemissoftware.cadmusdiary.core.domain.RequestState
 import com.artemissoftware.cadmusdiary.core.domain.usecases.GetDiaryImagesUseCase
-import com.artemissoftware.cadmusdiary.core.ui.gallery.GalleryImage
-import com.artemissoftware.cadmusdiary.core.ui.mood.MoodUI
-import com.artemissoftware.cadmusdiary.core.ui.mood.toMoodUi
+import com.core.ui.models.GalleryImage
+import com.core.ui.models.MoodUI
+import com.core.ui.models.toMoodUi
 import com.artemissoftware.cadmusdiary.core.ui.util.UiText
 import com.artemissoftware.cadmusdiary.core.ui.util.uievents.UiEvent
 import com.artemissoftware.cadmusdiary.core.ui.util.uievents.UiEventViewModel

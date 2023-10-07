@@ -9,7 +9,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.artemissoftware.cadmusdiary.core.ui.components.events.UIEventsManager
-import com.artemissoftware.cadmusdiary.core.ui.components.image.ZoomableImage
+import com.core.ui.components.image.ZoomableImage
 import com.artemissoftware.cadmusdiary.write.presentation.write.composables.WriteContent
 import com.artemissoftware.cadmusdiary.write.presentation.write.composables.WriteTopBar
 

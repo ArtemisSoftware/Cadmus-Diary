@@ -1,8 +1,8 @@
 package com.artemissoftware.cadmusdiary.write.presentation.write
 
 import android.net.Uri
-import com.artemissoftware.cadmusdiary.core.ui.gallery.GalleryImage
-import com.artemissoftware.cadmusdiary.core.ui.mood.MoodUI
+import com.core.ui.models.GalleryImage
+import com.core.ui.models.MoodUI
 import java.time.ZonedDateTime
 
 sealed class WriteEvents {

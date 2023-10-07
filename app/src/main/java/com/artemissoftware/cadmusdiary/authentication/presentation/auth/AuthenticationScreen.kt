@@ -16,10 +16,10 @@ import androidx.navigation.NavHostController
 import com.artemissoftware.cadmusdiary.core.ui.util.MessageBarType
 import com.artemissoftware.cadmusdiary.core.ui.components.events.UIEventsManager
 import com.artemissoftware.cadmusdiary.authentication.presentation.auth.composables.AuthenticationContent
-import com.artemissoftware.cadmusdiary.ui.theme.CadmusDiaryTheme
+import com.core.ui.theme.CadmusDiaryTheme
 import com.artemissoftware.cadmusdiary.util.Constants.CLIENT_ID
 import com.artemissoftware.cadmusdiary.core.ui.util.extensions.show
-import com.artemissoftware.cadmusdiary.core.ui.components.modifier.statusNavigationBarPadding
+import com.core.ui.components.modifier.statusNavigationBarPadding
 import com.stevdzasan.messagebar.ContentWithMessageBar
 import com.stevdzasan.messagebar.rememberMessageBarState
 import com.stevdzasan.onetap.OneTapSignInWithGoogle

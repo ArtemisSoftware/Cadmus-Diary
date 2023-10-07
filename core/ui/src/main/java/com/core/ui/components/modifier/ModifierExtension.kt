@@ -1,4 +1,4 @@
-package com.artemissoftware.cadmusdiary.core.ui.components.modifier
+package com.core.ui.components.modifier
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.navigationBarsPadding

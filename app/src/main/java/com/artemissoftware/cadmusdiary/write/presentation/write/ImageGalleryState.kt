@@ -1,6 +1,6 @@
 package com.artemissoftware.cadmusdiary.write.presentation.write
 
-import com.artemissoftware.cadmusdiary.core.ui.gallery.GalleryImage
+import com.core.ui.models.GalleryImage
 
 data class ImageGalleryState(
     val images: List<GalleryImage> = emptyList(),

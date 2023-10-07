@@ -1,4 +1,4 @@
-package com.artemissoftware.cadmusdiary.core.ui.components.image
+package com.core.ui.components.image
 
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -28,7 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.artemissoftware.cadmusdiary.R
+import com.core.ui.R
 
 @Composable
 fun ZoomableImage(

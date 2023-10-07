@@ -1,6 +1,6 @@
 package com.artemissoftware.cadmusdiary.write.presentation.write.mappers
 
-import com.artemissoftware.cadmusdiary.core.ui.gallery.GalleryImage
+import com.core.ui.models.GalleryImage
 import com.artemissoftware.cadmusdiary.core.domain.models.Picture
 
 fun List<GalleryImage>.toPictures(): List<Picture> {

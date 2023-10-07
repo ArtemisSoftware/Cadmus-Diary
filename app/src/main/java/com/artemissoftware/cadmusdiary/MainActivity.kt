@@ -8,7 +8,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.navigation.compose.rememberNavController
 import com.artemissoftware.cadmusdiary.navigation.NavGraph
-import com.artemissoftware.cadmusdiary.ui.theme.CadmusDiaryTheme
+import com.core.ui.theme.CadmusDiaryTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

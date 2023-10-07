@@ -35,7 +35,7 @@ import androidx.navigation.NavHostController
 import com.artemissoftware.cadmusdiary.R
 import com.artemissoftware.cadmusdiary.core.domain.RequestState
 import com.artemissoftware.cadmusdiary.navigation.Screen
-import com.artemissoftware.cadmusdiary.core.ui.components.dialog.DisplayAlertDialog
+import com.core.ui.components.dialog.DisplayAlertDialog
 import com.artemissoftware.cadmusdiary.core.ui.components.events.UIEventsManager
 import com.artemissoftware.cadmusdiary.home.presentation.home.composables.EmptyPage
 import com.artemissoftware.cadmusdiary.home.presentation.home.composables.HomeContent

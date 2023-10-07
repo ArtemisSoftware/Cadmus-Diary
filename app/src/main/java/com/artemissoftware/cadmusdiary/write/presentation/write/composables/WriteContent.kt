@@ -42,8 +42,8 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.artemissoftware.cadmusdiary.R
-import com.artemissoftware.cadmusdiary.core.ui.components.gallery.GalleryUploader
-import com.artemissoftware.cadmusdiary.core.ui.mood.MoodUI
+import com.core.ui.components.gallery.GalleryUploader
+import com.core.ui.models.MoodUI
 import com.artemissoftware.cadmusdiary.write.presentation.write.WriteState
 import kotlinx.coroutines.launch
 
