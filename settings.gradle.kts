@@ -18,3 +18,4 @@ rootProject.name = "CadmusDiary"
 include(":app")
 include(":core:ui")
 include(":core:data")
+include(":feature:home:presentation")
