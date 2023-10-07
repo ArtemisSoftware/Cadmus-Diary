@@ -7,8 +7,8 @@ import com.artemissoftware.cadmusdiary.R
 import com.artemissoftware.cadmusdiary.core.data.repository.Diaries
 import com.artemissoftware.cadmusdiary.core.domain.RequestState
 import com.artemissoftware.cadmusdiary.core.domain.usecases.GetDiaryImagesUseCase
-import com.artemissoftware.cadmusdiary.core.ui.connectivity.ConnectivityObserver
-import com.artemissoftware.cadmusdiary.core.ui.connectivity.NetworkConnectivityObserver
+import com.core.ui.connectivity.ConnectivityObserver
+import com.core.ui.connectivity.NetworkConnectivityObserver
 import com.core.ui.util.UiText
 import com.core.ui.util.uievents.UiEvent
 import com.core.ui.util.uievents.UiEventViewModel

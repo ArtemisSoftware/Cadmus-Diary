@@ -3,7 +3,7 @@ package com.artemissoftware.cadmusdiary.home.presentation.home
 import android.net.Uri
 import com.artemissoftware.cadmusdiary.core.data.repository.Diaries
 import com.artemissoftware.cadmusdiary.core.domain.RequestState
-import com.artemissoftware.cadmusdiary.core.ui.connectivity.ConnectivityObserver
+import com.core.ui.connectivity.ConnectivityObserver
 
 data class HomeState(
     val signOutDialogOpened: Boolean = false,

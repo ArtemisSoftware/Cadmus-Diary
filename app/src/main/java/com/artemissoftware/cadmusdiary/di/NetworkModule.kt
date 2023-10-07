@@ -1,7 +1,7 @@
 package com.artemissoftware.cadmusdiary.di
 
 import android.content.Context
-import com.artemissoftware.cadmusdiary.core.ui.connectivity.NetworkConnectivityObserver
+import com.core.ui.connectivity.NetworkConnectivityObserver
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

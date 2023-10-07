@@ -1,4 +1,4 @@
-package com.artemissoftware.cadmusdiary.core.ui.connectivity
+package com.core.ui.connectivity
 
 import kotlinx.coroutines.flow.Flow
 
