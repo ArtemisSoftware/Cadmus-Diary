@@ -5,10 +5,10 @@ import com.artemissoftware.cadmusdiary.R
 import com.artemissoftware.cadmusdiary.core.domain.RequestState
 import com.artemissoftware.cadmusdiary.authentication.domain.usecase.SignInUseCase
 import com.artemissoftware.cadmusdiary.navigation.Screen
-import com.artemissoftware.cadmusdiary.core.ui.util.MessageBarType
-import com.artemissoftware.cadmusdiary.core.ui.util.uievents.UiEvent
-import com.artemissoftware.cadmusdiary.core.ui.util.uievents.UiEventViewModel
-import com.artemissoftware.cadmusdiary.core.ui.util.UiText
+import com.core.ui.util.MessageBarType
+import com.core.ui.util.uievents.UiEvent
+import com.core.ui.util.uievents.UiEventViewModel
+import com.core.ui.util.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -9,9 +9,9 @@ import com.artemissoftware.cadmusdiary.core.domain.RequestState
 import com.artemissoftware.cadmusdiary.core.domain.usecases.GetDiaryImagesUseCase
 import com.artemissoftware.cadmusdiary.core.ui.connectivity.ConnectivityObserver
 import com.artemissoftware.cadmusdiary.core.ui.connectivity.NetworkConnectivityObserver
-import com.artemissoftware.cadmusdiary.core.ui.util.UiText
-import com.artemissoftware.cadmusdiary.core.ui.util.uievents.UiEvent
-import com.artemissoftware.cadmusdiary.core.ui.util.uievents.UiEventViewModel
+import com.core.ui.util.UiText
+import com.core.ui.util.uievents.UiEvent
+import com.core.ui.util.uievents.UiEventViewModel
 import com.artemissoftware.cadmusdiary.home.domain.usecases.DeleteAllDiariesUseCase
 import com.artemissoftware.cadmusdiary.home.domain.usecases.GetAllDiariesUseCase
 import com.artemissoftware.cadmusdiary.home.domain.usecases.GetFilteredDiariesUseCase

@@ -1,4 +1,4 @@
-package com.artemissoftware.cadmusdiary.core.ui.components.events
+package com.core.ui.components.events
 
 import android.content.Context
 import android.widget.Toast
@@ -6,8 +6,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
-import com.artemissoftware.cadmusdiary.core.ui.util.MessageBarType
-import com.artemissoftware.cadmusdiary.core.ui.util.uievents.UiEvent
+import com.core.ui.util.MessageBarType
+import com.core.ui.util.uievents.UiEvent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 

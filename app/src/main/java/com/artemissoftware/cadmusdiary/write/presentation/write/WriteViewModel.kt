@@ -12,9 +12,9 @@ import com.artemissoftware.cadmusdiary.core.domain.usecases.GetDiaryImagesUseCas
 import com.core.ui.models.GalleryImage
 import com.core.ui.models.MoodUI
 import com.core.ui.models.toMoodUi
-import com.artemissoftware.cadmusdiary.core.ui.util.UiText
-import com.artemissoftware.cadmusdiary.core.ui.util.uievents.UiEvent
-import com.artemissoftware.cadmusdiary.core.ui.util.uievents.UiEventViewModel
+import com.core.ui.util.UiText
+import com.core.ui.util.uievents.UiEvent
+import com.core.ui.util.uievents.UiEventViewModel
 import com.artemissoftware.cadmusdiary.core.domain.models.Diary
 import com.artemissoftware.cadmusdiary.navigation.Screen.Companion.WRITE_SCREEN_ARGUMENT_KEY
 import com.artemissoftware.cadmusdiary.util.extensions.toRealmInstant

@@ -1,7 +1,7 @@
-package com.artemissoftware.cadmusdiary.core.ui.util.uievents
+package com.core.ui.util.uievents
 
-import com.artemissoftware.cadmusdiary.core.ui.util.MessageBarType
-import com.artemissoftware.cadmusdiary.core.ui.util.UiText
+import com.core.ui.util.MessageBarType
+import com.core.ui.util.UiText
 
 sealed class UiEvent {
 

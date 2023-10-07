@@ -1,4 +1,4 @@
-package com.artemissoftware.cadmusdiary.core.ui.util
+package com.core.ui.util
 
 import android.content.Context
 import android.os.Parcelable

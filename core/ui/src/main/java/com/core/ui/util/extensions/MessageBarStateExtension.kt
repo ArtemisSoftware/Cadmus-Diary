@@ -1,7 +1,7 @@
-package com.artemissoftware.cadmusdiary.core.ui.util.extensions
+package com.core.ui.util.extensions
 
 import android.content.Context
-import com.artemissoftware.cadmusdiary.core.ui.util.MessageBarType
+import com.core.ui.util.MessageBarType
 import com.stevdzasan.messagebar.MessageBarState
 
 fun MessageBarState.show(context: Context, messageBarType: MessageBarType) {

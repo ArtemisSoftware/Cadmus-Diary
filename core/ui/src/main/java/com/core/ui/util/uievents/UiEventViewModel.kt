@@ -1,4 +1,4 @@
-package com.artemissoftware.cadmusdiary.core.ui.util.uievents
+package com.core.ui.util.uievents
 
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.channels.Channel

@@ -13,12 +13,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.artemissoftware.cadmusdiary.core.ui.util.MessageBarType
-import com.artemissoftware.cadmusdiary.core.ui.components.events.UIEventsManager
+import com.core.ui.util.MessageBarType
+import com.core.ui.components.events.UIEventsManager
 import com.artemissoftware.cadmusdiary.authentication.presentation.auth.composables.AuthenticationContent
 import com.core.ui.theme.CadmusDiaryTheme
 import com.artemissoftware.cadmusdiary.util.Constants.CLIENT_ID
-import com.artemissoftware.cadmusdiary.core.ui.util.extensions.show
+import com.core.ui.util.extensions.show
 import com.core.ui.components.modifier.statusNavigationBarPadding
 import com.stevdzasan.messagebar.ContentWithMessageBar
 import com.stevdzasan.messagebar.rememberMessageBarState
