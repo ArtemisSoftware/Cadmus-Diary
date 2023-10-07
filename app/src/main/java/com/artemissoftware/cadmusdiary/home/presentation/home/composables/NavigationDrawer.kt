@@ -22,6 +22,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.artemissoftware.cadmusdiary.R
+import com.core.ui.R as CoreUiR
 
 @Composable
 fun NavigationDrawer(
@@ -46,7 +47,7 @@ fun NavigationDrawer(
                         label = {
                             Row(modifier = Modifier.padding(horizontal = 12.dp)) {
                                 Image(
-                                    painter = painterResource(id = R.drawable.google_logo),
+                                    painter = painterResource(id = CoreUiR.drawable.google_logo),
                                     contentDescription = "Google Logo",
                                 )
                                 Spacer(modifier = Modifier.width(12.dp))
@@ -100,7 +101,7 @@ private fun NavigationDrawerContent(
         label = {
             Row(modifier = Modifier.padding(horizontal = 12.dp)) {
                 Image(
-                    painter = painterResource(id = R.drawable.google_logo),
+                    painter = painterResource(id = CoreUiR.drawable.google_logo),
                     contentDescription = "Google Logo",
                 )
                 Spacer(modifier = Modifier.width(12.dp))
