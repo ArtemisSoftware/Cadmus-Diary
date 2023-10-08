@@ -1,4 +1,4 @@
-package com.artemissoftware.cadmusdiary.home.presentation.home
+package com.home.presentation.home
 
 import android.net.Uri
 

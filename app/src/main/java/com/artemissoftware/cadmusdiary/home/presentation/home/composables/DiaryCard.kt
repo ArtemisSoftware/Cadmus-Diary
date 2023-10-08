@@ -43,10 +43,12 @@ import androidx.compose.ui.unit.dp
 import com.artemissoftware.cadmusdiary.R
 import com.artemissoftware.cadmusdiary.core.domain.models.Diary
 import com.artemissoftware.cadmusdiary.core.domain.models.Mood
-import com.core.ui.models.toMoodUi
-import com.core.ui.theme.Elevation
 import com.artemissoftware.cadmusdiary.util.DateTimeConstants
 import com.artemissoftware.cadmusdiary.util.extensions.toInstant
+import com.core.ui.models.toMoodUi
+import com.core.ui.theme.Elevation
+import com.home.presentation.home.composables.Gallery
+import com.home.presentation.home.composables.TimeLine
 import io.realm.kotlin.ext.realmListOf
 import org.mongodb.kbson.ObjectId
 import java.time.Instant

@@ -17,6 +17,8 @@ import com.artemissoftware.cadmusdiary.home.domain.usecases.GetAllDiariesUseCase
 import com.artemissoftware.cadmusdiary.home.domain.usecases.GetFilteredDiariesUseCase
 import com.artemissoftware.cadmusdiary.home.domain.usecases.SignOutUseCase
 import com.artemissoftware.cadmusdiary.navigation.Screen
+import com.home.presentation.home.DiariesImageState
+import com.home.presentation.home.HomeEvents
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.realm.kotlin.ext.copyFromRealm
 import kotlinx.coroutines.Job

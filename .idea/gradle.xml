@@ -19,6 +19,8 @@
             <option value="$PROJECT_DIR$/feature" />
             <option value="$PROJECT_DIR$/feature/home" />
             <option value="$PROJECT_DIR$/feature/home/presentation" />
+            <option value="$PROJECT_DIR$/feature/write" />
+            <option value="$PROJECT_DIR$/feature/write/presentation" />
           </set>
         </option>
       </GradleProjectSettings>

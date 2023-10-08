@@ -1,4 +1,4 @@
-package com.artemissoftware.cadmusdiary.home.presentation.home.composables
+package com.home.presentation.home.composables
 
 import android.net.Uri
 import androidx.compose.foundation.layout.BoxWithConstraints

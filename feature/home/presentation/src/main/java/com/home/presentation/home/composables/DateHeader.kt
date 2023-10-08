@@ -1,4 +1,4 @@
-package com.artemissoftware.cadmusdiary.home.presentation.home.composables
+package com.home.presentation.home.composables
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -19,10 +19,12 @@ import androidx.compose.ui.unit.dp
 import java.time.LocalDate
 
 @Composable
-fun DateHeader(localDate: LocalDate) {
+fun DateHeader(
+    localDate: LocalDate,
+    modifier: Modifier = Modifier,
+) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
+        modifier = modifier
             .background(MaterialTheme.colorScheme.surface)
             .padding(vertical = 16.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -68,5 +70,9 @@ fun DateHeader(localDate: LocalDate) {
 @Composable
 @Preview(showBackground = true)
 private fun DateHeaderPreview() {
-    DateHeader(localDate = LocalDate.now())
+    DateHeader(
+        localDate = LocalDate.now(),
+        modifier = Modifier
+            .fillMaxWidth(),
+    )
 }

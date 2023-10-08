@@ -102,4 +102,6 @@ dependencies {
 
     implementation(project(Module.coreData))
     implementation(project(Module.coreUi))
+
+    implementation(project(Module.homePresentation))
 }

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -22,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import com.artemissoftware.cadmusdiary.R
 import com.artemissoftware.cadmusdiary.core.domain.models.Diary
 import com.artemissoftware.cadmusdiary.home.presentation.home.HomeState
+import com.home.presentation.home.composables.DateHeader
 import org.mongodb.kbson.ObjectId
 import java.time.LocalDate
 
@@ -44,7 +46,11 @@ fun HomeContent(
         ) {
             diaryNotes.forEach { (localDate, diaries) ->
                 stickyHeader(key = localDate) {
-                    DateHeader(localDate = localDate)
+                    DateHeader(
+                        localDate = localDate,
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                    )
                 }
 
                 items(

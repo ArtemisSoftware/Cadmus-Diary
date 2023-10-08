@@ -4,6 +4,7 @@ import android.net.Uri
 import com.artemissoftware.cadmusdiary.core.data.repository.Diaries
 import com.artemissoftware.cadmusdiary.core.domain.RequestState
 import com.core.ui.connectivity.ConnectivityObserver
+import com.home.presentation.home.DiariesImageState
 
 data class HomeState(
     val signOutDialogOpened: Boolean = false,

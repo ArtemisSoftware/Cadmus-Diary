@@ -39,8 +39,9 @@ import com.core.ui.components.dialog.DisplayAlertDialog
 import com.core.ui.components.events.UIEventsManager
 import com.artemissoftware.cadmusdiary.home.presentation.home.composables.EmptyPage
 import com.artemissoftware.cadmusdiary.home.presentation.home.composables.HomeContent
-import com.artemissoftware.cadmusdiary.home.presentation.home.composables.HomeTopBar
-import com.artemissoftware.cadmusdiary.home.presentation.home.composables.NavigationDrawer
+import com.home.presentation.home.HomeEvents
+import com.home.presentation.home.composables.HomeTopBar
+import com.home.presentation.home.composables.NavigationDrawer
 import kotlinx.coroutines.launch
 
 @Composable

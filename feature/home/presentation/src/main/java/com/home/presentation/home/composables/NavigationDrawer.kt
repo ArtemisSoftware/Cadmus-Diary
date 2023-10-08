@@ -1,4 +1,4 @@
-package com.artemissoftware.cadmusdiary.home.presentation.home.composables
+package com.home.presentation.home.composables
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row
@@ -21,7 +21,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.artemissoftware.cadmusdiary.R
 import com.core.ui.R as CoreUiR
 
 @Composable
@@ -40,7 +39,7 @@ fun NavigationDrawer(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(250.dp),
-                        painter = painterResource(id = R.drawable.logo),
+                        painter = painterResource(id = CoreUiR.drawable.logo),
                         contentDescription = "Logo Image",
                     )
                     NavigationDrawerItem(
@@ -94,7 +93,7 @@ private fun NavigationDrawerContent(
         modifier = Modifier
             .fillMaxWidth()
             .height(250.dp),
-        painter = painterResource(id = R.drawable.logo),
+        painter = painterResource(id = CoreUiR.drawable.logo),
         contentDescription = "Logo Image",
     )
     NavigationDrawerItem(
