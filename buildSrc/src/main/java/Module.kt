@@ -15,4 +15,12 @@ object Module {
     private const val home = ":home"
 
     const val homePresentation = "${feature}${home}${presentation}"
+
+    private const val write = ":write"
+
+    const val writePresentation = "${feature}${write}${presentation}"
+
+    private const val authentication = ":authentication"
+
+    const val authenticationPresentation = "${feature}${authentication}${presentation}"
 }
