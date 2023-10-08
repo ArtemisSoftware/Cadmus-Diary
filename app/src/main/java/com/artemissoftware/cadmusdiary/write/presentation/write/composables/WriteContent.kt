@@ -42,9 +42,9 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.artemissoftware.cadmusdiary.R
+import com.artemissoftware.cadmusdiary.write.presentation.write.WriteState
 import com.core.ui.components.gallery.GalleryUploader
 import com.core.ui.models.MoodUI
-import com.artemissoftware.cadmusdiary.write.presentation.write.WriteState
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -180,13 +180,6 @@ fun WriteContent(
                 onImageSelect = onImageSelect,
                 onImageClicked = onImageClicked,
             )
-//            Lolo(
-//                modifier = Modifier.fillMaxWidth(),
-//                imagesL = state.getImagesUri(),
-//                onAddClicked = { focusManager.clearFocus() },
-//                onImageSelect = onImageSelect,
-//                onImageClicked = onImageClicked,
-//            )
             Spacer(modifier = Modifier.height(12.dp))
             Button(
                 modifier = Modifier
