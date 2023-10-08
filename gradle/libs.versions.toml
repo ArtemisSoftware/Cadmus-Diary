@@ -30,6 +30,7 @@ hilt = "2.48"
 hilt-navigation-compose = "1.1.0-beta01"
 appcompat = "1.6.1"
 material = "1.8.0"
+org-jetbrains-kotlin-jvm = "1.8.20"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -123,6 +124,7 @@ org-jetbrains-kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "o
 
 com-google-dagger-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 com-android-library = { id = "com.android.library", version.ref = "agp" }
+org-jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "org-jetbrains-kotlin-jvm" }
 
 [bundles]
 
