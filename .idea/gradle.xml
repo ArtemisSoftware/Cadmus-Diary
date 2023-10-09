@@ -23,6 +23,7 @@
             <option value="$PROJECT_DIR$/feature/authentication/domain" />
             <option value="$PROJECT_DIR$/feature/authentication/presentation" />
             <option value="$PROJECT_DIR$/feature/home" />
+            <option value="$PROJECT_DIR$/feature/home/domain" />
             <option value="$PROJECT_DIR$/feature/home/presentation" />
             <option value="$PROJECT_DIR$/feature/write" />
             <option value="$PROJECT_DIR$/feature/write/presentation" />
