@@ -5,20 +5,20 @@ import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
 import com.artemissoftware.cadmusdiary.R
 import com.artemissoftware.cadmusdiary.core.data.repository.Diaries
-import com.core.domain.RequestState
 import com.core.domain.usecases.GetDiaryImagesUseCase
 import com.core.ui.connectivity.ConnectivityObserver
 import com.core.ui.connectivity.NetworkConnectivityObserver
 import com.core.ui.util.UiText
 import com.core.ui.util.uievents.UiEvent
 import com.core.ui.util.uievents.UiEventViewModel
-import com.artemissoftware.cadmusdiary.home.domain.usecases.DeleteAllDiariesUseCase
-import com.artemissoftware.cadmusdiary.home.domain.usecases.GetAllDiariesUseCase
-import com.artemissoftware.cadmusdiary.home.domain.usecases.GetFilteredDiariesUseCase
-import com.artemissoftware.cadmusdiary.home.domain.usecases.SignOutUseCase
+import com.home.domain.usecases.DeleteAllDiariesUseCase
+import com.home.domain.usecases.GetAllDiariesUseCase
+import com.home.domain.usecases.GetFilteredDiariesUseCase
+import com.home.domain.usecases.SignOutUseCase
 import com.artemissoftware.cadmusdiary.navigation.Screen
 import com.home.presentation.home.DiariesImageState
 import com.home.presentation.home.HomeEvents
+import com.home.presentation.home.HomeState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.realm.kotlin.ext.copyFromRealm
 import kotlinx.coroutines.Job
@@ -35,10 +35,10 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val connectivity: NetworkConnectivityObserver,
     private val getDiaryImagesUseCase: GetDiaryImagesUseCase,
-    private val deleteAllDiariesUseCase: DeleteAllDiariesUseCase,
-    private val signOutUseCase: SignOutUseCase,
-    private val getAllDiariesUseCase: GetAllDiariesUseCase,
-    private val getFilteredDiariesUseCase: GetFilteredDiariesUseCase,
+    private val deleteAllDiariesUseCase: com.home.domain.usecases.DeleteAllDiariesUseCase,
+    private val signOutUseCase: com.home.domain.usecases.SignOutUseCase,
+    private val getAllDiariesUseCase: com.home.domain.usecases.GetAllDiariesUseCase,
+    private val getFilteredDiariesUseCase: com.home.domain.usecases.GetFilteredDiariesUseCase,
 ) : UiEventViewModel() {
 
     private val _state = MutableStateFlow(HomeState())

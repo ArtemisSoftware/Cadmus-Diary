@@ -197,9 +197,19 @@ object MongoDB : MongoRepository {
     }
 
     override suspend fun login(tokenId: String): Boolean {
-        return App.create(APP_ID).login(
+        return app.login(
             Credentials.jwt(tokenId),
             // Credentials.google(tokenId, GoogleAuthType.ID_TOKEN), // needs fix from google to be able to see name, email, picture.....
         ).loggedIn
+    }
+
+    override suspend fun logout(): Boolean {
+        val user = app.currentUser
+        if (user != null) {
+            user.logOut()
+            true
+        } else {
+            false
+        }
     }
 }

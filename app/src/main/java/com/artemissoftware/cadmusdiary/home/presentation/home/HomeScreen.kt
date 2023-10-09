@@ -33,13 +33,13 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.artemissoftware.cadmusdiary.R
-import com.core.domain.RequestState
 import com.artemissoftware.cadmusdiary.navigation.Screen
 import com.core.ui.components.dialog.DisplayAlertDialog
 import com.core.ui.components.events.UIEventsManager
-import com.artemissoftware.cadmusdiary.home.presentation.home.composables.EmptyPage
-import com.artemissoftware.cadmusdiary.home.presentation.home.composables.HomeContent
+import com.home.presentation.home.composables.EmptyPage
+import com.home.presentation.home.composables.HomeContent
 import com.home.presentation.home.HomeEvents
+import com.home.presentation.home.HomeState
 import com.home.presentation.home.composables.HomeTopBar
 import com.home.presentation.home.composables.NavigationDrawer
 import kotlinx.coroutines.launch

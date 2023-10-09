@@ -2,6 +2,7 @@
 plugins {
     alias(libs.plugins.com.android.library)
     alias(libs.plugins.org.jetbrains.kotlin.android)
+    alias(libs.plugins.com.google.devtools.ksp)
 }
 
 apply(from = "$rootDir/compose-module.gradle.kts")
@@ -50,10 +51,18 @@ dependencies {
     implementation(libs.ui.tooling.preview)
     implementation(libs.material3)
 
+    implementation(libs.realm.kotlin)
+
     implementation(libs.sheets.compose.dialogs.core)
     implementation(libs.sheets.compose.dialogs.calendar)
 
     implementation(libs.coil.compose)
 
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.android.compiler)
+    implementation(libs.hilt.navigation.compose)
+
+    implementation(project(Module.coreDomain))
     implementation(project(Module.coreUi))
+    implementation(project(Module.homeDomain))
 }

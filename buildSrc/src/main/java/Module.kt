@@ -14,13 +14,17 @@ object Module {
 
     private const val home = ":home"
 
+    const val homeDomain = "${feature}${home}${domain}"
     const val homePresentation = "${feature}${home}${presentation}"
 
     private const val write = ":write"
 
+    const val writeDomain = "${feature}${write}${domain}"
     const val writePresentation = "${feature}${write}${presentation}"
 
     private const val authentication = ":authentication"
 
+    const val authenticationData = "${feature}${authentication}${data}"
+    const val authenticationDomain = "${feature}${authentication}${domain}"
     const val authenticationPresentation = "${feature}${authentication}${presentation}"
 }

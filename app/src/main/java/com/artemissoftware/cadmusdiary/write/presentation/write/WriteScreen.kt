@@ -10,8 +10,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.core.ui.components.events.UIEventsManager
 import com.core.ui.components.image.ZoomableImage
-import com.artemissoftware.cadmusdiary.write.presentation.write.composables.WriteContent
-import com.artemissoftware.cadmusdiary.write.presentation.write.composables.WriteTopBar
+import com.write.presentation.write.WriteEvents
+import com.write.presentation.write.WriteState
+import com.write.presentation.write.composables.WriteContent
+import com.write.presentation.write.composables.WriteTopBar
 
 @Composable
 fun WriteScreen(

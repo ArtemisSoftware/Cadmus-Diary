@@ -12,4 +12,6 @@ dependencies {
     implementation libs.realm.kotlin
     implementation libs.kotlinx.coroutines.core
     implementation libs.dagger
+
+    implementation(project(":core:domain"))
 }

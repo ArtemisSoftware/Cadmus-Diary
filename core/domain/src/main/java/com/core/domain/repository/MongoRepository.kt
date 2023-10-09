@@ -13,10 +13,12 @@ interface MongoRepository {
     fun configureTheRealm()
     fun getAllDiaries(): Flow<Diaries>
     fun getFilteredDiaries(zonedDateTime: ZonedDateTime): Flow<Diaries>
-    fun getSelectedDiary(diaryId: ObjectId): Flow<com.core.domain.RequestState<Diary>>
-    suspend fun insertDiary(diary: Diary): com.core.domain.RequestState<Diary>
-    suspend fun updateDiary(diary: Diary): com.core.domain.RequestState<Diary>
-    suspend fun deleteDiary(id: ObjectId): com.core.domain.RequestState<Boolean>
-    suspend fun deleteAllDiaries(): com.core.domain.RequestState<Boolean>
+    fun getSelectedDiary(diaryId: ObjectId): Flow<RequestState<Diary>>
+    suspend fun insertDiary(diary: Diary): RequestState<Diary>
+    suspend fun updateDiary(diary: Diary): RequestState<Diary>
+    suspend fun deleteDiary(id: ObjectId): RequestState<Boolean>
+    suspend fun deleteAllDiaries(): RequestState<Boolean>
     suspend fun login(tokenId: String): Boolean
+
+    suspend fun logout(): Boolean
 }
