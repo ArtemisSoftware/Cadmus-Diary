@@ -2,7 +2,7 @@ package com.artemissoftware.cadmusdiary.authentication.presentation.auth
 
 import androidx.lifecycle.viewModelScope
 import com.artemissoftware.cadmusdiary.R
-import com.artemissoftware.cadmusdiary.core.domain.RequestState
+import com.core.domain.RequestState
 import com.artemissoftware.cadmusdiary.authentication.domain.usecase.SignInUseCase
 import com.artemissoftware.cadmusdiary.navigation.Screen
 import com.core.ui.util.MessageBarType
@@ -60,7 +60,7 @@ class AuthenticationViewModel @Inject constructor(
             val result = signInUseCase(tokenId)
 
             when (result) {
-                is RequestState.Success -> {
+                is com.core.domain.RequestState.Success -> {
                     if (result.data) {
                         sendUiEvent(
                             UiEvent.ShowMessageBar(
@@ -82,7 +82,7 @@ class AuthenticationViewModel @Inject constructor(
                     setAuthenticated(result.data)
                 }
 
-                is RequestState.Error -> {
+                is com.core.domain.RequestState.Error -> {
                     UiEvent.ShowMessageBar(MessageBarType.Error(result.error as Exception))
                     setAuthenticated(false)
                 }

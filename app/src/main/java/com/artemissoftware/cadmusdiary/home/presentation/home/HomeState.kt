@@ -2,14 +2,14 @@ package com.artemissoftware.cadmusdiary.home.presentation.home
 
 import android.net.Uri
 import com.artemissoftware.cadmusdiary.core.data.repository.Diaries
-import com.artemissoftware.cadmusdiary.core.domain.RequestState
+import com.core.domain.RequestState
 import com.core.ui.connectivity.ConnectivityObserver
 import com.home.presentation.home.DiariesImageState
 
 data class HomeState(
     val signOutDialogOpened: Boolean = false,
     val deleteAllDialogOpened: Boolean = false,
-    val diaries: Diaries = RequestState.Idle,
+    val diaries: Diaries = com.core.domain.RequestState.Idle,
     val network: ConnectivityObserver.Status = ConnectivityObserver.Status.Unavailable,
     val diariesImages: List<DiariesImageState> = emptyList(),
     val dateIsSelected: Boolean = false,

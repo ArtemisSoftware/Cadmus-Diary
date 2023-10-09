@@ -1,4 +1,4 @@
-package com.artemissoftware.cadmusdiary.core.domain
+package com.core.domain
 
 sealed class RequestState<out T> {
     object Idle : RequestState<Nothing>()

@@ -41,8 +41,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.artemissoftware.cadmusdiary.R
-import com.artemissoftware.cadmusdiary.core.domain.models.Diary
-import com.artemissoftware.cadmusdiary.core.domain.models.Mood
+import com.core.domain.models.Diary
+import com.core.domain.models.Mood
 import com.artemissoftware.cadmusdiary.util.DateTimeConstants
 import com.artemissoftware.cadmusdiary.util.extensions.toInstant
 import com.core.ui.models.toMoodUi

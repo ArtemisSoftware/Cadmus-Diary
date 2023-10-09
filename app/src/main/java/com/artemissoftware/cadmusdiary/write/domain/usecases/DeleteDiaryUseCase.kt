@@ -1,8 +1,7 @@
 package com.artemissoftware.cadmusdiary.write.domain.usecases
 
-import com.artemissoftware.cadmusdiary.core.data.repository.MongoRepository
-import com.artemissoftware.cadmusdiary.core.domain.RequestState
-import com.artemissoftware.cadmusdiary.core.domain.repository.ImageRepository
+import com.core.domain.repository.MongoRepository
+import com.core.domain.repository.ImageRepository
 import io.realm.kotlin.types.RealmList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -20,7 +19,7 @@ class DeleteDiaryUseCase @Inject constructor(
     ) = withContext(Dispatchers.IO) {
         val result = mongoRepository.deleteDiary(id = ObjectId.invoke(diaryId))
 
-        if(result is RequestState.Success) {
+        if(result is com.core.domain.RequestState.Success) {
             images?.let {
                 val imagesToDelete = imageRepository.deleteImagesFromFirebase(it)
                 // TODO: terminar

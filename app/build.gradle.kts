@@ -101,6 +101,7 @@ dependencies {
     implementation(libs.hilt.navigation.compose)
 
     implementation(project(Module.coreData))
+    implementation(project(Module.coreDomain))
     implementation(project(Module.coreUi))
 
     implementation(project(Module.homePresentation))

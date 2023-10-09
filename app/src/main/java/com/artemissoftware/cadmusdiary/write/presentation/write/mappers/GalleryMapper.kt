@@ -1,7 +1,7 @@
 package com.artemissoftware.cadmusdiary.write.presentation.write.mappers
 
 import com.core.ui.models.GalleryImage
-import com.artemissoftware.cadmusdiary.core.domain.models.Picture
+import com.core.domain.models.Picture
 
 fun List<GalleryImage>.toPictures(): List<Picture> {
     val list = mutableListOf<Picture>()

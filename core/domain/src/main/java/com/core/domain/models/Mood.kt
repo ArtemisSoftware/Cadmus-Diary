@@ -1,4 +1,4 @@
-package com.artemissoftware.cadmusdiary.core.domain.models
+package com.core.domain.models
 
 enum class Mood {
     Neutral,

@@ -1,7 +1,7 @@
 package com.artemissoftware.cadmusdiary.write.domain.usecases
 
-import com.artemissoftware.cadmusdiary.core.domain.models.Picture
-import com.artemissoftware.cadmusdiary.core.domain.repository.ImageRepository
+import com.core.domain.models.Picture
+import com.core.domain.repository.ImageRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject

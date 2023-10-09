@@ -1,7 +1,7 @@
-package com.artemissoftware.cadmusdiary.core.domain.repository
+package com.core.domain.repository
 
-import com.artemissoftware.cadmusdiary.core.domain.models.ImageResult
-import com.artemissoftware.cadmusdiary.core.domain.models.Picture
+import com.core.domain.models.ImageResult
+import com.core.domain.models.Picture
 
 interface ImageRepository {
 

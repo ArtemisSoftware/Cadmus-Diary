@@ -1,7 +1,7 @@
 package com.artemissoftware.cadmusdiary.write.domain.usecases
 
-import com.artemissoftware.cadmusdiary.core.data.repository.MongoRepository
-import com.artemissoftware.cadmusdiary.core.domain.models.Diary
+import com.core.domain.repository.MongoRepository
+import com.core.domain.models.Diary
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject

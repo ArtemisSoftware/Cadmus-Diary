@@ -1,6 +1,6 @@
 package com.artemissoftware.cadmusdiary.home.domain.usecases
 
-import com.artemissoftware.cadmusdiary.core.data.repository.MongoRepository
+import com.core.domain.repository.MongoRepository
 import java.time.ZonedDateTime
 import javax.inject.Inject
 

@@ -1,7 +1,7 @@
 package com.artemissoftware.cadmusdiary
 
 import androidx.lifecycle.ViewModel
-import com.artemissoftware.cadmusdiary.core.data.repository.MongoRepository
+import com.core.domain.repository.MongoRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

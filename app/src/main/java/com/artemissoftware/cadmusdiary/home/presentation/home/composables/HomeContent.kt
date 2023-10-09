@@ -21,7 +21,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.artemissoftware.cadmusdiary.R
-import com.artemissoftware.cadmusdiary.core.domain.models.Diary
+import com.core.domain.models.Diary
 import com.artemissoftware.cadmusdiary.home.presentation.home.HomeState
 import com.home.presentation.home.composables.DateHeader
 import org.mongodb.kbson.ObjectId

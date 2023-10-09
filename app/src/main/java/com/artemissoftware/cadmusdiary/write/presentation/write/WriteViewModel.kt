@@ -7,15 +7,15 @@ import androidx.core.net.toUri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.artemissoftware.cadmusdiary.R
-import com.artemissoftware.cadmusdiary.core.domain.RequestState
-import com.artemissoftware.cadmusdiary.core.domain.usecases.GetDiaryImagesUseCase
+import com.core.domain.RequestState
+import com.core.domain.usecases.GetDiaryImagesUseCase
 import com.core.ui.models.GalleryImage
 import com.core.ui.models.MoodUI
 import com.core.ui.models.toMoodUi
 import com.core.ui.util.UiText
 import com.core.ui.util.uievents.UiEvent
 import com.core.ui.util.uievents.UiEventViewModel
-import com.artemissoftware.cadmusdiary.core.domain.models.Diary
+import com.core.domain.models.Diary
 import com.artemissoftware.cadmusdiary.navigation.Screen.Companion.WRITE_SCREEN_ARGUMENT_KEY
 import com.artemissoftware.cadmusdiary.util.extensions.toRealmInstant
 import com.artemissoftware.cadmusdiary.write.domain.usecases.DeleteDiaryUseCase
@@ -228,7 +228,7 @@ class WriteViewModel @Inject constructor(
                 getDiaryUseCase(diaryId = diaryId).collect { request ->
 
                     when (request) {
-                        is RequestState.Success -> {
+                        is com.core.domain.RequestState.Success -> {
                             val diary = request.data
                             setSelectedDiary(diary)
                             fetchImages(diary._id.toString(), diary.images)
@@ -244,10 +244,10 @@ class WriteViewModel @Inject constructor(
         viewModelScope.launch {
             getDiaryImagesUseCase.invoke(diaryId, images).collect { result ->
                 when (result) {
-                    is RequestState.Success -> {
+                    is com.core.domain.RequestState.Success -> {
                         updateGallery(result.data.images)
                     }
-                    is RequestState.Error -> {
+                    is com.core.domain.RequestState.Error -> {
                         sendUiEvent(UiEvent.ShowToast(UiText.DynamicString("Images not uploaded yet." + "Wait a little bit, or try uploading again."), Toast.LENGTH_SHORT))
                     }
                     else -> Unit
@@ -278,11 +278,11 @@ class WriteViewModel @Inject constructor(
             val result = insertDiaryUseCase(diary = diary)
 
             when(result) {
-                is RequestState.Success -> {
+                is com.core.domain.RequestState.Success -> {
                     uploadImages()
                     sendUiEvent(UiEvent.PopBackStack)
                 }
-                is RequestState.Error -> {
+                is com.core.domain.RequestState.Error -> {
                     sendUiEvent(UiEvent.ShowToast(UiText.DynamicString(result.error.message.toString()), Toast.LENGTH_SHORT))
                 }
                 else -> Unit
@@ -294,11 +294,11 @@ class WriteViewModel @Inject constructor(
         viewModelScope.launch {
             val result = updateDiaryUseCase(diary = diary)
             when(result) {
-                is RequestState.Success -> {
+                is com.core.domain.RequestState.Success -> {
                     updateImages()
                     sendUiEvent(UiEvent.PopBackStack)
                 }
-                is RequestState.Error -> {
+                is com.core.domain.RequestState.Error -> {
                     sendUiEvent(UiEvent.ShowToast(UiText.DynamicString(result.error.message.toString()), Toast.LENGTH_SHORT))
                 }
                 else -> Unit
@@ -321,11 +321,11 @@ class WriteViewModel @Inject constructor(
                 val result = deleteDiaryUseCase.invoke(diaryId, images = selectedDiary?.images)
 
                 when (result) {
-                    is RequestState.Success -> {
+                    is com.core.domain.RequestState.Success -> {
                         sendUiEvent(UiEvent.ShowToast(UiText.StringResource(R.string.deleted), Toast.LENGTH_SHORT))
                         sendUiEvent(UiEvent.PopBackStack)
                     }
-                    is RequestState.Error -> {
+                    is com.core.domain.RequestState.Error -> {
                         sendUiEvent(UiEvent.ShowToast(UiText.DynamicString(result.error.message.toString()), Toast.LENGTH_SHORT))
                     }
                     else -> Unit

@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.artemissoftware.cadmusdiary.R
-import com.artemissoftware.cadmusdiary.core.domain.RequestState
+import com.core.domain.RequestState
 import com.artemissoftware.cadmusdiary.navigation.Screen
 import com.core.ui.components.dialog.DisplayAlertDialog
 import com.core.ui.components.events.UIEventsManager
@@ -109,7 +109,7 @@ fun HomeScreen(
     )
 
     LaunchedEffect(key1 = state.diaries) {
-        if (state.diaries !is RequestState.Loading) {
+        if (state.diaries !is com.core.domain.RequestState.Loading) {
             onDataLoaded()
         }
     }
@@ -164,7 +164,7 @@ private fun HomeScreenContent(
         content = {
             padding = it
             when (state.diaries) {
-                is RequestState.Success -> {
+                is com.core.domain.RequestState.Success -> {
                     HomeContent(
                         paddingValues = it,
                         state = state,
@@ -180,13 +180,13 @@ private fun HomeScreenContent(
                         },
                     )
                 }
-                is RequestState.Error -> {
+                is com.core.domain.RequestState.Error -> {
                     EmptyPage(
                         title = R.string.error,
                         subtitle = "${state.diaries.error.message}",
                     )
                 }
-                is RequestState.Loading -> {
+                is com.core.domain.RequestState.Loading -> {
                     Box(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center,

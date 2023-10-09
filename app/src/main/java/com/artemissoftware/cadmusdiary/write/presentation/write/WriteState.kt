@@ -1,6 +1,6 @@
 package com.artemissoftware.cadmusdiary.write.presentation.write
 
-import com.artemissoftware.cadmusdiary.core.domain.models.Diary
+import com.core.domain.models.Diary
 import com.core.ui.models.GalleryImage
 import com.core.ui.models.MoodUI
 import com.artemissoftware.cadmusdiary.util.DateTimeConstants

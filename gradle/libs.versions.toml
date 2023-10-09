@@ -32,6 +32,9 @@ appcompat = "1.6.1"
 material = "1.8.0"
 org-jetbrains-kotlin-jvm = "1.8.20"
 
+kotlinx-coroutines-core = "1.7.1"
+dagger = "2.44.2"
+
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -110,7 +113,8 @@ material = { group = "com.google.android.material", name = "material", version.r
 #// Desugar JDK
 #coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.0'
 
-
+kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinx-coroutines-core" }
+dagger = { group = "com.google.dagger", name = "dagger", version.ref = "dagger" }
 
 
 [plugins]

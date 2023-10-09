@@ -1,8 +1,7 @@
 package com.artemissoftware.cadmusdiary.authentication.domain.usecase
 
 import com.artemissoftware.cadmusdiary.authentication.domain.repository.AuthenticationRepository
-import com.artemissoftware.cadmusdiary.core.data.repository.MongoRepository
-import com.artemissoftware.cadmusdiary.core.domain.RequestState
+import com.core.domain.repository.MongoRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -17,9 +16,9 @@ class SignInUseCase @Inject constructor(
             authenticationRepository.firebaseAuthentication(tokenId)
             val result = mongoRepository.login(tokenId)
 
-            RequestState.Success(result)
+            com.core.domain.RequestState.Success(result)
         } catch (ex: Exception) {
-            RequestState.Error(ex)
+            com.core.domain.RequestState.Error(ex)
         }
     }
 }
