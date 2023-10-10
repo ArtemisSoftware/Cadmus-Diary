@@ -24,6 +24,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val isUserLoggedIn = viewModel.state.value.userLoggedIn
+
         installSplashScreen().setKeepOnScreenCondition {
             viewModel.state.value.keepSplashOpened
         }
@@ -34,6 +36,7 @@ class MainActivity : ComponentActivity() {
             CadmusDiaryTheme {
                 val navController = rememberNavController()
                 NavGraph(
+                    isUserLoggedIn = isUserLoggedIn,
                     navController = navController,
                     onDataLoaded = {
                         viewModel.onTriggerEvent(MainActivityEvents.FinishSplash)

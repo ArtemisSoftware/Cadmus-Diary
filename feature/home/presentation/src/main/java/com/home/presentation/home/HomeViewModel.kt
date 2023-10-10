@@ -1,24 +1,23 @@
-package com.artemissoftware.cadmusdiary.home.presentation.home
+package com.home.presentation.home
 
 import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
-import com.artemissoftware.cadmusdiary.R
-import com.artemissoftware.cadmusdiary.core.data.repository.Diaries
 import com.core.domain.usecases.GetDiaryImagesUseCase
 import com.core.ui.connectivity.ConnectivityObserver
 import com.core.ui.connectivity.NetworkConnectivityObserver
 import com.core.ui.util.UiText
 import com.core.ui.util.uievents.UiEvent
 import com.core.ui.util.uievents.UiEventViewModel
+import com.artemissoftware.cadmusdiary.navigation.Screen
+import com.core.domain.RequestState
+import com.core.domain.repository.Diaries
 import com.home.domain.usecases.DeleteAllDiariesUseCase
 import com.home.domain.usecases.GetAllDiariesUseCase
 import com.home.domain.usecases.GetFilteredDiariesUseCase
 import com.home.domain.usecases.SignOutUseCase
-import com.artemissoftware.cadmusdiary.navigation.Screen
-import com.home.presentation.home.DiariesImageState
-import com.home.presentation.home.HomeEvents
-import com.home.presentation.home.HomeState
+import com.home.presentation.R
+import com.home.presentation.home.navigation.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.realm.kotlin.ext.copyFromRealm
 import kotlinx.coroutines.Job
@@ -35,10 +34,10 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val connectivity: NetworkConnectivityObserver,
     private val getDiaryImagesUseCase: GetDiaryImagesUseCase,
-    private val deleteAllDiariesUseCase: com.home.domain.usecases.DeleteAllDiariesUseCase,
-    private val signOutUseCase: com.home.domain.usecases.SignOutUseCase,
-    private val getAllDiariesUseCase: com.home.domain.usecases.GetAllDiariesUseCase,
-    private val getFilteredDiariesUseCase: com.home.domain.usecases.GetFilteredDiariesUseCase,
+    private val deleteAllDiariesUseCase: DeleteAllDiariesUseCase,
+    private val signOutUseCase: SignOutUseCase,
+    private val getAllDiariesUseCase: GetAllDiariesUseCase,
+    private val getFilteredDiariesUseCase: GetFilteredDiariesUseCase,
 ) : UiEventViewModel() {
 
     private val _state = MutableStateFlow(HomeState())
@@ -164,7 +163,7 @@ class HomeViewModel @Inject constructor(
         update {
             it.copy(
                 dateIsSelected = zonedDateTime != null,
-                diaries = com.core.domain.RequestState.Loading,
+                diaries = RequestState.Loading,
             )
         }
 
@@ -204,7 +203,7 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun openDiaryGallery(diaryId: String) = with(_state) {
-        val allDiaries = (_state.value.diaries as com.core.domain.RequestState.Success).data.values.flatten().map { it.copyFromRealm() }
+        val allDiaries = (_state.value.diaries as RequestState.Success).data.values.flatten().map { it.copyFromRealm() }
         val currentDiary = allDiaries.find { it._id.toString() == diaryId }
         val currentNumberOfImages = allDiaries.find { it._id.toString() == diaryId }?.images?.size ?: 0
         val numberOfImages = value.diariesImages.find { it.id == diaryId }?.uris?.size ?: 0
@@ -252,7 +251,7 @@ class HomeViewModel @Inject constructor(
     private fun updateImagesOnOpenedGalleries(diaries: Diaries) {
         val openedGalleries = _state.value.diariesImages.filter { it.isOpened }.map { it.id }
         if(openedGalleries.isNotEmpty()) {
-            val allDiaries = (diaries as com.core.domain.RequestState.Success).data.values.flatten().map { it.copyFromRealm() }
+            val allDiaries = (diaries as RequestState.Success).data.values.flatten().map { it.copyFromRealm() }
 
             allDiaries.filter { openedGalleries.contains(it._id.toString()) }.forEach {
                 updateDiariesImages(it._id.toString(), null)
@@ -281,10 +280,10 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             getDiaryImagesUseCase.invoke(diaryId, list).collect { result ->
                 when(result) {
-                    is com.core.domain.RequestState.Success -> {
+                    is RequestState.Success -> {
                         updateDiariesImages(diaryId = result.data.id, urls = result.data.images)
                     }
-                    is com.core.domain.RequestState.Error -> {
+                    is RequestState.Error -> {
                         updateDiariesImages(diaryId = diaryId)
                         sendUiEvent(UiEvent.ShowToast(UiText.StringResource(R.string.images_not_uploaded_yet_wait_a_little_bit_or_try_uploading_again), Toast.LENGTH_SHORT))
                     }
@@ -300,10 +299,10 @@ class HomeViewModel @Inject constructor(
                 val result = deleteAllDiariesUseCase()
 
                 when(result) {
-                    is com.core.domain.RequestState.Success -> {
+                    is RequestState.Success -> {
                         sendUiEvent(UiEvent.ShowToast(UiText.StringResource(R.string.all_diaries_deleted), Toast.LENGTH_SHORT))
                     }
-                    is com.core.domain.RequestState.Error -> {
+                    is RequestState.Error -> {
                         sendUiEvent(UiEvent.ShowToast(UiText.DynamicString(result.error.message.toString()), Toast.LENGTH_SHORT))
                     }
                     else -> Unit

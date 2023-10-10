@@ -1,8 +1,6 @@
-package com.artemissoftware.cadmusdiary.navigation
+package com.write.presentation.write.navigation
 
-sealed class Screen(val route: String) {
-    object Authentication : Screen(route = "authentication")
-    object Home : Screen(route = "home")
+internal sealed class Screen(val route: String) {
     object Write : Screen(
         route = "write?$WRITE_SCREEN_ARGUMENT_KEY=" +
             "{$WRITE_SCREEN_ARGUMENT_KEY}",

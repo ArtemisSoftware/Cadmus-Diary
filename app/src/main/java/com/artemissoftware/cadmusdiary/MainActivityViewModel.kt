@@ -1,17 +1,23 @@
 package com.artemissoftware.cadmusdiary
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.core.domain.repository.MongoRepository
+import com.core.domain.usecases.CheckUserLoggedInUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.seconds
 
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
     private val mongoRepository: MongoRepository,
+    private val checkUserLoggedInUseCase: CheckUserLoggedInUseCase,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(MainActivityState())
@@ -24,8 +30,21 @@ class MainActivityViewModel @Inject constructor(
     fun onTriggerEvent(event: MainActivityEvents) {
         when (event) {
             MainActivityEvents.FinishSplash -> {
-                finishSplash()
+                checkUserLoggedIn()
             }
+        }
+    }
+
+    private fun checkUserLoggedIn() = with(_state) {
+        viewModelScope.launch {
+            val result = checkUserLoggedInUseCase()
+
+            update {
+                it.copy(userLoggedIn = result)
+            }
+
+            delay((0.5).seconds)
+            finishSplash()
         }
     }
 

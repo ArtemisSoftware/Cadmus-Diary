@@ -1,12 +1,11 @@
-package com.artemissoftware.cadmusdiary.write.presentation.navigation
+package com.write.presentation.write.navigation
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.artemissoftware.cadmusdiary.navigation.Screen
-import com.artemissoftware.cadmusdiary.write.presentation.write.WriteScreen
+import com.write.presentation.write.WriteScreen
 
 fun NavGraphBuilder.writeRoute(
     navController: NavHostController,

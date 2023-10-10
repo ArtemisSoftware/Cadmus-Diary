@@ -19,6 +19,6 @@ interface MongoRepository {
     suspend fun deleteDiary(id: ObjectId): RequestState<Boolean>
     suspend fun deleteAllDiaries(): RequestState<Boolean>
     suspend fun login(tokenId: String): Boolean
-
     suspend fun logout(): Boolean
+    suspend fun isLoggedIn(): Boolean
 }

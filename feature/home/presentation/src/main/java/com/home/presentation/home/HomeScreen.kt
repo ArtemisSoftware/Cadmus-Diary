@@ -1,4 +1,4 @@
-package com.artemissoftware.cadmusdiary.home.presentation.home
+package com.home.presentation.home
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Box
@@ -38,8 +38,6 @@ import com.core.ui.components.dialog.DisplayAlertDialog
 import com.core.ui.components.events.UIEventsManager
 import com.home.presentation.home.composables.EmptyPage
 import com.home.presentation.home.composables.HomeContent
-import com.home.presentation.home.HomeEvents
-import com.home.presentation.home.HomeState
 import com.home.presentation.home.composables.HomeTopBar
 import com.home.presentation.home.composables.NavigationDrawer
 import kotlinx.coroutines.launch

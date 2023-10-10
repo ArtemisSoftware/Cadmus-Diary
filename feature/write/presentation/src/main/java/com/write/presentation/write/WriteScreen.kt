@@ -1,4 +1,4 @@
-package com.artemissoftware.cadmusdiary.write.presentation.write
+package com.write.presentation.write
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.material3.Scaffold
@@ -10,8 +10,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.core.ui.components.events.UIEventsManager
 import com.core.ui.components.image.ZoomableImage
-import com.write.presentation.write.WriteEvents
-import com.write.presentation.write.WriteState
 import com.write.presentation.write.composables.WriteContent
 import com.write.presentation.write.composables.WriteTopBar
 
@@ -20,7 +18,6 @@ fun WriteScreen(
     viewModel: WriteViewModel = hiltViewModel(),
     navController: NavHostController,
 ) {
-//    var selectedGalleryImage by remember { mutableStateOf<GalleryImage?>(null) }
 //    // Update the Mood when selecting an existing Diary
 //    LaunchedEffect(key1 = uiState.mood) {
 //        pagerState.scrollToPage(Mood.valueOf(uiState.mood.name).ordinal)

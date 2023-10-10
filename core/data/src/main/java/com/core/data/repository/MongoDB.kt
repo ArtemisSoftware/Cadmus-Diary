@@ -1,8 +1,8 @@
 package com.core.data.repository
 
 import com.core.domain.models.Diary
-import com.artemissoftware.cadmusdiary.util.Constants.APP_ID
 import com.artemissoftware.cadmusdiary.util.extensions.toInstant
+import com.core.data.ConstantsId.APP_ID
 import com.core.data.exceptions.UserNotAuthenticatedException
 import com.core.domain.RequestState
 import com.core.domain.repository.Diaries
@@ -204,12 +204,17 @@ object MongoDB : MongoRepository {
     }
 
     override suspend fun logout(): Boolean {
-        val user = app.currentUser
-        if (user != null) {
+        val user = app.currentUser // TODO: irrelevante?
+        return if (user != null) {
             user.logOut()
             true
         } else {
             false
         }
+    }
+
+    override suspend fun isLoggedIn(): Boolean {
+        val user = app.currentUser
+        return (user != null) && user.loggedIn
     }
 }

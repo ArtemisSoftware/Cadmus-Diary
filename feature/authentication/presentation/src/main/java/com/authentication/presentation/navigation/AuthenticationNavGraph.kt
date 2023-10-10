@@ -1,17 +1,16 @@
-package com.artemissoftware.cadmusdiary.home.presentation.navigation
+package com.authentication.presentation.navigation
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
-import com.artemissoftware.cadmusdiary.home.presentation.home.HomeScreen
-import com.artemissoftware.cadmusdiary.navigation.Screen
+import com.authentication.presentation.auth.AuthenticationScreen
 
-fun NavGraphBuilder.homeRoute(
+fun NavGraphBuilder.authenticationRoute(
     navController: NavHostController,
     onDataLoaded: () -> Unit,
 ) {
-    composable(route = Screen.Home.route) {
-        HomeScreen(
+    composable(route = Screen.Authentication.route) {
+        AuthenticationScreen(
             navController = navController,
             onDataLoaded = onDataLoaded,
         )

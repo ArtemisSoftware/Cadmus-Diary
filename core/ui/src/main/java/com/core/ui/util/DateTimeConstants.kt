@@ -1,4 +1,4 @@
-package com.artemissoftware.cadmusdiary.util
+package com.core.ui.util
 
 object DateTimeConstants {
 

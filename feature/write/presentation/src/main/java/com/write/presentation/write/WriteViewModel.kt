@@ -1,4 +1,4 @@
-package com.artemissoftware.cadmusdiary.write.presentation.write
+package com.write.presentation.write
 
 import android.app.Application
 import android.net.Uri
@@ -6,7 +6,6 @@ import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.artemissoftware.cadmusdiary.R
 import com.core.domain.usecases.GetDiaryImagesUseCase
 import com.core.ui.models.GalleryImage
 import com.core.ui.models.MoodUI
@@ -15,18 +14,15 @@ import com.core.ui.util.UiText
 import com.core.ui.util.uievents.UiEvent
 import com.core.ui.util.uievents.UiEventViewModel
 import com.core.domain.models.Diary
-import com.artemissoftware.cadmusdiary.navigation.Screen.Companion.WRITE_SCREEN_ARGUMENT_KEY
-import com.artemissoftware.cadmusdiary.util.extensions.toRealmInstant
 import com.write.domain.usecases.DeleteDiaryUseCase
 import com.write.domain.usecases.DeleteImagesUseCase
 import com.write.domain.usecases.GetDiaryUseCase
 import com.write.domain.usecases.InsertDiaryUseCase
 import com.write.domain.usecases.UpdateDiaryUseCase
 import com.write.domain.usecases.UploadImagesUseCase
+import com.write.presentation.R
 import com.write.presentation.write.mappers.toPictures
-import com.google.firebase.auth.FirebaseAuth
-import com.write.presentation.write.WriteEvents
-import com.write.presentation.write.WriteState
+import com.write.presentation.write.navigation.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.realm.kotlin.ext.toRealmList
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -42,13 +38,13 @@ import javax.inject.Inject
 class WriteViewModel @Inject constructor(
     private val application: Application,
     private val savedStateHandle: SavedStateHandle,
-    private val getDiaryUseCase: com.write.domain.usecases.GetDiaryUseCase,
+    private val getDiaryUseCase: GetDiaryUseCase,
     private val getDiaryImagesUseCase: GetDiaryImagesUseCase,
-    private val deleteDiaryUseCase: com.write.domain.usecases.DeleteDiaryUseCase,
-    private val insertDiaryUseCase: com.write.domain.usecases.InsertDiaryUseCase,
-    private val updateDiaryUseCase: com.write.domain.usecases.UpdateDiaryUseCase,
-    private val uploadImagesUseCase: com.write.domain.usecases.UploadImagesUseCase,
-    private val deleteImagesUseCase: com.write.domain.usecases.DeleteImagesUseCase,
+    private val deleteDiaryUseCase: DeleteDiaryUseCase,
+    private val insertDiaryUseCase: InsertDiaryUseCase,
+    private val updateDiaryUseCase: UpdateDiaryUseCase,
+    private val uploadImagesUseCase: UploadImagesUseCase,
+    private val deleteImagesUseCase: DeleteImagesUseCase,
 ) : UiEventViewModel() {
 
     private val _state = MutableStateFlow(WriteState())
@@ -63,7 +59,7 @@ class WriteViewModel @Inject constructor(
         update {
             it.copy(
                 selectedDiaryId = savedStateHandle.get<String>(
-                    key = WRITE_SCREEN_ARGUMENT_KEY,
+                    key = Screen.WRITE_SCREEN_ARGUMENT_KEY,
                 ),
             )
         }
@@ -401,7 +397,7 @@ class WriteViewModel @Inject constructor(
 
     private fun getRemoteImagePath(image: Uri, imageType: String): String {
         return "images/${FirebaseAuth.getInstance().currentUser?.uid}/" +
-            "${image.lastPathSegment}-${System.currentTimeMillis()}.$imageType"
+                "${image.lastPathSegment}-${System.currentTimeMillis()}.$imageType"
     }
 
     private fun getImagePath(image: Uri): String {
