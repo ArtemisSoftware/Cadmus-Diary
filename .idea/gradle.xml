@@ -28,6 +28,7 @@
             <option value="$PROJECT_DIR$/feature/write" />
             <option value="$PROJECT_DIR$/feature/write/domain" />
             <option value="$PROJECT_DIR$/feature/write/presentation" />
+            <option value="$PROJECT_DIR$/util" />
           </set>
         </option>
       </GradleProjectSettings>
