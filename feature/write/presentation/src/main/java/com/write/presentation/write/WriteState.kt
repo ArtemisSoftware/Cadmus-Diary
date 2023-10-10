@@ -1,10 +1,10 @@
 package com.write.presentation.write
 
+import com.artemissoftware.util.extensions.toInstant
 import com.core.domain.models.Diary
 import com.core.ui.models.GalleryImage
 import com.core.ui.models.MoodUI
-import com.artemissoftware.cadmusdiary.util.extensions.toInstant
-import com.core.ui.util.DateTimeConstants
+import com.artemissoftware.util.DateTimeConstants
 import io.realm.kotlin.types.RealmInstant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter

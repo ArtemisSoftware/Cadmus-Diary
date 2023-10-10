@@ -6,6 +6,8 @@ import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.artemissoftware.util.extensions.toRealmInstant
+import com.core.domain.models.Diary
 import com.core.domain.usecases.GetDiaryImagesUseCase
 import com.core.ui.models.GalleryImage
 import com.core.ui.models.MoodUI
@@ -13,10 +15,11 @@ import com.core.ui.models.toMoodUi
 import com.core.ui.util.UiText
 import com.core.ui.util.uievents.UiEvent
 import com.core.ui.util.uievents.UiEventViewModel
-import com.core.domain.models.Diary
 import com.write.domain.usecases.DeleteDiaryUseCase
 import com.write.domain.usecases.DeleteImagesUseCase
 import com.write.domain.usecases.GetDiaryUseCase
+import com.write.domain.usecases.GetRemoteImagePathFromUrlUseCase
+import com.write.domain.usecases.GetRemoteImagePathUseCase
 import com.write.domain.usecases.InsertDiaryUseCase
 import com.write.domain.usecases.UpdateDiaryUseCase
 import com.write.domain.usecases.UploadImagesUseCase
@@ -45,6 +48,8 @@ class WriteViewModel @Inject constructor(
     private val updateDiaryUseCase: UpdateDiaryUseCase,
     private val uploadImagesUseCase: UploadImagesUseCase,
     private val deleteImagesUseCase: DeleteImagesUseCase,
+    private val getRemoteImagePathUseCase: GetRemoteImagePathUseCase,
+    private val getRemoteImagePathFromUrlUseCase: GetRemoteImagePathFromUrlUseCase,
 ) : UiEventViewModel() {
 
     private val _state = MutableStateFlow(WriteState())
@@ -126,7 +131,7 @@ class WriteViewModel @Inject constructor(
         val resultGallery = images.map {
             GalleryImage(
                 image = it.toUri(),
-                remoteImagePath = extractImagePath(
+                remoteImagePath = getRemoteImagePathFromUrlUseCase(
                     fullImageUrl = it,
                 ),
             )
@@ -167,7 +172,7 @@ class WriteViewModel @Inject constructor(
 
     private fun updateDateTime(zonedDateTime: ZonedDateTime) = with(_state) {
         update {
-            it.copy(updatedDateTime = zonedDateTime.toInstant().toRealmInstant())
+            it.copy(updatedDateTime = zonedDateTime.toRealmInstant())
         }
     }
 
@@ -176,7 +181,7 @@ class WriteViewModel @Inject constructor(
         imageList.add(
             GalleryImage(
                 image = image,
-                remoteImagePath = getRemoteImagePath(image, imageType),
+                remoteImagePath = getRemoteImagePathUseCase(image.toString(), imageType),
             ),
         )
 
@@ -388,17 +393,6 @@ class WriteViewModel @Inject constructor(
 //            }
 //        }
 //    }
-
-    private fun extractImagePath(fullImageUrl: String): String {
-        val chunks = fullImageUrl.split("%2F")
-        val imageName = chunks[2].split("?").first()
-        return "images/${FirebaseAuth.getInstance().currentUser?.uid}/$imageName"
-    }
-
-    private fun getRemoteImagePath(image: Uri, imageType: String): String {
-        return "images/${FirebaseAuth.getInstance().currentUser?.uid}/" +
-                "${image.lastPathSegment}-${System.currentTimeMillis()}.$imageType"
-    }
 
     private fun getImagePath(image: Uri): String {
         return application.contentResolver.getType(image)?.split("/")?.last() ?: "jpg"

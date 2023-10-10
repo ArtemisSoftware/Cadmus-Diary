@@ -1,6 +1,6 @@
 package com.core.domain.models
 
-import com.artemissoftware.cadmusdiary.util.extensions.toRealmInstant
+import com.artemissoftware.util.extensions.toRealmInstant
 import io.realm.kotlin.ext.realmListOf
 import io.realm.kotlin.types.RealmInstant
 import io.realm.kotlin.types.RealmList

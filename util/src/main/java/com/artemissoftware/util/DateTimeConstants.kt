@@ -1,4 +1,4 @@
-package com.core.ui.util
+package com.artemissoftware.util
 
 object DateTimeConstants {
 

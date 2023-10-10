@@ -1,5 +1,6 @@
 package com.core.data.repository
 
+import android.net.Uri
 import androidx.core.net.toUri
 import com.core.data.database.dao.ImageToUploadDao
 import com.core.data.mappers.toEntity
@@ -130,5 +131,16 @@ class ImageRepositoryImpl(
                 }
                 .addOnFailureListener { continuation.resumeWithException(it) }
         }
+    }
+
+    override fun extractImagePath(fullImageUrl: String): String {
+        val chunks = fullImageUrl.split("%2F")
+        val imageName = chunks[2].split("?").first()
+        return "images/${FirebaseAuth.getInstance().currentUser?.uid}/$imageName"
+    }
+
+    override fun getRemoteImagePath(imageUri: String, imageType: String): String {
+        return "images/${FirebaseAuth.getInstance().currentUser?.uid}/" +
+            "${imageUri.toUri().lastPathSegment}-${System.currentTimeMillis()}.$imageType"
     }
 }

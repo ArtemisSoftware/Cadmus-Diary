@@ -13,5 +13,5 @@ dependencies {
     implementation libs.kotlinx.coroutines.core
     implementation libs.dagger
 
-    implementation(project(":core:domain"))
+    implementation(project(":core:domain")) // TODO: alterar para Module
 }

@@ -27,4 +27,7 @@ object Module {
     const val authenticationData = "${feature}${authentication}${data}"
     const val authenticationDomain = "${feature}${authentication}${domain}"
     const val authenticationPresentation = "${feature}${authentication}${presentation}"
+
+
+    const val util = ":util"
 }

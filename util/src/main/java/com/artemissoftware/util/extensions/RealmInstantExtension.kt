@@ -1,4 +1,4 @@
-package com.artemissoftware.cadmusdiary.util.extensions
+package com.artemissoftware.util.extensions
 
 import io.realm.kotlin.types.RealmInstant
 import java.time.Instant

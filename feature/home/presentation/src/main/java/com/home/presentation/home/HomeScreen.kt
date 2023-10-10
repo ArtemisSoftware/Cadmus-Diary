@@ -32,10 +32,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.artemissoftware.cadmusdiary.R
 import com.artemissoftware.cadmusdiary.navigation.Screen
 import com.core.ui.components.dialog.DisplayAlertDialog
 import com.core.ui.components.events.UIEventsManager
+import com.home.presentation.R
 import com.home.presentation.home.composables.EmptyPage
 import com.home.presentation.home.composables.HomeContent
 import com.home.presentation.home.composables.HomeTopBar
@@ -120,11 +120,6 @@ private fun HomeScreenContent(
     onMenuClicked: () -> Unit,
     state: HomeState,
     events: (HomeEvents) -> Unit,
-//    dateIsSelected: Boolean,
-//    onDateSelected: (ZonedDateTime) -> Unit,
-//    onDateReset: () -> Unit,
-//    navigateToWrite: () -> Unit,
-//    navigateToWriteWithArgs: (String) -> Unit
 ) {
     var padding by remember { mutableStateOf(PaddingValues()) }
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()

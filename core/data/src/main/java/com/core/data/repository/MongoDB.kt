@@ -1,7 +1,7 @@
 package com.core.data.repository
 
 import com.core.domain.models.Diary
-import com.artemissoftware.cadmusdiary.util.extensions.toInstant
+import com.artemissoftware.util.extensions.toInstant
 import com.core.data.ConstantsId.APP_ID
 import com.core.data.exceptions.UserNotAuthenticatedException
 import com.core.domain.RequestState

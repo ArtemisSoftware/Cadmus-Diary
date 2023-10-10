@@ -14,4 +14,8 @@ interface ImageRepository {
     suspend fun deleteImagesFromFirebase(images: List<String>): List<String>
 
     suspend fun deleteAllImagesFromFirebase(): List<String>
+
+    fun extractImagePath(fullImageUrl: String): String
+
+    fun getRemoteImagePath(imageUri: String, imageType: String): String
 }

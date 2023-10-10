@@ -40,12 +40,12 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.artemissoftware.cadmusdiary.util.DateTimeConstants
-import com.artemissoftware.cadmusdiary.util.extensions.toInstant
+import com.artemissoftware.util.extensions.toInstant
 import com.core.domain.models.Diary
 import com.core.domain.models.Mood
 import com.core.ui.models.toMoodUi
 import com.core.ui.theme.Elevation
+import com.artemissoftware.util.DateTimeConstants
 import com.home.presentation.R
 import io.realm.kotlin.ext.realmListOf
 import org.mongodb.kbson.ObjectId
