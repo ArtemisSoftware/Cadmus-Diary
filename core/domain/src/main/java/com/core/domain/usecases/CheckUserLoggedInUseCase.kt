@@ -7,6 +7,7 @@ import javax.inject.Inject
 
 class CheckUserLoggedInUseCase @Inject constructor(private val mongoRepository: MongoRepository) {
     suspend operator fun invoke() = withContext(Dispatchers.IO) {
-        mongoRepository.isLoggedIn()
+        val result = mongoRepository.isLoggedIn()
+        result
     }
 }

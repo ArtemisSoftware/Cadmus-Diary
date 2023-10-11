@@ -5,14 +5,12 @@ import androidx.lifecycle.viewModelScope
 import com.core.domain.repository.MongoRepository
 import com.core.domain.usecases.CheckUserLoggedInUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.time.Duration.Companion.seconds
 
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
@@ -25,12 +23,13 @@ class MainActivityViewModel @Inject constructor(
 
     init {
         mongoRepository.configureTheRealm()
+        checkUserLoggedIn()
     }
 
     fun onTriggerEvent(event: MainActivityEvents) {
         when (event) {
             MainActivityEvents.FinishSplash -> {
-                checkUserLoggedIn()
+                finishSplash()
             }
         }
     }
@@ -42,9 +41,6 @@ class MainActivityViewModel @Inject constructor(
             update {
                 it.copy(userLoggedIn = result)
             }
-
-            delay((0.5).seconds)
-            finishSplash()
         }
     }
 

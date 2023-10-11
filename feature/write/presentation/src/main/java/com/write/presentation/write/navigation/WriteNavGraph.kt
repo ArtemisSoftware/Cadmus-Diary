@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.artemissoftware.navigation.Screen
 import com.write.presentation.write.WriteScreen
 
 fun NavGraphBuilder.writeRoute(

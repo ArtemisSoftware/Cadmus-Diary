@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.artemissoftware.navigation.Screen
 import com.artemissoftware.util.extensions.toRealmInstant
 import com.core.domain.models.Diary
 import com.core.domain.usecases.GetDiaryImagesUseCase
@@ -25,7 +26,6 @@ import com.write.domain.usecases.UpdateDiaryUseCase
 import com.write.domain.usecases.UploadImagesUseCase
 import com.write.presentation.R
 import com.write.presentation.write.mappers.toPictures
-import com.write.presentation.write.navigation.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.realm.kotlin.ext.toRealmList
 import kotlinx.coroutines.flow.MutableStateFlow

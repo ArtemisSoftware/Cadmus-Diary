@@ -60,6 +60,7 @@ dependencies {
     ksp(libs.hilt.android.compiler)
     implementation(libs.hilt.navigation.compose)
 
+    implementation(project(Module.navigation))
     implementation(project(Module.util))
     implementation(project(Module.coreDomain))
     implementation(project(Module.coreUi))

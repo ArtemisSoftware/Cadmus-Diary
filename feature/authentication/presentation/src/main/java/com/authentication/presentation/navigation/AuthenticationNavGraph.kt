@@ -3,6 +3,7 @@ package com.authentication.presentation.navigation
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
+import com.artemissoftware.navigation.Screen
 import com.authentication.presentation.auth.AuthenticationScreen
 
 fun NavGraphBuilder.authenticationRoute(

@@ -13,13 +13,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.core.ui.util.MessageBarType
-import com.core.ui.components.events.UIEventsManager
+import com.authentication.presentation.auth.Const.CLIENT_ID
 import com.authentication.presentation.auth.composables.AuthenticationContent
-import com.core.ui.theme.CadmusDiaryTheme
-import com.artemissoftware.cadmusdiary.util.Constants.CLIENT_ID
-import com.core.ui.util.extensions.show
+import com.core.ui.components.events.UIEventsManager
 import com.core.ui.components.modifier.statusNavigationBarPadding
+import com.core.ui.theme.CadmusDiaryTheme
+import com.core.ui.util.MessageBarType
+import com.core.ui.util.extensions.show
 import com.stevdzasan.messagebar.ContentWithMessageBar
 import com.stevdzasan.messagebar.rememberMessageBarState
 import com.stevdzasan.onetap.OneTapSignInWithGoogle
@@ -97,7 +97,7 @@ private fun AuthenticationScreenContentPreview() {
     CadmusDiaryTheme {
         Surface(
             content = {
-                com.authentication.presentation.auth.AuthenticationScreenContent(
+                AuthenticationScreenContent(
                     isLoading = false,
                     onGoogleAuthenticationButtonClicked = {},
                 )

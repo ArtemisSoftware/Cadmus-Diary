@@ -1,14 +1,14 @@
 package com.authentication.presentation.auth
 
 import androidx.lifecycle.viewModelScope
-import com.artemissoftware.cadmusdiary.navigation.Screen
+import com.artemissoftware.navigation.Screen
 import com.authentication.domain.usecases.SignInUseCase
 import com.authentication.presentation.R
 import com.core.domain.RequestState
 import com.core.ui.util.MessageBarType
+import com.core.ui.util.UiText
 import com.core.ui.util.uievents.UiEvent
 import com.core.ui.util.uievents.UiEventViewModel
-import com.core.ui.util.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow

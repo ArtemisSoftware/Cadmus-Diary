@@ -1,6 +1,10 @@
-package com.write.presentation.write.navigation
+package com.artemissoftware.navigation
 
-internal sealed class Screen(val route: String) {
+sealed class Screen(val route: String) {
+    object Home : Screen(route = "home")
+
+    object Authentication : Screen(route = "authentication")
+
     object Write : Screen(
         route = "write?$WRITE_SCREEN_ARGUMENT_KEY=" +
             "{$WRITE_SCREEN_ARGUMENT_KEY}",

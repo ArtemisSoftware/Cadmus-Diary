@@ -1,11 +1,10 @@
 package com.core.data.repository
 
-import com.core.domain.models.Diary
 import com.artemissoftware.util.extensions.toInstant
 import com.core.data.ConstantsId.APP_ID
 import com.core.data.exceptions.UserNotAuthenticatedException
+import com.core.data.realm.models.Diary
 import com.core.domain.RequestState
-import com.core.domain.repository.Diaries
 import com.core.domain.repository.MongoRepository
 import io.realm.kotlin.Realm
 import io.realm.kotlin.ext.query
@@ -48,6 +47,28 @@ object MongoDB : MongoRepository {
         }
     }
 
+    override suspend fun login(tokenId: String): Boolean {
+        return app.login(
+            Credentials.jwt(tokenId),
+            // Credentials.google(tokenId, GoogleAuthType.ID_TOKEN), // needs fix from google to be able to see name, email, picture.....
+        ).loggedIn
+    }
+
+    override suspend fun logout(): Boolean {
+        val user = app.currentUser // TODO: irrelevante?
+        return if (user != null) {
+            user.logOut()
+            true
+        } else {
+            false
+        }
+    }
+
+    override suspend fun isLoggedIn(): Boolean {
+        val user = app.currentUser
+        return (user != null) && user.loggedIn
+    }
+/*
     override fun getAllDiaries(): Flow<Diaries> {
         return if (user != null) {
             try {
@@ -195,26 +216,6 @@ object MongoDB : MongoRepository {
             RequestState.Error(UserNotAuthenticatedException())
         }
     }
+*/
 
-    override suspend fun login(tokenId: String): Boolean {
-        return app.login(
-            Credentials.jwt(tokenId),
-            // Credentials.google(tokenId, GoogleAuthType.ID_TOKEN), // needs fix from google to be able to see name, email, picture.....
-        ).loggedIn
-    }
-
-    override suspend fun logout(): Boolean {
-        val user = app.currentUser // TODO: irrelevante?
-        return if (user != null) {
-            user.logOut()
-            true
-        } else {
-            false
-        }
-    }
-
-    override suspend fun isLoggedIn(): Boolean {
-        val user = app.currentUser
-        return (user != null) && user.loggedIn
-    }
 }

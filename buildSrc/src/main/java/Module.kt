@@ -30,4 +30,5 @@ object Module {
 
 
     const val util = ":util"
+    const val navigation = ":navigation"
 }

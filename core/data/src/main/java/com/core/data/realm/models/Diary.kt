@@ -1,6 +1,7 @@
-package com.core.domain.models
+package com.core.data.realm.models
 
 import com.artemissoftware.util.extensions.toRealmInstant
+import com.core.domain.models.Mood
 import io.realm.kotlin.ext.realmListOf
 import io.realm.kotlin.types.RealmInstant
 import io.realm.kotlin.types.RealmList

@@ -57,6 +57,12 @@ android {
 
 dependencies {
 
+    // Modules
+    implementation(project(Module.navigation))
+    implementation(project(Module.coreData))
+    implementation(project(Module.coreDomain))
+    implementation(project(Module.coreUi))
+
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
 
@@ -101,11 +107,8 @@ dependencies {
     ksp(libs.hilt.android.compiler)
     implementation(libs.hilt.navigation.compose)
 
-    implementation(project(Module.coreData))
-    implementation(project(Module.coreDomain))
-    implementation(project(Module.coreUi))
-
-    implementation(project(Module.homePresentation))
-    implementation(project(Module.writePresentation))
-    implementation(project(Module.authenticationPresentation))
+//
+//    implementation(project(Module.homePresentation))
+//    implementation(project(Module.writePresentation))
+//    implementation(project(Module.authenticationPresentation))
 }
