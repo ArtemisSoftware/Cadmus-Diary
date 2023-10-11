@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.artemissoftware.navigation.Screen
+import com.core.domain.RequestState
 import com.core.ui.components.dialog.DisplayAlertDialog
 import com.core.ui.components.events.UIEventsManager
 import com.home.presentation.R
@@ -107,7 +108,7 @@ fun HomeScreen(
     )
 
     LaunchedEffect(key1 = state.diaries) {
-        if (state.diaries !is com.core.domain.RequestState.Loading) {
+        if (state.diaries !is RequestState.Loading) {
             onDataLoaded()
         }
     }
@@ -157,29 +158,29 @@ private fun HomeScreenContent(
         content = {
             padding = it
             when (state.diaries) {
-                is com.core.domain.RequestState.Success -> {
+                is RequestState.Success -> {
                     HomeContent(
                         paddingValues = it,
                         state = state,
                         diaryNotes = state.diaries.data,
                         onClick = { diaryId ->
-                            events.invoke(HomeEvents.Navigate(Screen.Write.passDiaryId(diaryId = diaryId)))
+//                            events.invoke(HomeEvents.Navigate(Screen.Write.passDiaryId(diaryId = diaryId)))
                         },
                         openGallery = { diaryId ->
-                            events.invoke(HomeEvents.OpenDiaryGallery(diaryId = diaryId.toString()))
+                            events.invoke(HomeEvents.OpenDiaryGallery(diaryId = diaryId))
                         },
                         fetchImages = { id, list ->
-                            events.invoke(HomeEvents.FetchImages(diaryId = id.toString(), list))
+                            events.invoke(HomeEvents.FetchImages(diaryId = id, list))
                         },
                     )
                 }
-                is com.core.domain.RequestState.Error -> {
+                is RequestState.Error -> {
                     EmptyPage(
                         title = R.string.error,
                         subtitle = "${state.diaries.error.message}",
                     )
                 }
-                is com.core.domain.RequestState.Loading -> {
+                is RequestState.Loading -> {
                     Box(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center,

@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.com.android.library)
     alias(libs.plugins.org.jetbrains.kotlin.android)
     alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.com.google.devtools.ksp)
 }
 
 android {
@@ -48,6 +49,9 @@ dependencies {
     implementation(libs.ui.tooling)
     implementation(libs.ui.tooling.preview)
     implementation(libs.material3)
+
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.android.compiler)
 
     implementation(libs.navigation.compose)
 

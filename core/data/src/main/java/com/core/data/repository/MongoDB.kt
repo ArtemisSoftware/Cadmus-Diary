@@ -3,8 +3,10 @@ package com.core.data.repository
 import com.artemissoftware.util.extensions.toInstant
 import com.core.data.ConstantsId.APP_ID
 import com.core.data.exceptions.UserNotAuthenticatedException
+import com.core.data.mappers.toJournal
 import com.core.data.realm.models.Diary
 import com.core.domain.RequestState
+import com.core.domain.models.Journal
 import com.core.domain.repository.MongoRepository
 import io.realm.kotlin.Realm
 import io.realm.kotlin.ext.query
@@ -68,8 +70,8 @@ object MongoDB : MongoRepository {
         val user = app.currentUser
         return (user != null) && user.loggedIn
     }
-/*
-    override fun getAllDiaries(): Flow<Diaries> {
+
+    override fun getAllDiaries(): Flow<Journal> {
         return if (user != null) {
             try {
                 realm.query<Diary>(query = "ownerId == $0", user.identity)
@@ -77,11 +79,19 @@ object MongoDB : MongoRepository {
                     .asFlow()
                     .map { result ->
                         RequestState.Success(
-                            data = result.list.groupBy {
-                                it.date.toInstant()
-                                    .atZone(ZoneId.systemDefault())
-                                    .toLocalDate()
-                            },
+                            data = result
+                                .list
+                                .map { it.toJournal() }
+                                .groupBy {
+                                    it.date
+                                        .atZone(ZoneId.systemDefault())
+                                        .toLocalDate()
+                                },
+//                            data = result.list.groupBy {
+//                                it.date.toInstant()
+//                                    .atZone(ZoneId.systemDefault())
+//                                    .toLocalDate()
+//                            },
                         )
                     }
             } catch (e: Exception) {
@@ -92,7 +102,7 @@ object MongoDB : MongoRepository {
         }
     }
 
-    override fun getFilteredDiaries(zonedDateTime: ZonedDateTime): Flow<Diaries> {
+    override fun getFilteredDiaries(zonedDateTime: ZonedDateTime): Flow<Journal> {
         return if (user != null) {
             try {
                 realm.query<Diary>(
@@ -114,8 +124,11 @@ object MongoDB : MongoRepository {
                     ),
                 ).asFlow().map { result ->
                     RequestState.Success(
-                        data = result.list.groupBy {
-                            it.date.toInstant()
+                        data = result
+                            .list
+                            .map { it.toJournal() }
+                            .groupBy {
+                            it.date
                                 .atZone(ZoneId.systemDefault())
                                 .toLocalDate()
                         },
@@ -128,7 +141,7 @@ object MongoDB : MongoRepository {
             flow { emit(RequestState.Error(UserNotAuthenticatedException())) }
         }
     }
-
+/*
     override fun getSelectedDiary(diaryId: ObjectId): Flow<RequestState<Diary>> {
         return if (user != null) {
             try {

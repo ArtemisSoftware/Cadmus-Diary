@@ -41,11 +41,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.artemissoftware.util.extensions.toInstant
-import com.core.domain.models.Diary
 import com.core.domain.models.Mood
 import com.core.ui.models.toMoodUi
 import com.core.ui.theme.Elevation
 import com.artemissoftware.util.DateTimeConstants
+import com.core.domain.models.JournalEntry
 import com.home.presentation.R
 import io.realm.kotlin.ext.realmListOf
 import org.mongodb.kbson.ObjectId
@@ -56,10 +56,10 @@ import java.util.Locale
 
 @Composable
 fun DiaryCard(
-    diary: Diary,
+    diary: JournalEntry,
     onClick: (String) -> Unit,
-    openGallery: (ObjectId) -> Unit,
-    fetchImages: (ObjectId, List<String>) -> Unit,
+    openGallery: (String) -> Unit,
+    fetchImages: (String, List<String>) -> Unit,
     galleryOpened: Boolean,
     galleryLoading: Boolean,
     downloadedImages: List<Uri> = emptyList(),
@@ -69,7 +69,7 @@ fun DiaryCard(
 
     LaunchedEffect(key1 = galleryOpened) {
         if (galleryOpened && downloadedImages.isEmpty()) {
-            fetchImages(diary._id, diary.images)
+            fetchImages(diary.id, diary.images)
         }
     }
 
@@ -80,7 +80,10 @@ fun DiaryCard(
                 interactionSource = remember {
                     MutableInteractionSource()
                 },
-            ) { onClick(diary._id.toHexString()) },
+                onClick = {
+//                    onClick(diary._id.toHexString())
+                },
+            )
     ) {
         Spacer(modifier = Modifier.width(14.dp))
 
@@ -97,7 +100,7 @@ fun DiaryCard(
             tonalElevation = Elevation.Level1,
         ) {
             Column(modifier = Modifier.fillMaxWidth()) {
-                DiaryHeader(moodName = diary.mood, time = diary.date.toInstant())
+                DiaryHeader(moodName = diary.mood, time = diary.date)
                 Text(
                     modifier = Modifier.padding(all = 14.dp),
                     text = diary.description,
@@ -111,7 +114,7 @@ fun DiaryCard(
                         galleryOpened = galleryOpened,
                         galleryLoading = galleryLoading,
                         onClick = {
-                            openGallery.invoke(diary._id)
+                            openGallery.invoke(diary.id)
                         },
                     )
                 }
@@ -124,7 +127,7 @@ fun DiaryCard(
                         ),
                     ),
                 ) {
-                    Column(modifier = Modifier.padding(all = 14.dp)) {
+                    Column(modifier = Modifier.padding(all = 16.dp)) {
                         Gallery(images = downloadedImages, modifier = Modifier.fillMaxWidth())
                     }
                 }
@@ -135,7 +138,7 @@ fun DiaryCard(
 
 @Composable
 private fun DiaryHeader(moodName: String, time: Instant) {
-    val mood by remember { mutableStateOf(/*Mood.valueOf(moodName)*/moodName.toMoodUi()) }
+    val mood by remember { mutableStateOf(moodName.toMoodUi()) }
     val formatter = remember {
         DateTimeFormatter.ofPattern(DateTimeConstants.FORMAT_hh_mm_a, Locale.getDefault())
             .withZone(ZoneId.systemDefault())
@@ -144,7 +147,7 @@ private fun DiaryHeader(moodName: String, time: Instant) {
         modifier = Modifier
             .fillMaxWidth()
             .background(mood.containerColor)
-            .padding(horizontal = 14.dp, vertical = 7.dp),
+            .padding(horizontal = 16.dp, vertical = 8.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -154,7 +157,7 @@ private fun DiaryHeader(moodName: String, time: Instant) {
                 painter = painterResource(id = mood.icon),
                 contentDescription = "Mood Icon",
             )
-            Spacer(modifier = Modifier.width(7.dp))
+            Spacer(modifier = Modifier.width(8.dp))
             Text(
                 text = mood.name,
                 color = mood.contentColor,
@@ -202,13 +205,14 @@ fun ShowGalleryButton(
 @Preview
 private fun DiaryCardPreview() {
     DiaryCard(
-        diary = Diary().apply {
-            title = "My Diary"
+        diary = JournalEntry(
+            id = "2",
+            title = "My Diary",
+            ownerId = "23",
+            date = Instant.now(),
             description =
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
-            mood = Mood.Happy.name
-            images = realmListOf("", "")
-        },
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+        ),
         onClick = {},
         openGallery = {},
         fetchImages = { _, _ -> },
@@ -221,13 +225,14 @@ private fun DiaryCardPreview() {
 @Preview
 private fun DiaryCard_no_images_Preview() {
     DiaryCard(
-        diary = Diary().apply {
-            title = "My Diary"
+        diary = JournalEntry(
+            id = "2",
+            title = "My Diary",
+            ownerId = "23",
+            date = Instant.now(),
             description =
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
-            mood = Mood.Happy.name
-            images = realmListOf()
-        },
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit ex ea commodo consequat.",
+        ),
         onClick = {},
         openGallery = {},
         fetchImages = { _, _ -> },

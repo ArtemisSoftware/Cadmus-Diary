@@ -5,9 +5,8 @@ import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
 import com.artemissoftware.navigation.Screen
 import com.core.domain.RequestState
-import com.core.domain.repository.Diaries
+import com.core.domain.models.Journal
 import com.core.domain.usecases.GetDiaryImagesUseCase
-import com.core.ui.connectivity.ConnectivityObserver
 import com.core.ui.connectivity.NetworkConnectivityObserver
 import com.core.ui.util.UiText
 import com.core.ui.util.uievents.UiEvent
@@ -18,7 +17,6 @@ import com.home.domain.usecases.GetFilteredDiariesUseCase
 import com.home.domain.usecases.SignOutUseCase
 import com.home.presentation.R
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.realm.kotlin.ext.copyFromRealm
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -48,6 +46,56 @@ class HomeViewModel @Inject constructor(
     init {
         getDiaries()
         checkConnectivity()
+    }
+
+    private fun getDiaries(zonedDateTime: ZonedDateTime? = null) = with(_state) {
+        update {
+            it.copy(
+                dateIsSelected = zonedDateTime != null,
+                diaries = RequestState.Loading,
+            )
+        }
+
+        if (value.dateIsSelected && zonedDateTime != null) {
+            observeFilteredDiaries(zonedDateTime = zonedDateTime)
+        } else {
+            observeAllDiaries()
+        }
+    }
+
+    private fun observeAllDiaries() {
+        allDiariesJob = viewModelScope.launch {
+            filteredDiariesJob?.cancelAndJoin()
+            getAllDiariesUseCase().collect { result ->
+                updateDiaries(result)
+            }
+        }
+    }
+
+    private fun observeFilteredDiaries(zonedDateTime: ZonedDateTime) = with(_state) {
+        filteredDiariesJob = viewModelScope.launch {
+            allDiariesJob?.cancelAndJoin()
+            getFilteredDiariesUseCase(zonedDateTime = zonedDateTime).collect { result ->
+                updateDiaries(result)
+            }
+        }
+    }
+
+    private fun updateDiaries(diaries: Journal) = with(_state) {
+        update {
+            it.copy(diaries = diaries)
+        }
+//        updateImagesOnOpenedGalleries(diaries)
+    }
+
+    private fun checkConnectivity() = with(_state) {
+        viewModelScope.launch {
+            connectivity.observe().collect { status ->
+                update {
+                    it.copy(network = status)
+                }
+            }
+        }
     }
 
     fun onTriggerEvent(event: HomeEvents) {
@@ -87,7 +135,7 @@ class HomeViewModel @Inject constructor(
             }
 
             HomeEvents.DeleteAllDiaries -> {
-                deleteAllDiaries()
+//                deleteAllDiaries()
             }
 
             is HomeEvents.GetDiaries -> {
@@ -106,13 +154,6 @@ class HomeViewModel @Inject constructor(
         update {
             it.copy(deleteAllDialogOpened = open)
         }
-    }
-
-    private fun updateDiaries(diaries: Diaries) = with(_state) {
-        update {
-            it.copy(diaries = diaries)
-        }
-        updateImagesOnOpenedGalleries(diaries)
     }
 
     private fun updateDiariesImages(diaryId: String, urls: List<String> = emptyList()) = with(_state) {
@@ -158,53 +199,10 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun getDiaries(zonedDateTime: ZonedDateTime? = null) = with(_state) {
-        update {
-            it.copy(
-                dateIsSelected = zonedDateTime != null,
-                diaries = RequestState.Loading,
-            )
-        }
-
-        if (value.dateIsSelected && zonedDateTime != null) {
-            observeFilteredDiaries(zonedDateTime = zonedDateTime)
-        } else {
-            observeAllDiaries()
-        }
-    }
-
-    private fun observeAllDiaries() {
-        allDiariesJob = viewModelScope.launch {
-            filteredDiariesJob?.cancelAndJoin()
-            getAllDiariesUseCase().collect { result ->
-                updateDiaries(result)
-            }
-        }
-    }
-
-    private fun observeFilteredDiaries(zonedDateTime: ZonedDateTime) = with(_state) {
-        filteredDiariesJob = viewModelScope.launch {
-            allDiariesJob?.cancelAndJoin()
-            getFilteredDiariesUseCase(zonedDateTime = zonedDateTime).collect { result ->
-                updateDiaries(result)
-            }
-        }
-    }
-
-    private fun checkConnectivity() = with(_state) {
-        viewModelScope.launch {
-            connectivity.observe().collect { status ->
-                update {
-                    it.copy(network = status)
-                }
-            }
-        }
-    }
-
     private fun openDiaryGallery(diaryId: String) = with(_state) {
-        val allDiaries = (_state.value.diaries as RequestState.Success).data.values.flatten().map { it.copyFromRealm() }
-        val currentDiary = allDiaries.find { it._id.toString() == diaryId }
-        val currentNumberOfImages = allDiaries.find { it._id.toString() == diaryId }?.images?.size ?: 0
+        val allDiaries = (_state.value.diaries as RequestState.Success).data.values.flatten()
+        val currentDiary = allDiaries.find { it.id == diaryId }
+        val currentNumberOfImages = allDiaries.find { it.id == diaryId }?.images?.size ?: 0
         val numberOfImages = value.diariesImages.find { it.id == diaryId }?.uris?.size ?: 0
 
         if(value.diariesImages.none { it.id == diaryId }) {
@@ -212,7 +210,7 @@ class HomeViewModel @Inject constructor(
             return@with
         }
         else if(currentNumberOfImages != numberOfImages) {
-            getImages(currentDiary?._id.toString(), currentDiary?.images ?: emptyList())
+            getImages(currentDiary?.id.toString(), currentDiary?.images ?: emptyList())
             return@with
         }
 
@@ -223,6 +221,23 @@ class HomeViewModel @Inject constructor(
             images.add(image)
             update {
                 it.copy(diariesImages = images)
+            }
+        }
+    }
+
+    private fun getImages(diaryId: String, list: List<String>) {
+        viewModelScope.launch {
+            getDiaryImagesUseCase.invoke(diaryId, list).collect { result ->
+                when(result) {
+                    is RequestState.Success -> {
+                        updateDiariesImages(diaryId = result.data.id, urls = result.data.images)
+                    }
+                    is RequestState.Error -> {
+                        updateDiariesImages(diaryId = diaryId)
+                        sendUiEvent(UiEvent.ShowToast(UiText.StringResource(R.string.images_not_uploaded_yet_wait_a_little_bit_or_try_uploading_again), Toast.LENGTH_SHORT))
+                    }
+                    else -> Unit
+                }
             }
         }
     }
@@ -247,23 +262,23 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun updateImagesOnOpenedGalleries(diaries: Diaries) {
-        val openedGalleries = _state.value.diariesImages.filter { it.isOpened }.map { it.id }
-        if(openedGalleries.isNotEmpty()) {
-            val allDiaries = (diaries as RequestState.Success).data.values.flatten().map { it.copyFromRealm() }
-
-            allDiaries.filter { openedGalleries.contains(it._id.toString()) }.forEach {
-                updateDiariesImages(it._id.toString(), null)
-                if(it.images.isNotEmpty()) {
-                    getImages(diaryId = it._id.toString(), list = it.images)
-                }
-                else {
-                    clearGallery(it._id.toString())
-                    closeDiaryGallery(it._id.toString())
-                }
-            }
-        }
-    }
+//    private fun updateImagesOnOpenedGalleries(diaries: Diaries) {
+//        val openedGalleries = _state.value.diariesImages.filter { it.isOpened }.map { it.id }
+//        if(openedGalleries.isNotEmpty()) {
+//            val allDiaries = (diaries as RequestState.Success).data.values.flatten().map { it.copyFromRealm() }
+//
+//            allDiaries.filter { openedGalleries.contains(it._id.toString()) }.forEach {
+//                updateDiariesImages(it._id.toString(), null)
+//                if(it.images.isNotEmpty()) {
+//                    getImages(diaryId = it._id.toString(), list = it.images)
+//                }
+//                else {
+//                    clearGallery(it._id.toString())
+//                    closeDiaryGallery(it._id.toString())
+//                }
+//            }
+//        }
+//    }
 
     private fun signOut() {
         viewModelScope.launch {
@@ -275,43 +290,28 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun getImages(diaryId: String, list: List<String>) {
-        viewModelScope.launch {
-            getDiaryImagesUseCase.invoke(diaryId, list).collect { result ->
-                when(result) {
-                    is RequestState.Success -> {
-                        updateDiariesImages(diaryId = result.data.id, urls = result.data.images)
-                    }
-                    is RequestState.Error -> {
-                        updateDiariesImages(diaryId = diaryId)
-                        sendUiEvent(UiEvent.ShowToast(UiText.StringResource(R.string.images_not_uploaded_yet_wait_a_little_bit_or_try_uploading_again), Toast.LENGTH_SHORT))
-                    }
-                    else -> Unit
-                }
-            }
-        }
-    }
 
-    private fun deleteAllDiaries() {
-        viewModelScope.launch {
-            if (_state.value.network == ConnectivityObserver.Status.Available) {
-                val result = deleteAllDiariesUseCase()
 
-                when(result) {
-                    is RequestState.Success -> {
-                        sendUiEvent(UiEvent.ShowToast(UiText.StringResource(R.string.all_diaries_deleted), Toast.LENGTH_SHORT))
-                    }
-                    is RequestState.Error -> {
-                        sendUiEvent(UiEvent.ShowToast(UiText.DynamicString(result.error.message.toString()), Toast.LENGTH_SHORT))
-                    }
-                    else -> Unit
-                }
-            }
-            else {
-                sendUiEvent(UiEvent.ShowToast(UiText.StringResource(R.string.internet_connection_necessary_for_this_operation), Toast.LENGTH_SHORT))
-            }
-
-            sendUiEvent(UiEvent.CloseNavigationDrawer)
-        }
-    }
+//    private fun deleteAllDiaries() {
+//        viewModelScope.launch {
+//            if (_state.value.network == ConnectivityObserver.Status.Available) {
+//                val result = deleteAllDiariesUseCase()
+//
+//                when(result) {
+//                    is RequestState.Success -> {
+//                        sendUiEvent(UiEvent.ShowToast(UiText.StringResource(R.string.all_diaries_deleted), Toast.LENGTH_SHORT))
+//                    }
+//                    is RequestState.Error -> {
+//                        sendUiEvent(UiEvent.ShowToast(UiText.DynamicString(result.error.message.toString()), Toast.LENGTH_SHORT))
+//                    }
+//                    else -> Unit
+//                }
+//            }
+//            else {
+//                sendUiEvent(UiEvent.ShowToast(UiText.StringResource(R.string.internet_connection_necessary_for_this_operation), Toast.LENGTH_SHORT))
+//            }
+//
+//            sendUiEvent(UiEvent.CloseNavigationDrawer)
+//        }
+//    }
 }

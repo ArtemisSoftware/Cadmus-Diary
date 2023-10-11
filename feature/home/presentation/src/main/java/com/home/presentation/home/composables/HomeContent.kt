@@ -20,20 +20,19 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.core.domain.models.Diary
+import com.core.domain.models.JournalEntry
 import com.home.presentation.R
 import com.home.presentation.home.HomeState
-import org.mongodb.kbson.ObjectId
 import java.time.LocalDate
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeContent(
     paddingValues: PaddingValues,
-    diaryNotes: Map<LocalDate, List<Diary>>,
+    diaryNotes: Map<LocalDate, List<JournalEntry>>,
     onClick: (String) -> Unit,
-    openGallery: (ObjectId) -> Unit,
-    fetchImages: (ObjectId, List<String>) -> Unit,
+    openGallery: (String) -> Unit,
+    fetchImages: (String, List<String>) -> Unit,
     state: HomeState,
 ) {
     if (diaryNotes.isNotEmpty()) {
@@ -44,26 +43,29 @@ fun HomeContent(
                 .padding(top = paddingValues.calculateTopPadding()),
         ) {
             diaryNotes.forEach { (localDate, diaries) ->
-                stickyHeader(key = localDate) {
-                    DateHeader(
-                        localDate = localDate,
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                    )
-                }
+                stickyHeader(
+                    key = localDate,
+                    content = {
+                        DateHeader(
+                            localDate = localDate,
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                        )
+                    },
+                )
 
                 items(
                     items = diaries,
-                    key = { it._id.toString() },
+                    key = { it.id },
                 ) {
                     DiaryCard(
                         diary = it,
                         onClick = onClick,
                         openGallery = openGallery,
                         fetchImages = fetchImages,
-                        galleryOpened = state.isGalleryOpen(it._id.toString()),
-                        galleryLoading = state.isFetchingImages(it._id.toString()),
-                        downloadedImages = state.downloadedImages(it._id.toString()),
+                        galleryOpened = state.isGalleryOpen(it.id),
+                        galleryLoading = state.isFetchingImages(it.id),
+                        downloadedImages = state.downloadedImages(it.id),
                     )
                 }
             }

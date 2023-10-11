@@ -63,6 +63,8 @@ dependencies {
     implementation(project(Module.coreDomain))
     implementation(project(Module.coreUi))
 
+    implementation(project(Module.homePresentation))
+
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
 
@@ -108,7 +110,7 @@ dependencies {
     implementation(libs.hilt.navigation.compose)
 
 //
-//    implementation(project(Module.homePresentation))
+
 //    implementation(project(Module.writePresentation))
 //    implementation(project(Module.authenticationPresentation))
 }

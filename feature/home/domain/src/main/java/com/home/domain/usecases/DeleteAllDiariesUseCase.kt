@@ -20,7 +20,7 @@ class DeleteAllDiariesUseCase @Inject constructor(
 //            )
 //        )
 
-        val result = mongoRepository.deleteAllDiaries()
+        val result = false//--mongoRepository.deleteAllDiaries()
 
         result
     }
