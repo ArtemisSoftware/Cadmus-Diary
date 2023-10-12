@@ -10,7 +10,6 @@ import io.realm.kotlin.types.annotations.PrimaryKey
 import org.mongodb.kbson.ObjectId
 import java.time.Instant
 
-// TODO: isto é uma classe de dominio? Ficar atento
 class Diary : RealmObject {
     @PrimaryKey
     var _id: ObjectId = ObjectId.invoke()

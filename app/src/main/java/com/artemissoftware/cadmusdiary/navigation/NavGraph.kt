@@ -3,7 +3,6 @@ package com.artemissoftware.cadmusdiary.navigation
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import com.artemissoftware.navigation.Screen
 import com.authentication.presentation.auth.navigation.authenticationRoute
 import com.home.presentation.home.navigation.homeRoute
 import com.write.presentation.write.navigation.writeRoute
@@ -29,13 +28,5 @@ fun NavGraph(
         writeRoute(
             navController = navController,
         )
-    }
-}
-
-private fun getStartDestination(isUserLoggedIn: Boolean): String {
-    return if (isUserLoggedIn) {
-        Screen.Home.route
-    } else {
-        Screen.Authentication.route
     }
 }

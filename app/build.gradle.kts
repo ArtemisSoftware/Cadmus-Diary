@@ -88,15 +88,6 @@ dependencies {
 
     implementation(libs.core.splashscreen)
     implementation(libs.navigation.compose)
-    implementation(libs.one.tap.compose)
-    implementation(libs.message.bar.compose)
-    implementation(libs.realm.kotlin)
-
-    implementation(libs.coil.compose)
-
-    implementation(libs.sheets.compose.dialogs.core)
-    implementation(libs.sheets.compose.dialogs.calendar)
-    implementation(libs.sheets.compose.dialogs.clock)
 
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)

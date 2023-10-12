@@ -1,7 +1,9 @@
 package com.core.data.repository
 
 import androidx.core.net.toUri
+import com.core.data.database.dao.ImageToDeleteDao
 import com.core.data.database.dao.ImageToUploadDao
+import com.core.data.database.entity.ImageToDeleteEntity
 import com.core.data.mappers.toEntity
 import com.core.domain.models.ImageResult
 import com.core.domain.models.Picture
@@ -14,6 +16,7 @@ import kotlin.coroutines.suspendCoroutine
 
 class ImageRepositoryImpl(
     private val imageToUploadDao: ImageToUploadDao,
+    private val imageToDeleteDao: ImageToDeleteDao,
 ) : ImageRepository {
 
     override suspend fun uploadImagesToFirebase(pictures: List<Picture>): HashMap<String, Picture> {
@@ -77,9 +80,14 @@ class ImageRepositoryImpl(
     }
 
     override suspend fun deleteImagesFromFirebase(images: List<String>): List<String> {
+        if(images.isEmpty()) {
+            return emptyList()
+        }
+
         val storage = FirebaseStorage.getInstance().reference
         val toDelete = mutableListOf<String>()
         var deletesFinished = 0
+
         return suspendCoroutine { continuation ->
             images.forEach { remotePath ->
                 storage.child(remotePath).delete()
@@ -147,5 +155,9 @@ class ImageRepositoryImpl(
     override fun getRemoteImagePath(imageUri: String, imageType: String): String {
         return "images/${FirebaseAuth.getInstance().currentUser?.uid}/" +
             "${imageUri.toUri().lastPathSegment}-${System.currentTimeMillis()}.$imageType"
+    }
+
+    override suspend fun deleteImagesFormDatabase(images: List<String>) {
+        imageToDeleteDao.addImagesToDelete(images.map { ImageToDeleteEntity(remoteImagePath = it) })
     }
 }

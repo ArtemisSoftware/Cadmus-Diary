@@ -13,12 +13,7 @@ class DeleteAllDiariesUseCase @Inject constructor(
 
     suspend operator fun invoke() = withContext(Dispatchers.IO) {
         val imagesToDelete = imageRepository.deleteAllImagesFromFirebase()
-        // TODO: adicionar aqui
-//        imageToDeleteDao.addImageToDelete(
-//            ImageToDelete(
-//                remoteImagePath = imagePath
-//            )
-//        )
+        imageRepository.deleteImagesFormDatabase(imagesToDelete)
 
         val result = mongoRepository.deleteAllDiaries()
 

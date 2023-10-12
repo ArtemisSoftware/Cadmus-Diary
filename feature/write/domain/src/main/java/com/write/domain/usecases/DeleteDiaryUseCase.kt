@@ -21,10 +21,7 @@ class DeleteDiaryUseCase @Inject constructor(
         if(result is RequestState.Success) {
             if(!images.isNullOrEmpty()) {
                 val imagesToDelete = imageRepository.deleteImagesFromFirebase(images)
-                // TODO: terminar
-                //                            imageToDeleteDao.addImageToDelete(
-                //                                ImageToDelete(remoteImagePath = remotePath)
-                //                            )
+                imageRepository.deleteImagesFormDatabase(imagesToDelete)
             }
         }
 

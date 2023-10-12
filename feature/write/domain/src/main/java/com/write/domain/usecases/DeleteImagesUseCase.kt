@@ -9,9 +9,6 @@ class DeleteImagesUseCase @Inject constructor(private val imageRepository: Image
 
     suspend operator fun invoke(imagesRemotePaths: List<String>) = withContext(Dispatchers.IO) {
         val imagesToDelete = imageRepository.deleteImagesFromFirebase(imagesRemotePaths)
-        // TODO: terminar
-//                            imageToDeleteDao.addImageToDelete(
-//                                ImageToDelete(remoteImagePath = remotePath)
-//                            )
+        imageRepository.deleteImagesFormDatabase(imagesToDelete)
     }
 }

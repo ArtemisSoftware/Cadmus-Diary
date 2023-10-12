@@ -18,4 +18,6 @@ interface ImageRepository {
     fun extractImagePath(fullImageUrl: String): String
 
     fun getRemoteImagePath(imageUri: String, imageType: String): String
+
+    suspend fun deleteImagesFormDatabase(images: List<String>)
 }

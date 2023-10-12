@@ -46,8 +46,9 @@ object MongoDB : MongoRepository {
                         name = "User's Diaries",
                     )
                 }
-                .log(LogLevel.ALL) // TODO: verificar isto
+                .log(LogLevel.ALL)
                 .build()
+
             realm = Realm.open(config)
         }
     }
@@ -60,7 +61,6 @@ object MongoDB : MongoRepository {
     }
 
     override suspend fun logout(): Boolean {
-        val user = app.currentUser // TODO: irrelevante?
         return if (user != null) {
             user.logOut()
             true
@@ -90,11 +90,6 @@ object MongoDB : MongoRepository {
                                         .atZone(ZoneId.systemDefault())
                                         .toLocalDate()
                                 },
-//                            data = result.list.groupBy {
-//                                it.date.toInstant()
-//                                    .atZone(ZoneId.systemDefault())
-//                                    .toLocalDate()
-//                            },
                         )
                     }
             } catch (e: Exception) {
@@ -200,13 +195,13 @@ object MongoDB : MongoRepository {
         }
     }
 
-    override suspend fun deleteDiary(diaryId: String): RequestState<Boolean> {
+    override suspend fun deleteDiary(id: String): RequestState<Boolean> {
         return if (user != null) {
-            val id = ObjectId.invoke(diaryId)
+            val diaryId = ObjectId.invoke(id)
 
             realm.write {
                 val diary =
-                    query<Diary>(query = "_id == $0 AND ownerId == $1", id, user.id)
+                    query<Diary>(query = "_id == $0 AND ownerId == $1", diaryId, user.id)
                         .first().find()
 
                 if (diary != null) {
