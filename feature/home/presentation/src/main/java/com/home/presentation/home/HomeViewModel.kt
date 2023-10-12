@@ -7,6 +7,7 @@ import com.artemissoftware.navigation.Screen
 import com.core.domain.RequestState
 import com.core.domain.models.Journal
 import com.core.domain.usecases.GetDiaryImagesUseCase
+import com.core.ui.connectivity.ConnectivityObserver
 import com.core.ui.connectivity.NetworkConnectivityObserver
 import com.core.ui.util.UiText
 import com.core.ui.util.uievents.UiEvent
@@ -81,11 +82,29 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun updateDiaries(diaries: Journal) = with(_state) {
+    private fun updateDiaries(journal: Journal) = with(_state) {
         update {
-            it.copy(diaries = diaries)
+            it.copy(diaries = journal)
         }
-//        updateImagesOnOpenedGalleries(diaries)
+        updateImagesOnOpenedGalleries(journal)
+    }
+
+    private fun updateImagesOnOpenedGalleries(journal: Journal) {
+        val openedGalleries = _state.value.diariesImages.filter { it.isOpened }.map { it.id }
+        if(openedGalleries.isNotEmpty()) {
+            val allDiaries = (journal as RequestState.Success).data.values.flatten()
+
+            allDiaries.filter { openedGalleries.contains(it.id) }.forEach {
+                updateDiariesImages(it.id, null)
+                if(it.images.isNotEmpty()) {
+                    getImages(diaryId = it.id, list = it.images)
+                }
+                else {
+                    clearGallery(it.id)
+                    closeDiaryGallery(it.id)
+                }
+            }
+        }
     }
 
     private fun checkConnectivity() = with(_state) {
@@ -135,7 +154,7 @@ class HomeViewModel @Inject constructor(
             }
 
             HomeEvents.DeleteAllDiaries -> {
-//                deleteAllDiaries()
+                deleteAllDiaries()
             }
 
             is HomeEvents.GetDiaries -> {
@@ -262,24 +281,6 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-//    private fun updateImagesOnOpenedGalleries(diaries: Diaries) {
-//        val openedGalleries = _state.value.diariesImages.filter { it.isOpened }.map { it.id }
-//        if(openedGalleries.isNotEmpty()) {
-//            val allDiaries = (diaries as RequestState.Success).data.values.flatten().map { it.copyFromRealm() }
-//
-//            allDiaries.filter { openedGalleries.contains(it._id.toString()) }.forEach {
-//                updateDiariesImages(it._id.toString(), null)
-//                if(it.images.isNotEmpty()) {
-//                    getImages(diaryId = it._id.toString(), list = it.images)
-//                }
-//                else {
-//                    clearGallery(it._id.toString())
-//                    closeDiaryGallery(it._id.toString())
-//                }
-//            }
-//        }
-//    }
-
     private fun signOut() {
         viewModelScope.launch {
             val isLoggedOut = signOutUseCase.invoke()
@@ -290,28 +291,26 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    private fun deleteAllDiaries() {
+        viewModelScope.launch {
+            if (_state.value.network == ConnectivityObserver.Status.Available) {
+                val result = deleteAllDiariesUseCase()
 
+                when(result) {
+                    is RequestState.Success -> {
+                        sendUiEvent(UiEvent.ShowToast(UiText.StringResource(R.string.all_diaries_deleted), Toast.LENGTH_SHORT))
+                    }
+                    is RequestState.Error -> {
+                        sendUiEvent(UiEvent.ShowToast(UiText.DynamicString(result.error.message.toString()), Toast.LENGTH_SHORT))
+                    }
+                    else -> Unit
+                }
+            }
+            else {
+                sendUiEvent(UiEvent.ShowToast(UiText.StringResource(R.string.internet_connection_necessary_for_this_operation), Toast.LENGTH_SHORT))
+            }
 
-//    private fun deleteAllDiaries() {
-//        viewModelScope.launch {
-//            if (_state.value.network == ConnectivityObserver.Status.Available) {
-//                val result = deleteAllDiariesUseCase()
-//
-//                when(result) {
-//                    is RequestState.Success -> {
-//                        sendUiEvent(UiEvent.ShowToast(UiText.StringResource(R.string.all_diaries_deleted), Toast.LENGTH_SHORT))
-//                    }
-//                    is RequestState.Error -> {
-//                        sendUiEvent(UiEvent.ShowToast(UiText.DynamicString(result.error.message.toString()), Toast.LENGTH_SHORT))
-//                    }
-//                    else -> Unit
-//                }
-//            }
-//            else {
-//                sendUiEvent(UiEvent.ShowToast(UiText.StringResource(R.string.internet_connection_necessary_for_this_operation), Toast.LENGTH_SHORT))
-//            }
-//
-//            sendUiEvent(UiEvent.CloseNavigationDrawer)
-//        }
-//    }
+            sendUiEvent(UiEvent.CloseNavigationDrawer)
+        }
+    }
 }

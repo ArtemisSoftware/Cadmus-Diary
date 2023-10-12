@@ -7,8 +7,8 @@ import androidx.core.net.toUri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.artemissoftware.navigation.Screen
-import com.artemissoftware.util.extensions.toRealmInstant
-import com.core.domain.models.Diary
+import com.core.domain.RequestState
+import com.core.domain.models.JournalEntry
 import com.core.domain.usecases.GetDiaryImagesUseCase
 import com.core.ui.models.GalleryImage
 import com.core.ui.models.MoodUI
@@ -27,13 +27,13 @@ import com.write.domain.usecases.UploadImagesUseCase
 import com.write.presentation.R
 import com.write.presentation.write.mappers.toPictures
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.realm.kotlin.ext.toRealmList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.mongodb.kbson.ObjectId
+import java.time.Instant
 import java.time.ZonedDateTime
 import javax.inject.Inject
 
@@ -66,6 +66,36 @@ class WriteViewModel @Inject constructor(
                 selectedDiaryId = savedStateHandle.get<String>(
                     key = Screen.WRITE_SCREEN_ARGUMENT_KEY,
                 ),
+            )
+        }
+    }
+
+    private fun fetchSelectedDiary() = with(_state.value) {
+        selectedDiaryId?.let { diaryId ->
+
+            viewModelScope.launch {
+                getDiaryUseCase(diaryId = diaryId).collect { request ->
+
+                    when (request) {
+                        is RequestState.Success -> {
+                            val diary = request.data
+                            setSelectedDiary(diary)
+                            fetchImages(diary.id, diary.images)
+                        }
+                        else -> Unit
+                    }
+                }
+            }
+        }
+    }
+
+    private fun setSelectedDiary(journalEntry: JournalEntry) = with(_state) {
+        update {
+            it.copy(
+                selectedDiary = journalEntry,
+                title = journalEntry.title,
+                description = journalEntry.description,
+                mood = journalEntry.mood.toMoodUi(),
             )
         }
     }
@@ -116,17 +146,6 @@ class WriteViewModel @Inject constructor(
         }
     }
 
-    private fun setSelectedDiary(diary: Diary) = with(_state) {
-        update {
-            it.copy(
-                selectedDiary = diary,
-                title = diary.title,
-                description = diary.description,
-                mood = diary.mood.toMoodUi(),
-            )
-        }
-    }
-
     private fun updateGallery(images: List<String>) = with(_state) {
         val resultGallery = images.map {
             GalleryImage(
@@ -172,7 +191,7 @@ class WriteViewModel @Inject constructor(
 
     private fun updateDateTime(zonedDateTime: ZonedDateTime) = with(_state) {
         update {
-            it.copy(updatedDateTime = zonedDateTime.toRealmInstant())
+            it.copy(updatedDateTime = zonedDateTime.toInstant())
         }
     }
 
@@ -194,51 +213,9 @@ class WriteViewModel @Inject constructor(
         }
     }
 
-    private fun createDiary(): Diary = with(_state) {
-        val diary = Diary().apply {
-            this.title = value.title
-            this.description = value.description
-            this.mood = value.mood.name
-
-            if (value.updatedDateTime != null) {
-                this.date = value.updatedDateTime!!
-            } else {
-                value.selectedDiary?.let { this.date = it.date }
-            }
-            this.images = value.galleryState.images.map { it.remoteImagePath }.toRealmList()
-        }
-
-        value.selectedDiaryId?.let {
-            diary.apply {
-                _id = ObjectId.invoke(it)
-            }
-        }
-
-        return diary
-    }
-
     private fun popBackStack() {
         viewModelScope.launch {
             sendUiEvent(UiEvent.PopBackStack)
-        }
-    }
-
-    private fun fetchSelectedDiary() = with(_state.value) {
-        selectedDiaryId?.let { diaryId ->
-
-            viewModelScope.launch {
-                getDiaryUseCase(diaryId = diaryId).collect { request ->
-
-                    when (request) {
-                        is com.core.domain.RequestState.Success -> {
-                            val diary = request.data
-                            setSelectedDiary(diary)
-                            fetchImages(diary._id.toString(), diary.images)
-                        }
-                        else -> Unit
-                    }
-                }
-            }
         }
     }
 
@@ -246,10 +223,10 @@ class WriteViewModel @Inject constructor(
         viewModelScope.launch {
             getDiaryImagesUseCase.invoke(diaryId, images).collect { result ->
                 when (result) {
-                    is com.core.domain.RequestState.Success -> {
+                    is RequestState.Success -> {
                         updateGallery(result.data.images)
                     }
-                    is com.core.domain.RequestState.Error -> {
+                    is RequestState.Error -> {
                         sendUiEvent(UiEvent.ShowToast(UiText.DynamicString("Images not uploaded yet." + "Wait a little bit, or try uploading again."), Toast.LENGTH_SHORT))
                     }
                     else -> Unit
@@ -260,13 +237,13 @@ class WriteViewModel @Inject constructor(
 
     private fun save() = with(_state.value) {
         if (title.isNotEmpty() && description.isNotEmpty()) {
-            val diary = createDiary()
+            val journalEntry = createJournalEntry()
 
             if (selectedDiaryId != null) {
-                updateDiary(diary = diary)
+                updateDiary(journalEntry = journalEntry)
             }
             else {
-                insertDiary(diary = diary)
+                insertDiary(journalEntry = journalEntry)
             }
         } else {
             viewModelScope.launch {
@@ -275,16 +252,43 @@ class WriteViewModel @Inject constructor(
         }
     }
 
-    private fun insertDiary(diary: Diary) {
+    private fun createJournalEntry(): JournalEntry = with(_state) {
+        var id = ObjectId.invoke()
+        value.selectedDiaryId?.let { id = ObjectId.invoke(it) }
+
+        val date = when {
+            (value.updatedDateTime != null) -> {
+                value.updatedDateTime!!
+            }
+            (value.selectedDiary != null) -> {
+                value.selectedDiary!!.date
+            }
+
+            else -> {
+                Instant.now()
+            }
+        }
+
+        return JournalEntry(
+            id = id.toHexString(),
+            title = value.title,
+            description = value.description,
+            mood = value.mood.name,
+            images = value.galleryState.images.map { it.remoteImagePath },
+            date = date,
+        )
+    }
+
+    private fun insertDiary(journalEntry: JournalEntry) {
         viewModelScope.launch {
-            val result = insertDiaryUseCase(diary = diary)
+            val result = insertDiaryUseCase(journalEntry = journalEntry)
 
             when(result) {
-                is com.core.domain.RequestState.Success -> {
+                is RequestState.Success -> {
                     uploadImages()
                     sendUiEvent(UiEvent.PopBackStack)
                 }
-                is com.core.domain.RequestState.Error -> {
+                is RequestState.Error -> {
                     sendUiEvent(UiEvent.ShowToast(UiText.DynamicString(result.error.message.toString()), Toast.LENGTH_SHORT))
                 }
                 else -> Unit
@@ -292,15 +296,15 @@ class WriteViewModel @Inject constructor(
         }
     }
 
-    private fun updateDiary(diary: Diary) {
+    private fun updateDiary(journalEntry: JournalEntry) {
         viewModelScope.launch {
-            val result = updateDiaryUseCase(diary = diary)
+            val result = updateDiaryUseCase(journalEntry = journalEntry)
             when(result) {
-                is com.core.domain.RequestState.Success -> {
+                is RequestState.Success -> {
                     updateImages()
                     sendUiEvent(UiEvent.PopBackStack)
                 }
-                is com.core.domain.RequestState.Error -> {
+                is RequestState.Error -> {
                     sendUiEvent(UiEvent.ShowToast(UiText.DynamicString(result.error.message.toString()), Toast.LENGTH_SHORT))
                 }
                 else -> Unit
@@ -323,11 +327,11 @@ class WriteViewModel @Inject constructor(
                 val result = deleteDiaryUseCase.invoke(diaryId, images = selectedDiary?.images)
 
                 when (result) {
-                    is com.core.domain.RequestState.Success -> {
+                    is RequestState.Success -> {
                         sendUiEvent(UiEvent.ShowToast(UiText.StringResource(R.string.deleted), Toast.LENGTH_SHORT))
                         sendUiEvent(UiEvent.PopBackStack)
                     }
-                    is com.core.domain.RequestState.Error -> {
+                    is RequestState.Error -> {
                         sendUiEvent(UiEvent.ShowToast(UiText.DynamicString(result.error.message.toString()), Toast.LENGTH_SHORT))
                     }
                     else -> Unit
@@ -358,41 +362,6 @@ class WriteViewModel @Inject constructor(
             )
         }
     }
-
-//    private fun deleteImages(images: List<String>? = null) = with(_state.value) {
-//        val imagesToBeDeleted = images ?: galleryState.imagesToBeDeleted.map { it.remoteImagePath }
-//
-//        viewModelScope.launch {
-//            uploadImagesUseCase.invoke(galleryState.images)
-//        }
-//    }
-
-//    private fun deleteImagesFromFirebase(images: List<String>? = null) {
-//        val storage = FirebaseStorage.getInstance().reference
-//        if (images != null) {
-//            images.forEach { remotePath ->
-//                storage.child(remotePath).delete()
-//                    .addOnFailureListener {
-//                        viewModelScope.launch(Dispatchers.IO) {
-//                            imageToDeleteDao.addImageToDelete(
-//                                ImageToDelete(remoteImagePath = remotePath)
-//                            )
-//                        }
-//                    }
-//            }
-//        } else {
-//            galleryState.imagesToBeDeleted.map { it.remoteImagePath }.forEach { remotePath ->
-//                storage.child(remotePath).delete()
-//                    .addOnFailureListener {
-//                        viewModelScope.launch(Dispatchers.IO) {
-//                            imageToDeleteDao.addImageToDelete(
-//                                ImageToDelete(remoteImagePath = remotePath)
-//                            )
-//                        }
-//                    }
-//            }
-//        }
-//    }
 
     private fun getImagePath(image: Uri): String {
         return application.contentResolver.getType(image)?.split("/")?.last() ?: "jpg"

@@ -1,15 +1,18 @@
 package com.core.data.repository
 
-import com.artemissoftware.util.extensions.toInstant
+import com.artemissoftware.util.extensions.toRealmInstant
 import com.core.data.ConstantsId.APP_ID
 import com.core.data.exceptions.UserNotAuthenticatedException
+import com.core.data.mappers.toDiary
 import com.core.data.mappers.toJournal
 import com.core.data.realm.models.Diary
 import com.core.domain.RequestState
 import com.core.domain.models.Journal
+import com.core.domain.models.JournalEntry
 import com.core.domain.repository.MongoRepository
 import io.realm.kotlin.Realm
 import io.realm.kotlin.ext.query
+import io.realm.kotlin.ext.toRealmList
 import io.realm.kotlin.log.LogLevel
 import io.realm.kotlin.mongodb.App
 import io.realm.kotlin.mongodb.Credentials
@@ -43,7 +46,7 @@ object MongoDB : MongoRepository {
                         name = "User's Diaries",
                     )
                 }
-                .log(LogLevel.ALL)
+                .log(LogLevel.ALL) // TODO: verificar isto
                 .build()
             realm = Realm.open(config)
         }
@@ -128,10 +131,10 @@ object MongoDB : MongoRepository {
                             .list
                             .map { it.toJournal() }
                             .groupBy {
-                            it.date
-                                .atZone(ZoneId.systemDefault())
-                                .toLocalDate()
-                        },
+                                it.date
+                                    .atZone(ZoneId.systemDefault())
+                                    .toLocalDate()
+                            },
                     )
                 }
             } catch (e: Exception) {
@@ -141,12 +144,14 @@ object MongoDB : MongoRepository {
             flow { emit(RequestState.Error(UserNotAuthenticatedException())) }
         }
     }
-/*
-    override fun getSelectedDiary(diaryId: ObjectId): Flow<RequestState<Diary>> {
+
+    override fun getSelectedDiary(diaryId: String): Flow<RequestState<JournalEntry>> {
+        val id = ObjectId.invoke(diaryId)
+
         return if (user != null) {
             try {
-                realm.query<Diary>(query = "_id == $0", diaryId).asFlow().map {
-                    RequestState.Success(data = it.list.first())
+                realm.query<Diary>(query = "_id == $0", id).asFlow().map {
+                    RequestState.Success(data = it.list.first().toJournal())
                 }
             } catch (e: Exception) {
                 flow { emit(RequestState.Error(e)) }
@@ -156,12 +161,12 @@ object MongoDB : MongoRepository {
         }
     }
 
-    override suspend fun insertDiary(diary: Diary): RequestState<Diary> {
+    override suspend fun insertDiary(journalEntry: JournalEntry): RequestState<JournalEntry> {
         return if (user != null) {
             realm.write {
                 try {
-                    val addedDiary = copyToRealm(diary.apply { ownerId = user.id })
-                    RequestState.Success(data = addedDiary)
+                    val addedDiary = copyToRealm(journalEntry.toDiary(ownerId = user.id))
+                    RequestState.Success(data = addedDiary.toJournal())
                 } catch (e: Exception) {
                     RequestState.Error(e)
                 }
@@ -171,17 +176,21 @@ object MongoDB : MongoRepository {
         }
     }
 
-    override suspend fun updateDiary(diary: Diary): RequestState<Diary> {
+    override suspend fun updateDiary(journalEntry: JournalEntry): RequestState<JournalEntry> {
         return if (user != null) {
+            val id = ObjectId.invoke(journalEntry.id)
+
             realm.write {
-                val queriedDiary = query<Diary>(query = "_id == $0", diary._id).first().find()
+                val queriedDiary = query<Diary>(query = "_id == $0", id).first().find()
                 if (queriedDiary != null) {
-                    queriedDiary.title = diary.title
-                    queriedDiary.description = diary.description
-                    queriedDiary.mood = diary.mood
-                    queriedDiary.images = diary.images
-                    queriedDiary.date = diary.date
-                    RequestState.Success(data = queriedDiary)
+                    with(journalEntry) {
+                        queriedDiary.title = title
+                        queriedDiary.description = description
+                        queriedDiary.mood = mood
+                        queriedDiary.images = images.toRealmList()
+                        queriedDiary.date = date.toRealmInstant()
+                    }
+                    RequestState.Success(data = queriedDiary.toJournal())
                 } else {
                     RequestState.Error(error = Exception("Queried Diary does not exist."))
                 }
@@ -191,8 +200,10 @@ object MongoDB : MongoRepository {
         }
     }
 
-    override suspend fun deleteDiary(id: ObjectId): RequestState<Boolean> {
+    override suspend fun deleteDiary(diaryId: String): RequestState<Boolean> {
         return if (user != null) {
+            val id = ObjectId.invoke(diaryId)
+
             realm.write {
                 val diary =
                     query<Diary>(query = "_id == $0 AND ownerId == $1", id, user.id)
@@ -229,6 +240,4 @@ object MongoDB : MongoRepository {
             RequestState.Error(UserNotAuthenticatedException())
         }
     }
-*/
-
 }

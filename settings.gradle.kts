@@ -26,13 +26,15 @@ include(":core:ui")
 include(":feature:home:domain")
 include(":feature:home:presentation")
 
-//include(":feature:write:presentation")
+include(":feature:write:domain")
+include(":feature:write:presentation")
+
 //include(":feature:authentication:presentation")
 
 //include(":feature:authentication:data")
 //include(":feature:authentication:domain")
 
 
-//include(":feature:write:domain")
+
 
 

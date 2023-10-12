@@ -8,5 +8,5 @@ import kotlin.time.Duration.Companion.seconds
 
 class GetAllDiariesUseCase @Inject constructor(private val mongoRepository: MongoRepository) {
     @OptIn(FlowPreview::class)
-    operator fun invoke() = mongoRepository.getAllDiaries().debounce(2.seconds)
+    operator fun invoke() = mongoRepository.getAllDiaries()/*.debounce(2.seconds)*/ // TODO: este debounce está a aumentar muito o delay
 }

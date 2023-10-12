@@ -1,6 +1,5 @@
 package com.core.data.repository
 
-import android.net.Uri
 import androidx.core.net.toUri
 import com.core.data.database.dao.ImageToUploadDao
 import com.core.data.mappers.toEntity
@@ -109,24 +108,30 @@ class ImageRepositoryImpl(
             storage.child(imagesDirectory)
                 .listAll()
                 .addOnSuccessListener { directoryList ->
-                    directoryList.items.forEach { ref ->
-                        val imagePath = "images/$userId/${ref.name}"
-                        storage
-                            .child(imagePath)
-                            .delete()
-                            .addOnFailureListener {
-                                toDelete.add(imagePath)
-                            }
-                            .addOnSuccessListener {
-                                ++numberOfSuccess
-                            }
-                            .addOnCompleteListener {
-                                ++deletesFinished
 
-                                if (deletesFinished == directoryList.items.size) {
-                                    continuation.resume(toDelete)
+                    if(directoryList.items.isEmpty()) {
+                        continuation.resume(toDelete)
+                    }
+                    else {
+                        directoryList.items.forEach { ref ->
+                            val imagePath = "images/$userId/${ref.name}"
+                            storage
+                                .child(imagePath)
+                                .delete()
+                                .addOnFailureListener {
+                                    toDelete.add(imagePath)
                                 }
-                            }
+                                .addOnSuccessListener {
+                                    ++numberOfSuccess
+                                }
+                                .addOnCompleteListener {
+                                    ++deletesFinished
+
+                                    if (deletesFinished == directoryList.items.size) {
+                                        continuation.resume(toDelete)
+                                    }
+                                }
+                        }
                     }
                 }
                 .addOnFailureListener { continuation.resumeWithException(it) }

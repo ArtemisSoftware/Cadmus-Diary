@@ -64,6 +64,7 @@ dependencies {
     implementation(project(Module.coreUi))
 
     implementation(project(Module.homePresentation))
+    implementation(project(Module.writePresentation))
 
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
@@ -111,6 +112,5 @@ dependencies {
 
 //
 
-//    implementation(project(Module.writePresentation))
 //    implementation(project(Module.authenticationPresentation))
 }

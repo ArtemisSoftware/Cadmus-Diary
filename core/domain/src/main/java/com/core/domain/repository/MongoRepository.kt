@@ -2,9 +2,8 @@ package com.core.domain.repository
 
 import com.core.domain.RequestState
 import com.core.domain.models.Journal
+import com.core.domain.models.JournalEntry
 import kotlinx.coroutines.flow.Flow
-import org.mongodb.kbson.ObjectId
-import java.time.LocalDate
 import java.time.ZonedDateTime
 
 interface MongoRepository {
@@ -16,10 +15,9 @@ interface MongoRepository {
 
     fun getAllDiaries(): Flow<Journal>
     fun getFilteredDiaries(zonedDateTime: ZonedDateTime): Flow<Journal>
-//    fun getSelectedDiary(diaryId: ObjectId): Flow<RequestState<Diary>>
-//    suspend fun insertDiary(diary: Diary): RequestState<Diary>
-//    suspend fun updateDiary(diary: Diary): RequestState<Diary>
-//    suspend fun deleteDiary(id: ObjectId): RequestState<Boolean>
-//    suspend fun deleteAllDiaries(): RequestState<Boolean>
-
+    fun getSelectedDiary(diaryId: String): Flow<RequestState<JournalEntry>>
+    suspend fun insertDiary(journalEntry: JournalEntry): RequestState<JournalEntry>
+    suspend fun updateDiary(journalEntry: JournalEntry): RequestState<JournalEntry>
+    suspend fun deleteDiary(id: String): RequestState<Boolean>
+    suspend fun deleteAllDiaries(): RequestState<Boolean>
 }

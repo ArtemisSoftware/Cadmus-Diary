@@ -40,15 +40,12 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.artemissoftware.util.extensions.toInstant
+import com.artemissoftware.util.DateTimeConstants
+import com.core.domain.models.JournalEntry
 import com.core.domain.models.Mood
 import com.core.ui.models.toMoodUi
 import com.core.ui.theme.Elevation
-import com.artemissoftware.util.DateTimeConstants
-import com.core.domain.models.JournalEntry
 import com.home.presentation.R
-import io.realm.kotlin.ext.realmListOf
-import org.mongodb.kbson.ObjectId
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -81,9 +78,9 @@ fun DiaryCard(
                     MutableInteractionSource()
                 },
                 onClick = {
-//                    onClick(diary._id.toHexString())
+                    onClick(diary.id)
                 },
-            )
+            ),
     ) {
         Spacer(modifier = Modifier.width(14.dp))
 
@@ -138,7 +135,7 @@ fun DiaryCard(
 
 @Composable
 private fun DiaryHeader(moodName: String, time: Instant) {
-    val mood by remember { mutableStateOf(moodName.toMoodUi()) }
+    val mood = moodName.toMoodUi()
     val formatter = remember {
         DateTimeFormatter.ofPattern(DateTimeConstants.FORMAT_hh_mm_a, Locale.getDefault())
             .withZone(ZoneId.systemDefault())

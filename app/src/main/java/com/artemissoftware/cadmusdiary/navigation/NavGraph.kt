@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.artemissoftware.navigation.Screen
 import com.home.presentation.home.navigation.homeRoute
+import com.write.presentation.write.navigation.writeRoute
 
 //import com.authentication.presentation.navigation.authenticationRoute
 //import com.home.presentation.home.navigation.homeRoute
@@ -29,9 +30,9 @@ fun NavGraph(
             navController = navController,
             onDataLoaded = onDataLoaded,
         )
-//        writeRoute(
-//            navController = navController,
-//        )
+        writeRoute(
+            navController = navController,
+        )
     }
 }
 

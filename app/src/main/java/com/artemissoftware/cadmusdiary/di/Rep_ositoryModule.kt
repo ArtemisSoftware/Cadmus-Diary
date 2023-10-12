@@ -21,16 +21,4 @@ package com.artemissoftware.cadmusdiary.di
 //    fun provideAuthenticationRepository(): AuthenticationRepository {
 //        return AuthenticationRepositoryImpl()
 //    }
-//
-//    @Provides
-//    @Singleton
-//    fun provideImageRepository(imageToUploadDao: com.core.data.database.dao.ImageToUploadDao): ImageRepository {
-//        return ImageRepositoryImpl(imageToUploadDao = imageToUploadDao)
-//    }
-//
-//    @Provides
-//    @Singleton
-//    fun provideMongoRepository(): MongoRepository {
-//        return MongoDB
-//    }
 //}

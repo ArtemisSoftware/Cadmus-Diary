@@ -164,7 +164,7 @@ private fun HomeScreenContent(
                         state = state,
                         diaryNotes = state.diaries.data,
                         onClick = { diaryId ->
-//                            events.invoke(HomeEvents.Navigate(Screen.Write.passDiaryId(diaryId = diaryId)))
+                            events.invoke(HomeEvents.Navigate(Screen.Write.passDiaryId(diaryId = diaryId)))
                         },
                         openGallery = { diaryId ->
                             events.invoke(HomeEvents.OpenDiaryGallery(diaryId = diaryId))

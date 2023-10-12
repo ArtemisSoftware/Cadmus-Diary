@@ -18,10 +18,6 @@ fun WriteScreen(
     viewModel: WriteViewModel = hiltViewModel(),
     navController: NavHostController,
 ) {
-//    // Update the Mood when selecting an existing Diary
-//    LaunchedEffect(key1 = uiState.mood) {
-//        pagerState.scrollToPage(Mood.valueOf(uiState.mood.name).ordinal)
-//    }
 
     val state = viewModel.state.collectAsState().value
 
