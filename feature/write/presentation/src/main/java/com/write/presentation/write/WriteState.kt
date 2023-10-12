@@ -9,7 +9,7 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
-data class WriteState(
+internal data class WriteState(
     val selectedDiaryId: String? = null,
     val selectedDiary: JournalEntry? = null,
     val selectedImage: GalleryImage? = null,

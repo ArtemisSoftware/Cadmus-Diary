@@ -39,7 +39,7 @@ import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun WriteTopBar(
+internal fun WriteTopBar(
     state: WriteState,
     onDateTimeUpdated: (ZonedDateTime) -> Unit,
     onDeleteConfirmed: () -> Unit,

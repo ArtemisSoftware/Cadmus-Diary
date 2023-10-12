@@ -7,11 +7,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.authentication.presentation.auth.Const.CLIENT_ID
 import com.authentication.presentation.auth.composables.AuthenticationContent
@@ -28,13 +28,13 @@ import com.stevdzasan.onetap.rememberOneTapSignInState
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun AuthenticationScreen(
+internal fun AuthenticationScreen(
     viewModel: AuthenticationViewModel = hiltViewModel(),
     navController: NavHostController,
     onDataLoaded: () -> Unit,
 ) {
     val context = LocalContext.current
-    val state = viewModel.state.collectAsState().value
+    val state = viewModel.state.collectAsStateWithLifecycle().value
     val oneTapState = rememberOneTapSignInState()
     val messageBarState = rememberMessageBarState()
 

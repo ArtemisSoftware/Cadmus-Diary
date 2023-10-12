@@ -27,7 +27,7 @@ import java.time.LocalDate
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun HomeContent(
+internal fun HomeContent(
     paddingValues: PaddingValues,
     diaryNotes: Map<LocalDate, List<JournalEntry>>,
     onClick: (String) -> Unit,
@@ -76,7 +76,7 @@ fun HomeContent(
 }
 
 @Composable
-fun EmptyPage(
+internal fun EmptyPage(
     @StringRes title: Int = R.string.empty_diary,
     subtitle: String = stringResource(id = R.string.write_something),
 ) {

@@ -1,6 +1,6 @@
 package com.authentication.presentation.auth
 
-sealed class AuthenticationEvents {
+internal sealed class AuthenticationEvents {
 
     data class SetLoading(val loading: Boolean) : AuthenticationEvents()
 

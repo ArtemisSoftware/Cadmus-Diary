@@ -22,7 +22,7 @@ import java.time.Instant
 import com.core.ui.R as CoreUiR
 
 @Composable
-fun DeleteDiaryAction(
+internal fun DeleteDiaryAction(
     selectedDiary: JournalEntry,
     onDeleteConfirmed: () -> Unit,
 ) {

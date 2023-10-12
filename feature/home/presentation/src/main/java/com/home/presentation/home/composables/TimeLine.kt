@@ -11,7 +11,7 @@ import androidx.compose.ui.unit.dp
 import com.core.ui.theme.Elevation
 
 @Composable
-fun TimeLine(height: Dp) {
+internal fun TimeLine(height: Dp) {
     Surface(
         modifier = Modifier
             .width(2.dp)

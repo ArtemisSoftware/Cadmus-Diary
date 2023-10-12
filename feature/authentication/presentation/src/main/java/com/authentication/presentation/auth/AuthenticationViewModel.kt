@@ -20,7 +20,7 @@ import javax.inject.Inject
 import kotlin.time.Duration.Companion.milliseconds
 
 @HiltViewModel
-class AuthenticationViewModel @Inject constructor(
+internal class AuthenticationViewModel @Inject constructor(
     private val signInUseCase: SignInUseCase,
 ) : UiEventViewModel() {
 

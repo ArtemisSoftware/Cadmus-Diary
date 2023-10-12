@@ -1,5 +1,6 @@
 package com.core.data.di
 
+import com.core.data.database.dao.ImageToDeleteDao
 import com.core.data.database.dao.ImageToUploadDao
 import com.core.data.repository.ImageRepositoryImpl
 import com.core.data.repository.MongoDB
@@ -23,7 +24,7 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideImageRepository(imageToUploadDao: ImageToUploadDao): ImageRepository {
-        return ImageRepositoryImpl(imageToUploadDao = imageToUploadDao)
+    fun provideImageRepository(imageToUploadDao: ImageToUploadDao, imageToDeleteDao: ImageToDeleteDao): ImageRepository {
+        return ImageRepositoryImpl(imageToUploadDao = imageToUploadDao, imageToDeleteDao = imageToDeleteDao)
     }
 }

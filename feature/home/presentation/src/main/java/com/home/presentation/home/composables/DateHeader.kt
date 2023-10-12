@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import java.time.LocalDate
 
 @Composable
-fun DateHeader(
+internal fun DateHeader(
     localDate: LocalDate,
     modifier: Modifier = Modifier,
 ) {

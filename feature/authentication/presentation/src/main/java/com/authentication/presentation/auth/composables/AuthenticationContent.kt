@@ -22,7 +22,7 @@ import com.core.ui.components.buttons.GoogleButton
 import com.core.ui.R as CoreUiR
 
 @Composable
-fun AuthenticationContent(
+internal fun AuthenticationContent(
     isLoading: Boolean,
     onGoogleAuthenticationButtonClicked: () -> Unit,
 ) {

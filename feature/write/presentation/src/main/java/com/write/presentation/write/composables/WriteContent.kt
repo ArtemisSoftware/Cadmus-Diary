@@ -49,7 +49,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun WriteContent(
+internal fun WriteContent(
     state: WriteState,
     onTitleChanged: (String) -> Unit,
     onDescriptionChanged: (String) -> Unit,

@@ -5,7 +5,7 @@ import com.core.ui.models.GalleryImage
 import com.core.ui.models.MoodUI
 import java.time.ZonedDateTime
 
-sealed class WriteEvents {
+internal sealed class WriteEvents {
 
     object PopBackStack : WriteEvents()
 

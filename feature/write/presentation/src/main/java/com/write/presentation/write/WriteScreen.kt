@@ -3,10 +3,10 @@ package com.write.presentation.write
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.core.ui.components.events.UIEventsManager
 import com.core.ui.components.image.ZoomableImage
@@ -14,12 +14,11 @@ import com.write.presentation.write.composables.WriteContent
 import com.write.presentation.write.composables.WriteTopBar
 
 @Composable
-fun WriteScreen(
+internal fun WriteScreen(
     viewModel: WriteViewModel = hiltViewModel(),
     navController: NavHostController,
 ) {
-
-    val state = viewModel.state.collectAsState().value
+    val state = viewModel.state.collectAsStateWithLifecycle().value
 
     WriteScreenContent(
         state = state,
@@ -33,7 +32,7 @@ fun WriteScreen(
 }
 
 @Composable
-fun WriteScreenContent(
+private fun WriteScreenContent(
     events: (WriteEvents) -> Unit,
     state: WriteState,
 ) {

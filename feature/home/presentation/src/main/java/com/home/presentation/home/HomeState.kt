@@ -5,7 +5,7 @@ import com.core.domain.RequestState
 import com.core.domain.models.Journal
 import com.core.ui.connectivity.ConnectivityObserver
 
-data class HomeState(
+internal data class HomeState(
     val signOutDialogOpened: Boolean = false,
     val deleteAllDialogOpened: Boolean = false,
     val diaries: Journal = RequestState.Idle,

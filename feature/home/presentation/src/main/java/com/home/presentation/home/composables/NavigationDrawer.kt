@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import com.core.ui.R as CoreUiR
 
 @Composable
-fun NavigationDrawer(
+internal fun NavigationDrawer(
     drawerState: DrawerState,
     onSignOutClicked: () -> Unit,
     onDeleteAllClicked: () -> Unit,

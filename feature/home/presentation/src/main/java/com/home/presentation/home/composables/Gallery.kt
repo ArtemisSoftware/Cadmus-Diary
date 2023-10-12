@@ -25,7 +25,7 @@ import com.core.ui.components.PlusValueIcon
 import kotlin.math.max
 
 @Composable
-fun Gallery(
+internal fun Gallery(
     modifier: Modifier = Modifier,
     images: List<Uri>,
     imageSize: Dp = 40.dp,

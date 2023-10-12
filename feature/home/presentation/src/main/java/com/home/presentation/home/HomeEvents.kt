@@ -2,7 +2,7 @@ package com.home.presentation.home
 
 import java.time.ZonedDateTime
 
-sealed class HomeEvents {
+internal sealed class HomeEvents {
 
     object OpenSignOutDialog : HomeEvents()
     object CloseSignOutDialog : HomeEvents()

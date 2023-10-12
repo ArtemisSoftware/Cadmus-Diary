@@ -52,7 +52,7 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 @Composable
-fun DiaryCard(
+internal fun DiaryCard(
     diary: JournalEntry,
     onClick: (String) -> Unit,
     openGallery: (String) -> Unit,
