@@ -70,6 +70,7 @@ dependencies {
 
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
+    implementation(libs.lifecycle.runtime.compose)
 
     implementation(libs.activity.compose)
     implementation(platform(libs.compose.bom))
@@ -88,16 +89,6 @@ dependencies {
 
     implementation(libs.core.splashscreen)
     implementation(libs.navigation.compose)
-
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.auth)
-    implementation(libs.firebase.storage)
-    implementation(libs.firebase.storage.ktx)
-
-    implementation(libs.room.runtime)
-    implementation(libs.room.ktx)
-    annotationProcessor(libs.room.compiler)
-    ksp(libs.room.compiler)
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)

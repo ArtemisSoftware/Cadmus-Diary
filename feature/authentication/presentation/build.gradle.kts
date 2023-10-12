@@ -57,6 +57,8 @@ dependencies {
     implementation(libs.one.tap.compose)
     implementation(libs.message.bar.compose)
 
+    implementation(libs.lifecycle.runtime.compose)
+
     implementation(project(Module.navigation))
 
     implementation(project(Module.coreDomain))
