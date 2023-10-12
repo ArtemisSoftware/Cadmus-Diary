@@ -1,4 +1,4 @@
-package com.authentication.presentation.navigation
+package com.authentication.presentation.auth.navigation
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController

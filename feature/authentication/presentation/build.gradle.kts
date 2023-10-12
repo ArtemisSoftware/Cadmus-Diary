@@ -7,10 +7,10 @@ plugins {
 
 android {
     namespace = "com.authentication.presentation"
-    compileSdk = 33
+    compileSdk = ProjectConfig.compileSdk
 
     defaultConfig {
-        minSdk = 31
+        minSdk = ProjectConfig.minSdk
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -32,6 +32,12 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = Compose.kotlinCompilerExtensionVersion
+    }
 }
 
 dependencies {
@@ -44,14 +50,15 @@ dependencies {
     implementation(libs.ui.tooling.preview)
     implementation(libs.material3)
 
-    implementation(libs.one.tap.compose)
-    implementation(libs.message.bar.compose)
-
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
     implementation(libs.hilt.navigation.compose)
 
+    implementation(libs.one.tap.compose)
+    implementation(libs.message.bar.compose)
+
     implementation(project(Module.navigation))
+
     implementation(project(Module.coreDomain))
     implementation(project(Module.coreUi))
     implementation(project(Module.authenticationDomain))

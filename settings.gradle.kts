@@ -29,12 +29,13 @@ include(":feature:home:presentation")
 include(":feature:write:domain")
 include(":feature:write:presentation")
 
-//include(":feature:authentication:presentation")
-
-//include(":feature:authentication:data")
-//include(":feature:authentication:domain")
+include(":feature:authentication:data")
+include(":feature:authentication:domain")
 
 
 
 
 
+
+
+include(":feature:authentication:presentation")

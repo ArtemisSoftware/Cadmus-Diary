@@ -2,6 +2,7 @@ package com.artemissoftware.cadmusdiary
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.artemissoftware.navigation.Screen
 import com.core.domain.repository.MongoRepository
 import com.core.domain.usecases.CheckUserLoggedInUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -36,10 +37,16 @@ class MainActivityViewModel @Inject constructor(
 
     private fun checkUserLoggedIn() = with(_state) {
         viewModelScope.launch {
-            val result = checkUserLoggedInUseCase()
+            val isUserLoggedIn = checkUserLoggedInUseCase()
+
+            val startDestination = if (isUserLoggedIn) {
+                Screen.Home.route
+            } else {
+                Screen.Authentication.route
+            }
 
             update {
-                it.copy(userLoggedIn = result)
+                it.copy(userLoggedIn = isUserLoggedIn, startDestination = startDestination)
             }
         }
     }

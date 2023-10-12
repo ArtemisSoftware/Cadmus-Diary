@@ -7,14 +7,20 @@ import com.artemissoftware.cadmusdiary.navigation.NavGraph
 
 @Composable
 fun MainScreen(viewModel: MainActivityViewModel) {
-    val isUserLoggedIn = viewModel.state.collectAsState().value
+    val state = viewModel.state.collectAsState().value
 
     val navController = rememberNavController()
-    NavGraph(
-        isUserLoggedIn = isUserLoggedIn.userLoggedIn,
-        navController = navController,
-        onDataLoaded = {
-            viewModel.onTriggerEvent(MainActivityEvents.FinishSplash)
-        },
-    )
+
+    state.startDestination?.let { startDestination ->
+        NavGraph(
+            startDestination = startDestination,
+            navController = navController,
+            onDataLoaded = {
+                viewModel.onTriggerEvent(MainActivityEvents.FinishSplash)
+            },
+        )
+
+    }
+
+
 }

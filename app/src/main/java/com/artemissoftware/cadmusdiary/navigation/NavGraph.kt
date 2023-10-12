@@ -4,17 +4,13 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.artemissoftware.navigation.Screen
+import com.authentication.presentation.auth.navigation.authenticationRoute
 import com.home.presentation.home.navigation.homeRoute
 import com.write.presentation.write.navigation.writeRoute
 
-//import com.authentication.presentation.navigation.authenticationRoute
-//import com.home.presentation.home.navigation.homeRoute
-//import com.write.presentation.write.navigation.writeRoute
-
 @Composable
 fun NavGraph(
-    isUserLoggedIn: Boolean,
-    startDestination: String = getStartDestination(isUserLoggedIn),
+    startDestination: String,
     navController: NavHostController,
     onDataLoaded: () -> Unit,
 ) {
@@ -22,10 +18,10 @@ fun NavGraph(
         startDestination = startDestination,
         navController = navController,
     ) {
-//        authenticationRoute(
-//            navController = navController,
-//            onDataLoaded = onDataLoaded,
-//        )
+        authenticationRoute(
+            navController = navController,
+            onDataLoaded = onDataLoaded,
+        )
         homeRoute(
             navController = navController,
             onDataLoaded = onDataLoaded,
@@ -40,7 +36,6 @@ private fun getStartDestination(isUserLoggedIn: Boolean): String {
     return if (isUserLoggedIn) {
         Screen.Home.route
     } else {
-        Screen.Home.route
-        //Screen.Authentication.route
+        Screen.Authentication.route
     }
 }

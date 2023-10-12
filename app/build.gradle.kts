@@ -65,6 +65,8 @@ dependencies {
 
     implementation(project(Module.homePresentation))
     implementation(project(Module.writePresentation))
+    implementation(project(Module.authenticationData))
+    implementation(project(Module.authenticationPresentation))
 
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
@@ -109,8 +111,4 @@ dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
     implementation(libs.hilt.navigation.compose)
-
-//
-
-//    implementation(project(Module.authenticationPresentation))
 }

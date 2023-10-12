@@ -18,6 +18,10 @@
             <option value="$PROJECT_DIR$/core/domain" />
             <option value="$PROJECT_DIR$/core/ui" />
             <option value="$PROJECT_DIR$/feature" />
+            <option value="$PROJECT_DIR$/feature/authentication" />
+            <option value="$PROJECT_DIR$/feature/authentication/data" />
+            <option value="$PROJECT_DIR$/feature/authentication/domain" />
+            <option value="$PROJECT_DIR$/feature/authentication/presentation" />
             <option value="$PROJECT_DIR$/feature/home" />
             <option value="$PROJECT_DIR$/feature/home/domain" />
             <option value="$PROJECT_DIR$/feature/home/presentation" />
