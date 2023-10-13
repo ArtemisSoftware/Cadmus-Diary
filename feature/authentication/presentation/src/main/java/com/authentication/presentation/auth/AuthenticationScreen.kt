@@ -14,7 +14,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.authentication.presentation.BuildConfig
-import com.authentication.presentation.auth.Const.CLIENT_ID
 import com.authentication.presentation.auth.composables.AuthenticationContent
 import com.core.ui.components.events.UIEventsManager
 import com.core.ui.components.modifier.statusNavigationBarPadding

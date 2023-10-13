@@ -2,7 +2,6 @@ package com.core.data.repository
 
 import com.artemissoftware.util.extensions.toRealmInstant
 import com.core.data.BuildConfig
-import com.core.data.ConstantsId.APP_ID
 import com.core.data.exceptions.UserNotAuthenticatedException
 import com.core.data.mappers.toDiary
 import com.core.data.mappers.toJournal
