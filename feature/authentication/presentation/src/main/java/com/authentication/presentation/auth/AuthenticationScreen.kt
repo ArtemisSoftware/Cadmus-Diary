@@ -13,6 +13,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
+import com.authentication.presentation.BuildConfig
 import com.authentication.presentation.auth.Const.CLIENT_ID
 import com.authentication.presentation.auth.composables.AuthenticationContent
 import com.core.ui.components.events.UIEventsManager
@@ -63,7 +64,7 @@ internal fun AuthenticationScreen(
 
     OneTapSignInWithGoogle(
         state = oneTapState,
-        clientId = CLIENT_ID,
+        clientId = BuildConfig.CLIENT_ID,
         onTokenIdReceived = { tokenId ->
             viewModel.onTriggerEvent(AuthenticationEvents.SignIn(tokenId = tokenId))
         },

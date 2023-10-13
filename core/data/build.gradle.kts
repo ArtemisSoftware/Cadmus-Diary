@@ -1,3 +1,8 @@
+import java.util.Properties
+
+val props = Properties()
+file("$rootDir/secret.properties").inputStream().use { props.load(it) }
+
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
     alias(libs.plugins.com.android.library)
@@ -15,6 +20,8 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+
+        buildConfigField("String", "APP_ID", props.getProperty("APP_ID"))
     }
 
     buildTypes {
@@ -32,6 +39,9 @@ android {
     }
     kotlinOptions {
         jvmTarget = "17"
+    }
+    buildFeatures {
+        buildConfig = true
     }
 }
 

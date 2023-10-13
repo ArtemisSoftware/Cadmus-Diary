@@ -1,12 +1,38 @@
 //apply('com.android.library')
 //apply('kotlin-android')
-
+import java.util.Properties
 println(
     """
     I am defined at the top level of the script and
     executed at the configuration phase of build process
     """
 )
+
+
+fun getApiKey(): String {
+    val props = Properties()
+    val secretsFile = File("secrets.properties")
+
+    if (secretsFile.exists()) {
+        secretsFile.inputStream().use { props.load(it) }
+        return props.getProperty("CLIENT_ID") ?: ""
+    } else {
+        return ""
+    }
+}
+
+
+//val props = java.util.Properties()
+//file("$rootDir/secret.properties").inputStream().use { props.load(it) }
+//
+//println("APP_ID ${props.getProperty("APP_ID")}")
+//println("CLIENT_ID ${props.getProperty("CLIENT_ID")}")
+
+//defaultConfig {
+//
+//    buildConfigField("String", "CLIENT_ID", props.getProperty("CLIENT_ID"))
+//}
+
 //
 //android {
 //    namespace = "com.home.presentation"

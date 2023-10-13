@@ -5,8 +5,6 @@ plugins {
     alias(libs.plugins.com.google.devtools.ksp)
 }
 
-apply(from = "$rootDir/compose-module.gradle.kts")
-
 android {
     namespace = "com.home.presentation"
     compileSdk = ProjectConfig.compileSdk

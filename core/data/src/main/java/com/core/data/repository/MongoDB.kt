@@ -1,6 +1,7 @@
 package com.core.data.repository
 
 import com.artemissoftware.util.extensions.toRealmInstant
+import com.core.data.BuildConfig
 import com.core.data.ConstantsId.APP_ID
 import com.core.data.exceptions.UserNotAuthenticatedException
 import com.core.data.mappers.toDiary
@@ -29,7 +30,7 @@ import java.time.ZoneId
 import java.time.ZonedDateTime
 
 object MongoDB : MongoRepository {
-    private val app = App.create(APP_ID)
+    private val app = App.create(BuildConfig.APP_ID)
     private val user = app.currentUser
     private lateinit var realm: Realm
 
