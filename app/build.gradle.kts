@@ -11,12 +11,12 @@ plugins {
 
 android {
     namespace = "com.artemissoftware.cadmusdiary"
-    compileSdk = 34
+    compileSdk = ProjectConfig.compileSdk
 
     defaultConfig {
         applicationId = "com.artemissoftware.cadmusdiary"
-        minSdk = 31
-        targetSdk = 33
+        minSdk = ProjectConfig.minSdk
+        targetSdk = ProjectConfig.targetSdk
         versionCode = 1
         versionName = "1.0"
 
@@ -46,7 +46,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.6"
+        kotlinCompilerExtensionVersion = Compose.kotlinCompilerExtensionVersion
     }
     packaging {
         resources {
@@ -57,14 +57,28 @@ android {
 
 dependencies {
 
+    // Modules
+    implementation(project(Module.navigation))
+    implementation(project(Module.coreData))
+    implementation(project(Module.coreDomain))
+    implementation(project(Module.coreUi))
+
+    implementation(project(Module.homePresentation))
+    implementation(project(Module.writePresentation))
+    implementation(project(Module.authenticationData))
+    implementation(project(Module.authenticationPresentation))
+
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
+    implementation(libs.lifecycle.runtime.compose)
+
     implementation(libs.activity.compose)
     implementation(platform(libs.compose.bom))
     implementation(libs.ui)
     implementation(libs.ui.graphics)
     implementation(libs.ui.tooling.preview)
     implementation(libs.material3)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
@@ -75,25 +89,6 @@ dependencies {
 
     implementation(libs.core.splashscreen)
     implementation(libs.navigation.compose)
-    implementation(libs.one.tap.compose)
-    implementation(libs.message.bar.compose)
-    implementation(libs.realm.kotlin)
-
-    implementation(libs.coil.compose)
-
-    implementation(libs.sheets.compose.dialogs.core)
-    implementation(libs.sheets.compose.dialogs.calendar)
-    implementation(libs.sheets.compose.dialogs.clock)
-
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.auth)
-    implementation(libs.firebase.storage)
-    implementation(libs.firebase.storage.ktx)
-
-    implementation(libs.room.runtime)
-    implementation(libs.room.ktx)
-    annotationProcessor(libs.room.compiler)
-    ksp(libs.room.compiler)
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)

@@ -6,18 +6,11 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
-import androidx.navigation.compose.rememberNavController
-import com.artemissoftware.cadmusdiary.navigation.NavGraph
-import com.artemissoftware.cadmusdiary.ui.theme.CadmusDiaryTheme
+import com.core.ui.theme.CadmusDiaryTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
-//    @Inject
-//    lateinit var imageToUploadDao: ImageToUploadDao
-//    @Inject
-//    lateinit var imageToDeleteDao: ImageToDeleteDao
 
     private val viewModel: MainActivityViewModel by viewModels()
 
@@ -28,17 +21,10 @@ class MainActivity : ComponentActivity() {
             viewModel.state.value.keepSplashOpened
         }
         WindowCompat.setDecorFitsSystemWindows(window, false)
-        // --FirebaseApp.initializeApp(this)
 
         setContent {
             CadmusDiaryTheme {
-                val navController = rememberNavController()
-                NavGraph(
-                    navController = navController,
-                    onDataLoaded = {
-                        viewModel.onTriggerEvent(MainActivityEvents.FinishSplash)
-                    },
-                )
+                MainScreen(viewModel = viewModel)
             }
         }
 
