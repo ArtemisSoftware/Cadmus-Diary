@@ -13,9 +13,9 @@ Insira um gif ou um link de alguma demonstração
 
 ## Screenshots
 
-Image #1            |  Image #2             |  Image #3           
-:-------------------------:|:----------------------------:|:----------------------------:
-<img src="images/CadmusDiary_1.jpg">    |  <img src="images/CadmusDiary_2.jpg">     |  <img src="images/CadmusDiary_3.jpg"> 
+Image #1            |  Image #2             |  Image #3     |  Image #4            
+:-------------------------:|:----------------------------:|:----------------------------:|:----------------------------:
+[App Screenshot](images/CadmusDiary_1.jpg)    |  <img src="images/CadmusDiary_2.jpg">     |  <img src="images/CadmusDiary_3.jpg">  |  <img src="images/CadmusDiary_4.jpg"> 
 
 ![App Screenshot](images/CadmusDiary_1.jpg) ![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here) ![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
 
