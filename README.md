@@ -15,9 +15,9 @@ Insira um gif ou um link de alguma demonstração
 
 Image #1            |  Image #2             |  Image #3           
 :-------------------------:|:----------------------------:|:----------------------------:
-<img src="images/Demeter_Recipes_1.jpg">    |  <img src="images/Demeter_Recipes_2.jpg">     |  <img src="images/Demeter_Recipes_3.jpg"> 
+<img src="images/CadmusDiary_1.jpg">    |  <img src="images/CadmusDiary_2.jpg">     |  <img src="images/CadmusDiary_3.jpg"> 
 
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here) ![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here) ![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![App Screenshot](images/CadmusDiary_1.jpg) ![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here) ![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
 
 
 ## Architecture & Libraries
